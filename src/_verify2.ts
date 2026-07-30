@@ -1,20 +1,20 @@
-import { dateStrOffset, toDateStr, todayStr } from "./lib/dates.ts";
-import { isTrackableDate, frequencyLabel } from "./lib/frequency.ts";
+import { dateStrOffset, toDateStr, todayStr } from "./lib/dates";
+import { isTrackableDate, frequencyLabel } from "./lib/frequency";
 import {
   computeOnTrackStatus,
   computeSuccessRate,
   computeCurrentStreak,
-} from "./lib/analytics.ts";
-import { computeCompletionTimeStats } from "./lib/completionStats.ts";
-import { generateInsights } from "./lib/insights.ts";
+} from "./lib/analytics";
+import { computeCompletionTimeStats } from "./lib/completionStats";
+import { generateInsights } from "./lib/insights";
 import {
   parseCategory,
   parseFrequency,
   parseTarget,
   parseMissAllowance,
-} from "./lib/habitInput.ts";
-import { HABIT_TEMPLATES } from "./lib/templates.ts";
-import type { Habit } from "./types/habit.ts";
+} from "./lib/habitInput";
+import { HABIT_TEMPLATES } from "./lib/templates";
+import type { Habit } from "./types/habit";
 
 let failures = 0;
 function check(desc: string, actual: unknown, expected: unknown) {

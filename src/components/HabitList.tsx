@@ -7,10 +7,17 @@ interface Props {
   habits: Habit[];
   loading: boolean;
   onToggle: (id: string) => void;
+  onLogProgress: (id: string, value: number) => void;
   onDelete: (id: string) => void;
 }
 
-export default function HabitList({ habits, loading, onToggle, onDelete }: Props) {
+export default function HabitList({
+  habits,
+  loading,
+  onToggle,
+  onLogProgress,
+  onDelete,
+}: Props) {
   if (loading) {
     return <p className="py-16 text-center text-sm text-muted">Loading…</p>;
   }
@@ -30,6 +37,7 @@ export default function HabitList({ habits, loading, onToggle, onDelete }: Props
           key={habit.id}
           habit={habit}
           onToggle={onToggle}
+          onLogProgress={onLogProgress}
           onDelete={onDelete}
         />
       ))}

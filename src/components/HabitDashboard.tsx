@@ -1,18 +1,39 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
+import { HABIT_TEMPLATES } from "@/lib/templates";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
+import type { HabitCategory } from "@/types/habit";
 
 export default function HabitDashboard() {
-  const { habits, loading, error, addHabit, toggleHabit, deleteHabit } =
-    useHabits();
+  const {
+    habits,
+    loading,
+    error,
+    addHabit,
+    addFromTemplate,
+    toggleHabit,
+    logProgress,
+    deleteHabit,
+  } = useHabits();
+
+  const [filter, setFilter] = useState<HabitCategory | "All">("All");
 
   const today = new Date().toLocaleDateString(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
   });
+
+  const categoriesPresent = useMemo(
+    () => Array.from(new Set(habits.map((h) => h.category))),
+    [habits]
+  );
+  const filterOptions: (HabitCategory | "All")[] = ["All", ...categoriesPresent];
+  const filteredHabits =
+    filter === "All" ? habits : habits.filter((h) => h.category === filter);
 
   return (
     <div>
@@ -25,16 +46,51 @@ export default function HabitDashboard() {
 
       <AddHabit onAdd={addHabit} />
 
+      {!loading && habits.length === 0 && (
+        <div className="mb-9">
+          <p className="mb-2 text-sm text-muted">Or start from a template:</p>
+          <div className="flex flex-wrap gap-2">
+            {HABIT_TEMPLATES.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => addFromTemplate(t.key)}
+                title={t.description}
+                className="rounded-sm border border-mist px-3 py-1.5 text-sm text-muted transition-colors hover:text-charcoal"
+              >
+                + {t.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {error && (
         <p className="mb-6 rounded border border-ember/30 bg-ember/5 px-3 py-2 text-sm text-ember">
           {error}
         </p>
       )}
 
+      {categoriesPresent.length > 1 && (
+        <div className="mb-4 flex flex-wrap gap-1">
+          {filterOptions.map((c) => (
+            <button
+              key={c}
+              onClick={() => setFilter(c)}
+              className={`rounded-sm px-3 py-1 text-sm transition-colors ${
+                filter === c ? "bg-charcoal text-ink" : "text-muted hover:text-charcoal"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+
       <HabitList
-        habits={habits}
+        habits={filteredHabits}
         loading={loading}
         onToggle={toggleHabit}
+        onLogProgress={logProgress}
         onDelete={deleteHabit}
       />
     </div>

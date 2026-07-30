@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { listHabits, createHabit } from "@/lib/habits";
+import {
+  parseCategory,
+  parseFrequency,
+  parseMissAllowance,
+  parseTarget,
+} from "@/lib/habitInput";
 
 export const dynamic = "force-dynamic";
 
@@ -45,8 +51,20 @@ export async function POST(request: Request) {
       typeof body.color === "string" && /^#[0-9a-fA-F]{6}$/.test(body.color)
         ? body.color
         : PALETTE[Math.floor(Math.random() * PALETTE.length)];
+    const category = parseCategory(body.category);
+    const frequency = parseFrequency(body.frequency);
+    const target = parseTarget(body.target);
+    const missAllowance = parseMissAllowance(body.missAllowance);
 
-    const habit = await createHabit(session.user.id, name, color);
+    const habit = await createHabit(
+      session.user.id,
+      name,
+      color,
+      category,
+      frequency,
+      target,
+      missAllowance
+    );
     return NextResponse.json({ habit }, { status: 201 });
   } catch (error) {
     console.error("POST /api/habits", error);

@@ -1,15 +1,31 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { Habit } from "@/types/habit";
+import type {
+  Habit,
+  HabitCategory,
+  HabitFrequency,
+  HabitTarget,
+} from "@/types/habit";
 import { todayStr } from "@/lib/dates";
+import { HABIT_TEMPLATES } from "@/lib/templates";
+
+export interface NewHabitInput {
+  name: string;
+  category: HabitCategory;
+  frequency: HabitFrequency;
+  target?: HabitTarget | null;
+  missAllowance?: number;
+}
 
 interface UseHabits {
   habits: Habit[];
   loading: boolean;
   error: string | null;
-  addHabit: (name: string) => Promise<void>;
+  addHabit: (input: NewHabitInput) => Promise<void>;
+  addFromTemplate: (templateKey: string) => Promise<void>;
   toggleHabit: (id: string) => Promise<void>;
+  logProgress: (id: string, value: number) => Promise<void>;
   deleteHabit: (id: string) => Promise<void>;
 }
 
@@ -46,14 +62,20 @@ export function useHabits(): UseHabits {
     refresh();
   }, [refresh]);
 
-  const addHabit = useCallback(async (name: string) => {
-    const trimmed = name.trim();
+  const addHabit = useCallback(async (input: NewHabitInput) => {
+    const trimmed = input.name.trim();
     if (!trimmed) return;
     try {
       const res = await fetch("/api/habits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: trimmed }),
+        body: JSON.stringify({
+          name: trimmed,
+          category: input.category,
+          frequency: input.frequency,
+          target: input.target ?? null,
+          missAllowance: input.missAllowance ?? 0,
+        }),
       });
       if (res.status === 401) {
         setHabits([]);
@@ -65,6 +87,28 @@ export function useHabits(): UseHabits {
       setError(null);
     } catch {
       setError("Couldn't add that habit. Try again.");
+    }
+  }, []);
+
+  const addFromTemplate = useCallback(async (templateKey: string) => {
+    const template = HABIT_TEMPLATES.find((t) => t.key === templateKey);
+    if (!template) return;
+    try {
+      const res = await fetch("/api/habits/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ habits: template.habits }),
+      });
+      if (res.status === 401) {
+        setHabits([]);
+        return redirectToLogin();
+      }
+      if (!res.ok) throw new Error("bulk");
+      const data = await res.json();
+      setHabits((prev) => [...prev, ...(data.habits as Habit[])]);
+      setError(null);
+    } catch {
+      setError("Couldn't add that template. Try again.");
     }
   }, []);
 
@@ -106,6 +150,32 @@ export function useHabits(): UseHabits {
     [refresh]
   );
 
+  const logProgress = useCallback(
+    async (id: string, value: number) => {
+      const date = todayStr();
+      try {
+        const res = await fetch(`/api/habits/${id}/progress`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date, value }),
+        });
+        if (res.status === 401) {
+          setHabits([]);
+          return redirectToLogin();
+        }
+        if (!res.ok) throw new Error("progress");
+        const data = await res.json();
+        const updated = data.habit as Habit;
+        setHabits((prev) => prev.map((h) => (h.id === id ? updated : h)));
+        setError(null);
+      } catch {
+        setError("Couldn't save that value. Refreshing…");
+        refresh();
+      }
+    },
+    [refresh]
+  );
+
   const deleteHabit = useCallback(
     async (id: string) => {
       const snapshot = habits;
@@ -125,5 +195,14 @@ export function useHabits(): UseHabits {
     [habits]
   );
 
-  return { habits, loading, error, addHabit, toggleHabit, deleteHabit };
+  return {
+    habits,
+    loading,
+    error,
+    addHabit,
+    addFromTemplate,
+    toggleHabit,
+    logProgress,
+    deleteHabit,
+  };
 }

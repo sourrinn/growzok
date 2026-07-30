@@ -17,21 +17,6 @@ export function dateStrOffset(offset: number): string {
   return toDateStr(d);
 }
 
-/**
- * Consecutive completed days ending today, or ending yesterday when today
- * isn't done yet (so a streak survives until you actually miss a day).
- */
-export function computeStreak(history: string[]): number {
-  const set = new Set(history);
-  let streak = 0;
-  let offset = set.has(todayStr()) ? 0 : -1;
-  while (set.has(dateStrOffset(offset))) {
-    streak++;
-    offset--;
-  }
-  return streak;
-}
-
 /** The last `n` calendar days, oldest first. */
 export function lastNDays(n: number): string[] {
   const days: string[] = [];

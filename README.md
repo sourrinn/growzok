@@ -3,7 +3,44 @@
 A minimal, sleek habit tracker.
 **Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Auth.js · MongoDB.**
 
-Sign up, then tap a habit to mark it done for the day. Each one grows a 14-day "stem" so you can see your rhythm at a glance, and your current streak is tracked automatically. Every account sees only its own habits.
+Sign up, then tap a habit to mark it done for the day. Each one grows a 14-day "stem" so you can see your rhythm at a glance, and your success rate, streak, and category are tracked automatically. Every account sees only its own habits.
+
+See [TODO.md](TODO.md) for the full feature roadmap.
+
+## Analytics
+
+Each habit tracks more than a streak:
+
+- **Category** (Health, Fitness, Learning, Finance, Productivity, Personal) and
+  **frequency** (Daily, Weekdays, Weekends, N times/week, or specific days of
+  the week), set at creation. The dashboard shows filter tabs once more than
+  one category is in use.
+- **Success rate** — completed ÷ trackable days since creation, frequency-aware
+  (a weekday-only habit isn't penalized for weekends).
+- **Current & best streak** for daily/weekdays/weekends/custom-day habits;
+  N-times/week habits show progress toward this week's target instead, since a
+  daily streak doesn't fit that shape.
+- **Habit detail page** (click any habit) — a GitHub-style completion heatmap,
+  its stats, usual completion time, and plain-language insights (e.g. "your
+  success rate is up 17% vs last month", "you complete this most often on
+  Tuesdays") generated from simple period-over-period and weekday diffing — no
+  AI, and nothing shown until there's enough history to say something real.
+- **Reports** page — completed/missed/success rate, top and weakest habit, and
+  a per-category breakdown, for the current week, month, quarter, or year.
+  Computed client-side from each habit's history — no extra API calls.
+
+## Advanced habit features
+
+- **Targets** — give a habit a daily numeric goal instead of a plain checkmark
+  (count/time/distance/currency + a unit, e.g. "8 glasses"). Logging a value
+  derives "done" from value ≥ goal, so streaks/success-rate/the heatmap all
+  keep working unchanged underneath.
+- **Miss allowance** — set how many misses per week are still "on track" for a
+  habit; the card and detail page show on-track status for the current week
+  instead of (or alongside) a strict streak.
+- **Templates** — 30-Day Fitness, Student, Developer, and Morning Routine
+  bundles, offered when your habit list is empty; picks a category + frequency
+  per habit and creates them all in one request.
 
 ## Accounts
 
@@ -87,24 +124,37 @@ src/
   auth.ts                     Auth.js config (Credentials provider, JWT sessions)
   app/
     layout.tsx                Root layout, fonts, global styles
-    page.tsx                  Home (auth-gated) — account bar + dashboard
+    page.tsx                  Home (auth-gated) — header + dashboard
+    reports/page.tsx          Weekly/monthly/quarterly/yearly reports (auth-gated)
+    habit/[id]/page.tsx       Habit detail — stats + heatmap (auth-gated)
     login/ · register/        Auth pages
     globals.css               Tailwind v4 import + design tokens
     api/
       auth/[...nextauth]/     Auth.js route handler
       register/route.ts       POST (sign up)
       habits/
-        route.ts              GET (list) · POST (create)   — auth-gated
-        [id]/route.ts         DELETE                        — auth-gated
-        [id]/toggle/route.ts  POST (toggle a date)          — auth-gated
-  components/                 UI: dashboard, list, card, add form, streak stem, auth form
+        route.ts              GET (list) · POST (create)    — auth-gated
+        bulk/route.ts         POST (create from a template)  — auth-gated
+        [id]/route.ts         DELETE                         — auth-gated
+        [id]/toggle/route.ts  POST (toggle a date)           — auth-gated
+        [id]/progress/route.ts POST (log a target value)     — auth-gated
+  components/
+    AppHeader.tsx              Nav + account bar + sign-out (server component)
+    HabitDashboard.tsx · HabitList.tsx · HabitCard.tsx · AddHabit.tsx · StreakStem.tsx
+    HabitDetail.tsx · Heatmap.tsx · ReportsView.tsx · StatTile.tsx · AuthForm.tsx
   hooks/useHabits.ts          Client data layer with optimistic updates
   lib/
     mongodb.ts                Cached MongoDB connection (safe across HMR)
     password.ts               scrypt hash/verify
-    habits.ts                 Habit data access (atomic toggle via update pipeline)
+    habits.ts                 Habit data access (toggle, target-progress logging — both atomic update pipelines)
+    habitInput.ts              Shared request-body validation (category, frequency, target, miss allowance)
+    templates.ts               Static habit-template bundles
     users.ts                  User data access (unique-email index, race-safe create)
-    dates.ts                  Local-date + streak helpers
+    dates.ts                  Local-date helpers
+    frequency.ts              Trackable-day logic + frequency labels (incl. custom days)
+    analytics.ts               Success rate, streaks, weekly progress, on-track status, reports
+    completionStats.ts         Completion-time-of-day stats
+    insights.ts                 Trend detection (period-over-period + weekday diffing)
   types/habit.ts · user.ts    Shared types + serializers
   types/next-auth.d.ts        Session augmentation (adds user id)
 ```
@@ -126,9 +176,18 @@ under **Database Access**, not your Atlas account login. Check:
 allowlist), not credentials. Add your current IP (or `0.0.0.0/0` for testing)
 under Atlas's **Network Access**.
 
-## How streaks work
+## How streaks and success rate work
 
-A day counts when you tap the circle. Your streak is the number of consecutive completed days ending today — or yesterday if today isn't done yet — so a streak survives until you actually miss a day. Dates use your local timezone.
+A day counts when you tap the circle. Your current streak is the number of
+consecutive *trackable* days completed, ending today — or yesterday if today
+isn't done yet — so a streak survives until you actually miss a trackable day.
+For a weekdays-only habit, weekends don't count and don't break the streak. For
+an N-times/week habit, a daily streak doesn't fit the shape of the goal, so its
+card shows progress toward the current week's target instead.
+
+Success rate is completed ÷ trackable days since the habit was created (capped
+per calendar week at the target for N-times/week habits, so over-completing one
+week doesn't inflate the rate). Dates use your local timezone.
 
 ## Notes
 

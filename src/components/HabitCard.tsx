@@ -41,7 +41,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
     <li className="group flex items-center justify-between gap-4 border-b border-mist py-5">
       <div className="flex min-w-0 flex-1 items-center gap-3.5">
         {habit.target ? (
-          <div className="flex flex-shrink-0 items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <input
               type="number"
               min={0}
@@ -52,7 +52,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
                 if (e.key === "Enter") (e.target as HTMLInputElement).blur();
               }}
               aria-label={`Log today's ${habit.name}`}
-              className={`h-[26px] w-14 rounded-sm border px-1.5 text-center text-sm outline-none transition-colors ${
+              className={`h-6.5 w-14 rounded-sm border px-1.5 text-center text-sm outline-none transition-colors ${
                 doneToday
                   ? "border-transparent text-ink"
                   : "border-mist text-charcoal focus:border-sage"
@@ -67,7 +67,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
             aria-label={
               doneToday ? `Mark ${habit.name} not done` : `Mark ${habit.name} done`
             }
-            className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
+            className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
             style={{
               borderColor: habit.color,
               backgroundColor: doneToday ? habit.color : "transparent",

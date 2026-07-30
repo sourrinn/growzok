@@ -1,0 +1,129 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import type { Habit } from "@/types/habit";
+import { todayStr } from "@/lib/dates";
+
+interface UseHabits {
+  habits: Habit[];
+  loading: boolean;
+  error: string | null;
+  addHabit: (name: string) => Promise<void>;
+  toggleHabit: (id: string) => Promise<void>;
+  deleteHabit: (id: string) => Promise<void>;
+}
+
+/** Session expired or missing → send the user to the login page. */
+function redirectToLogin() {
+  if (typeof window !== "undefined") window.location.href = "/login";
+}
+
+export function useHabits(): UseHabits {
+  const [habits, setHabits] = useState<Habit[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/habits", { cache: "no-store" });
+      if (res.status === 401) {
+        setHabits([]);
+        return redirectToLogin();
+      }
+      if (!res.ok) throw new Error("load");
+      const data = await res.json();
+      setHabits(data.habits as Habit[]);
+      setError(null);
+    } catch {
+      setError("Couldn't load your habits. Check your database connection and refresh.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const addHabit = useCallback(async (name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    try {
+      const res = await fetch("/api/habits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: trimmed }),
+      });
+      if (res.status === 401) {
+        setHabits([]);
+        return redirectToLogin();
+      }
+      if (!res.ok) throw new Error("add");
+      const data = await res.json();
+      setHabits((prev) => [...prev, data.habit as Habit]);
+      setError(null);
+    } catch {
+      setError("Couldn't add that habit. Try again.");
+    }
+  }, []);
+
+  const toggleHabit = useCallback(
+    async (id: string) => {
+      const date = todayStr();
+      // Optimistic update for an instant response.
+      setHabits((prev) =>
+        prev.map((h) =>
+          h.id === id
+            ? {
+                ...h,
+                history: h.history.includes(date)
+                  ? h.history.filter((d) => d !== date)
+                  : [...h.history, date],
+              }
+            : h
+        )
+      );
+      try {
+        const res = await fetch(`/api/habits/${id}/toggle`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date }),
+        });
+        if (res.status === 401) {
+          setHabits([]);
+          return redirectToLogin();
+        }
+        if (!res.ok) throw new Error("toggle");
+        const data = await res.json();
+        const updated = data.habit as Habit;
+        setHabits((prev) => prev.map((h) => (h.id === id ? updated : h)));
+      } catch {
+        setError("Couldn't save that change. Refreshing…");
+        refresh();
+      }
+    },
+    [refresh]
+  );
+
+  const deleteHabit = useCallback(
+    async (id: string) => {
+      const snapshot = habits;
+      setHabits((prev) => prev.filter((h) => h.id !== id)); // optimistic
+      try {
+        const res = await fetch(`/api/habits/${id}`, { method: "DELETE" });
+        if (res.status === 401) {
+          setHabits([]);
+          return redirectToLogin();
+        }
+        if (!res.ok) throw new Error("delete");
+      } catch {
+        setError("Couldn't delete that habit.");
+        setHabits(snapshot); // rollback
+      }
+    },
+    [habits]
+  );
+
+  return { habits, loading, error, addHabit, toggleHabit, deleteHabit };
+}

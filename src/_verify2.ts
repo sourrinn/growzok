@@ -33,6 +33,8 @@ function makeHabit(overrides: Partial<Habit>): Habit {
     name: "Test",
     color: "#5c7a5c",
     category: "Personal",
+    userLabel: "Personal",
+    domain: "Productivity",
     frequency: { type: "daily" },
     missAllowance: 0,
     target: null,

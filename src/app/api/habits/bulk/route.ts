@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createHabit } from "@/lib/habits";
-import { parseCategory, parseFrequency } from "@/lib/habitInput";
+import {
+  parseCategory,
+  parseDomain,
+  parseFrequency,
+  parseMissAllowance,
+  parseTarget,
+  parseUserLabel,
+} from "@/lib/habitInput";
 
 export const dynamic = "force-dynamic";
 
 const PALETTE = ["#5c7a5c", "#7a6a5c", "#5c6a7a", "#7a5c6a", "#6a7a5c"];
 const MAX_BULK = 10;
 
-/** Bulk-create habits (used by the "start from a template" flow). */
+/** Bulk-create habits (used by template adopt / custom template import flows). */
 export async function POST(request: Request) {
   try {
     const session = await auth();
@@ -38,9 +45,25 @@ export async function POST(request: Request) {
           typeof v.name === "string" ? v.name.trim().slice(0, 60) : "";
         const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
         const category = parseCategory(v.category);
+        const domain = parseDomain(v.domain);
+        // suggestedLabel from template; fall back to category string
+        const userLabel = parseUserLabel(v.suggestedLabel ?? v.userLabel ?? v.category);
         const frequency = parseFrequency(v.frequency);
+        const target = parseTarget(v.target);
+        const missAllowance = parseMissAllowance(v.missAllowance);
+
         return name
-          ? createHabit(session.user.id, name, color, category, frequency)
+          ? createHabit(
+              session.user.id,
+              name,
+              color,
+              category,
+              frequency,
+              target,
+              missAllowance,
+              domain,
+              userLabel
+            )
           : null;
       })
     );

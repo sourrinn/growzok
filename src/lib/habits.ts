@@ -1,9 +1,12 @@
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import {
+  DEFAULT_DOMAIN,
+  DEFAULT_USER_LABEL,
   type Habit,
   type HabitCategory,
   type HabitDoc,
+  type HabitDomain,
   type HabitFrequency,
   type HabitTarget,
   serializeHabit,
@@ -29,7 +32,9 @@ export async function createHabit(
   category: HabitCategory,
   frequency: HabitFrequency,
   target: HabitTarget | null = null,
-  missAllowance = 0
+  missAllowance = 0,
+  domain: HabitDomain = DEFAULT_DOMAIN,
+  userLabel: string = DEFAULT_USER_LABEL
 ): Promise<Habit> {
   const col = await collection();
   const doc: HabitDoc = {
@@ -38,6 +43,8 @@ export async function createHabit(
     name,
     color,
     category,
+    userLabel,
+    domain,
     frequency,
     missAllowance,
     target,

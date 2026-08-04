@@ -1,8 +1,11 @@
 import {
-  DEFAULT_CATEGORY,
+  DEFAULT_DOMAIN,
   DEFAULT_FREQUENCY,
+  DEFAULT_USER_LABEL,
   HABIT_CATEGORIES,
+  HABIT_DOMAINS,
   type HabitCategory,
+  type HabitDomain,
   type HabitFrequency,
   type HabitTarget,
   type HabitTargetType,
@@ -16,7 +19,20 @@ export function parseCategory(value: unknown): HabitCategory {
   return typeof value === "string" &&
     (HABIT_CATEGORIES as string[]).includes(value)
     ? (value as HabitCategory)
-    : DEFAULT_CATEGORY;
+    : "Personal";
+}
+
+export function parseDomain(value: unknown): HabitDomain {
+  return typeof value === "string" &&
+    (HABIT_DOMAINS as string[]).includes(value)
+    ? (value as HabitDomain)
+    : DEFAULT_DOMAIN;
+}
+
+export function parseUserLabel(value: unknown): string {
+  if (typeof value !== "string") return DEFAULT_USER_LABEL;
+  const trimmed = value.trim().slice(0, 30);
+  return trimmed || DEFAULT_USER_LABEL;
 }
 
 export function parseFrequency(value: unknown): HabitFrequency {

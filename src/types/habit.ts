@@ -17,6 +17,43 @@ export const HABIT_CATEGORIES: HabitCategory[] = [
   "Personal",
 ];
 
+export type HabitDomain =
+  | "Sleep"
+  | "Hydration"
+  | "Nutrition"
+  | "Cardio"
+  | "Strength"
+  | "Mobility"
+  | "Breathing"
+  | "Grooming"
+  | "Preventive"
+  | "Recovery"
+  | "Productivity"
+  | "Finance"
+  | "Social"
+  | "Learning"
+  | "Digital Minimalism"
+  | "Gut Health";
+
+export const HABIT_DOMAINS: HabitDomain[] = [
+  "Sleep",
+  "Hydration",
+  "Nutrition",
+  "Cardio",
+  "Strength",
+  "Mobility",
+  "Breathing",
+  "Grooming",
+  "Preventive",
+  "Recovery",
+  "Productivity",
+  "Finance",
+  "Social",
+  "Learning",
+  "Digital Minimalism",
+  "Gut Health",
+];
+
 export type HabitFrequency =
   | { type: "daily" }
   | { type: "weekdays" }
@@ -26,6 +63,8 @@ export type HabitFrequency =
   | { type: "custom"; days: number[] };
 
 export const DEFAULT_CATEGORY: HabitCategory = "Personal";
+export const DEFAULT_USER_LABEL: string = "Personal";
+export const DEFAULT_DOMAIN: HabitDomain = "Productivity";
 export const DEFAULT_FREQUENCY: HabitFrequency = { type: "daily" };
 
 export type HabitTargetType = "count" | "time" | "distance" | "currency";
@@ -44,6 +83,24 @@ export interface Completion {
   completedAt: string;
 }
 
+/** Infer domain for legacy MongoDB documents that only have a category */
+export function inferDomainFromCategory(cat?: string): HabitDomain {
+  switch (cat) {
+    case "Health":
+      return "Hydration";
+    case "Fitness":
+      return "Cardio";
+    case "Learning":
+      return "Learning";
+    case "Finance":
+      return "Finance";
+    case "Productivity":
+      return "Productivity";
+    default:
+      return "Productivity";
+  }
+}
+
 /** Shape stored in MongoDB. */
 export interface HabitDoc {
   _id: ObjectId;
@@ -51,7 +108,9 @@ export interface HabitDoc {
   userId: string;
   name: string;
   color: string;
-  category: HabitCategory;
+  category?: HabitCategory;
+  userLabel?: string;
+  domain?: HabitDomain;
   frequency: HabitFrequency;
   /** Allowed misses per Monday-start week before the habit reads as "off track". 0 = strict. */
   missAllowance: number;
@@ -70,6 +129,8 @@ export interface Habit {
   name: string;
   color: string;
   category: HabitCategory;
+  userLabel: string;
+  domain: HabitDomain;
   frequency: HabitFrequency;
   missAllowance: number;
   target: HabitTarget | null;
@@ -80,11 +141,17 @@ export interface Habit {
 }
 
 export function serializeHabit(doc: HabitDoc): Habit {
+  const category = doc.category ?? DEFAULT_CATEGORY;
+  const userLabel = doc.userLabel ?? doc.category ?? DEFAULT_USER_LABEL;
+  const domain = doc.domain ?? inferDomainFromCategory(doc.category);
+
   return {
     id: doc._id.toString(),
     name: doc.name,
     color: doc.color,
-    category: doc.category ?? DEFAULT_CATEGORY,
+    category,
+    userLabel,
+    domain,
     frequency: doc.frequency ?? DEFAULT_FREQUENCY,
     missAllowance: doc.missAllowance ?? 0,
     target: doc.target ?? null,

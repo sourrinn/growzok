@@ -3,7 +3,9 @@
 import { useState } from "react";
 import {
   HABIT_CATEGORIES,
+  HABIT_DOMAINS,
   type HabitCategory,
+  type HabitDomain,
   type HabitFrequency,
   type HabitTarget,
   type HabitTargetType,
@@ -31,7 +33,8 @@ export default function AddHabit({
   onAdd: (input: NewHabitInput) => void | Promise<void>;
 }) {
   const [value, setValue] = useState("");
-  const [category, setCategory] = useState<HabitCategory>("Personal");
+  const [userLabel, setUserLabel] = useState("Personal");
+  const [domain, setDomain] = useState<HabitDomain>("Productivity");
   const [freqKind, setFreqKind] = useState<FrequencyKind>("daily");
   const [times, setTimes] = useState(3);
   const [customDays, setCustomDays] = useState<Set<number>>(new Set([1, 2, 3, 4, 5]));
@@ -69,8 +72,14 @@ export default function AddHabit({
         ? { type: targetType, goal, unit: unit.trim().slice(0, 20) }
         : null;
 
+    // Derive category from userLabel for backward compat with existing analytics
+    const category: HabitCategory =
+      (HABIT_CATEGORIES as string[]).includes(userLabel)
+        ? (userLabel as HabitCategory)
+        : "Personal";
+
     setValue("");
-    await onAdd({ name, category, frequency, target, missAllowance });
+    await onAdd({ name, category, domain, userLabel, frequency, target, missAllowance });
   };
 
   return (
@@ -96,15 +105,26 @@ export default function AddHabit({
       </div>
 
       <div className="flex flex-wrap items-center gap-3 text-sm">
+        {/* User Label — dashboard filter */}
+        <input
+          type="text"
+          value={userLabel}
+          onChange={(e) => setUserLabel(e.target.value.slice(0, 30))}
+          placeholder="Label (e.g. Health)"
+          aria-label="Label"
+          className="w-28 border-b border-mist bg-transparent py-1 text-charcoal outline-none transition-colors placeholder:text-muted focus:border-sage"
+        />
+
+        {/* Scientific domain */}
         <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value as HabitCategory)}
+          value={domain}
+          onChange={(e) => setDomain(e.target.value as HabitDomain)}
           className={selectClass}
-          aria-label="Category"
+          aria-label="Domain"
         >
-          {HABIT_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
+          {HABIT_DOMAINS.map((d) => (
+            <option key={d} value={d}>
+              {d}
             </option>
           ))}
         </select>

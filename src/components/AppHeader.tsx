@@ -6,7 +6,7 @@ export default function AppHeader({
   active,
 }: {
   userLabel: string;
-  active: "habits" | "reports";
+  active: "habits" | "reports" | "templates";
 }) {
   return (
     <div className="mb-8 flex items-center justify-between gap-4">
@@ -30,6 +30,16 @@ export default function AppHeader({
           }
         >
           Reports
+        </Link>
+        <Link
+          href="/templates"
+          className={
+            active === "templates"
+              ? "font-medium text-charcoal"
+              : "text-muted transition-colors hover:text-charcoal"
+          }
+        >
+          Templates
         </Link>
       </nav>
 

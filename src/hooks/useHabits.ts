@@ -4,15 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 import type {
   Habit,
   HabitCategory,
+  HabitDomain,
   HabitFrequency,
   HabitTarget,
 } from "@/types/habit";
 import { todayStr } from "@/lib/dates";
-import { HABIT_TEMPLATES } from "@/lib/templates";
+import type { TemplateHabitOverride } from "@/types/template";
 
 export interface NewHabitInput {
   name: string;
   category: HabitCategory;
+  domain: HabitDomain;
+  userLabel: string;
   frequency: HabitFrequency;
   target?: HabitTarget | null;
   missAllowance?: number;
@@ -23,7 +26,7 @@ interface UseHabits {
   loading: boolean;
   error: string | null;
   addHabit: (input: NewHabitInput) => Promise<void>;
-  addFromTemplate: (templateKey: string) => Promise<void>;
+  addFromTemplate: (items: TemplateHabitOverride[]) => Promise<void>;
   toggleHabit: (id: string) => Promise<void>;
   logProgress: (id: string, value: number) => Promise<void>;
   deleteHabit: (id: string) => Promise<void>;
@@ -72,6 +75,8 @@ export function useHabits(): UseHabits {
         body: JSON.stringify({
           name: trimmed,
           category: input.category,
+          domain: input.domain,
+          userLabel: input.userLabel,
           frequency: input.frequency,
           target: input.target ?? null,
           missAllowance: input.missAllowance ?? 0,
@@ -90,14 +95,17 @@ export function useHabits(): UseHabits {
     }
   }, []);
 
-  const addFromTemplate = useCallback(async (templateKey: string) => {
-    const template = HABIT_TEMPLATES.find((t) => t.key === templateKey);
-    if (!template) return;
+  /**
+   * Bulk-create from a customized list of TemplateHabitOverride items.
+   * The items may have been filtered/edited by the user in the customizer drawer.
+   */
+  const addFromTemplate = useCallback(async (items: TemplateHabitOverride[]) => {
+    if (items.length === 0) return;
     try {
       const res = await fetch("/api/habits/bulk", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ habits: template.habits }),
+        body: JSON.stringify({ habits: items }),
       });
       if (res.status === 401) {
         setHabits([]);

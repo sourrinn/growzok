@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useHabits } from "@/hooks/useHabits";
-import { HABIT_TEMPLATES } from "@/lib/templates";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
-import type { HabitCategory } from "@/types/habit";
+import { HABIT_TEMPLATES } from "@/lib/templates";
+import type { TemplateHabitOverride } from "@/types/template";
 
 export default function HabitDashboard() {
   const {
@@ -19,7 +20,7 @@ export default function HabitDashboard() {
     deleteHabit,
   } = useHabits();
 
-  const [filter, setFilter] = useState<HabitCategory | "All">("All");
+  const [filter, setFilter] = useState<string>("All");
 
   const today = new Date().toLocaleDateString(undefined, {
     weekday: "long",
@@ -27,13 +28,18 @@ export default function HabitDashboard() {
     day: "numeric",
   });
 
-  const categoriesPresent = useMemo(
-    () => Array.from(new Set(habits.map((h) => h.category))),
+  // Filter tabs are built from userLabel, not category
+  const labelsPresent = useMemo(
+    () => Array.from(new Set(habits.map((h) => h.userLabel))),
     [habits]
   );
-  const filterOptions: (HabitCategory | "All")[] = ["All", ...categoriesPresent];
+  const filterOptions = ["All", ...labelsPresent];
   const filteredHabits =
-    filter === "All" ? habits : habits.filter((h) => h.category === filter);
+    filter === "All" ? habits : habits.filter((h) => h.userLabel === filter);
+
+  const handleQuickTemplate = async (habits: TemplateHabitOverride[]) => {
+    await addFromTemplate(habits);
+  };
 
   return (
     <div>
@@ -53,7 +59,7 @@ export default function HabitDashboard() {
             {HABIT_TEMPLATES.map((t) => (
               <button
                 key={t.key}
-                onClick={() => addFromTemplate(t.key)}
+                onClick={() => handleQuickTemplate(t.habits)}
                 title={t.description}
                 className="rounded-sm border border-mist px-3 py-1.5 text-sm text-muted transition-colors hover:text-charcoal"
               >
@@ -61,6 +67,12 @@ export default function HabitDashboard() {
               </button>
             ))}
           </div>
+          <Link
+            href="/templates"
+            className="mt-3 inline-block text-xs text-muted underline-offset-2 hover:text-charcoal hover:underline"
+          >
+            Browse all templates →
+          </Link>
         </div>
       )}
 
@@ -70,7 +82,7 @@ export default function HabitDashboard() {
         </p>
       )}
 
-      {categoriesPresent.length > 1 && (
+      {labelsPresent.length > 1 && (
         <div className="mb-4 flex flex-wrap gap-1">
           {filterOptions.map((c) => (
             <button

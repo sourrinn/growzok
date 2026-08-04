@@ -3,9 +3,11 @@ import { auth } from "@/auth";
 import { listHabits, createHabit } from "@/lib/habits";
 import {
   parseCategory,
+  parseDomain,
   parseFrequency,
   parseMissAllowance,
   parseTarget,
+  parseUserLabel,
 } from "@/lib/habitInput";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +54,8 @@ export async function POST(request: Request) {
         ? body.color
         : PALETTE[Math.floor(Math.random() * PALETTE.length)];
     const category = parseCategory(body.category);
+    const domain = parseDomain(body.domain);
+    const userLabel = parseUserLabel(body.userLabel ?? body.category);
     const frequency = parseFrequency(body.frequency);
     const target = parseTarget(body.target);
     const missAllowance = parseMissAllowance(body.missAllowance);
@@ -63,7 +67,9 @@ export async function POST(request: Request) {
       category,
       frequency,
       target,
-      missAllowance
+      missAllowance,
+      domain,
+      userLabel
     );
     return NextResponse.json({ habit }, { status: 201 });
   } catch (error) {

@@ -99,7 +99,8 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
             {habit.name}
           </Link>
           <p className="mt-0.5 truncate text-xs text-muted">
-            {habit.category} · {frequencyLabel(habit.frequency)}
+            <span className="rounded-sm bg-mist px-1 py-0.5 text-[10px] font-medium text-charcoal">{habit.domain}</span>
+            {" "}{habit.userLabel} · {frequencyLabel(habit.frequency)}
             {habit.target ? ` · goal ${habit.target.goal} ${habit.target.unit}` : ""}
           </p>
           <StreakStem history={habit.history} color={habit.color} />

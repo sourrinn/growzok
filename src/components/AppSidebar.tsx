@@ -11,7 +11,7 @@ interface Props {
 export default function AppSidebar({ userLabel }: Props) {
   const pathname = usePathname();
 
-  const workspaceItems = [
+  const navItems = [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -53,7 +53,7 @@ export default function AppSidebar({ userLabel }: Props) {
 
   return (
     <aside className="flex h-full flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-4 text-[#232f26]">
-      {/* Top Section: Brand & Workspace Nav */}
+      {/* Top Section: Brand & Workspace Nav Links */}
       <div className="space-y-6">
         {/* Brand Header */}
         <div className="flex items-center justify-between px-2 py-1">
@@ -72,13 +72,13 @@ export default function AppSidebar({ userLabel }: Props) {
           </Link>
         </div>
 
-        {/* Workspace Navigation Group */}
+        {/* Navigation Group */}
         <div className="space-y-1">
           <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970]">
             Workspace
           </p>
           <nav className="mt-2 space-y-1">
-            {workspaceItems.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -96,9 +96,9 @@ export default function AppSidebar({ userLabel }: Props) {
         </div>
       </div>
 
-      {/* Bottom Section: Account Settings Nav Item & Profile Card */}
+      {/* Bottom Section: Account Settings Nav Item & Profile Bar */}
       <div className="space-y-3 border-t border-[#e5e1d7] pt-4">
-        {/* Dedicated Bottom Account Nav Item */}
+        {/* Account Settings Nav Item */}
         <Link
           href="/account"
           className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
@@ -114,10 +114,10 @@ export default function AppSidebar({ userLabel }: Props) {
           <span>Account Settings</span>
         </Link>
 
-        {/* User Card with Sign Out Action */}
+        {/* User Profile Bar */}
         {userLabel ? (
           <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-[#e5e1d7] shadow-sm">
-            <Link href="/account" className="flex items-center gap-2.5 min-w-0 flex-1 hover:opacity-80">
+            <div className="flex items-center gap-2.5 min-w-0">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#232f26] text-xs font-bold text-white uppercase">
                 {userLabel[0]}
               </div>
@@ -125,9 +125,9 @@ export default function AppSidebar({ userLabel }: Props) {
                 <p className="truncate text-xs font-semibold text-[#232f26]">
                   {userLabel}
                 </p>
-                <p className="text-[10px] text-[#737970]">Active Member</p>
+                <p className="text-[10px] text-[#737970]">Active User</p>
               </div>
-            </Link>
+            </div>
 
             <button
               type="button"

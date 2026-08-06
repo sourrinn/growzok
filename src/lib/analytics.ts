@@ -1,6 +1,6 @@
 import { dateStrOffset, toDateStr, todayStr } from "@/lib/dates";
 import { isTrackableDate } from "@/lib/frequency";
-import type { Habit, HabitCategory } from "@/types/habit";
+import type { Habit, HabitCategory, HabitDomain } from "@/types/habit";
 
 export interface SuccessRate {
   completed: number;
@@ -31,14 +31,7 @@ function weekKeyOf(dateStr: string): string {
 
 /**
  * completed/trackable days within [rangeStart, rangeEnd], clipped to the
- * habit's lifetime (creation date through today — no crediting/penalizing for
- * days before the habit existed or that haven't happened yet).
- *
- * For "timesPerWeek" habits every day is nominally trackable, but credit is
- * capped at the weekly target per Monday-start week so over-completing one
- * week doesn't inflate the rate. A week that's only partially inside the range
- * still counts its full weekly target — a reasonable approximation at the
- * range's edges.
+ * habit's lifetime (creation date through today).
  */
 export function successRateForRange(
   habit: Habit,
@@ -86,9 +79,7 @@ export function computeSuccessRate(habit: Habit): SuccessRate {
 }
 
 /**
- * Consecutive trackable days completed, ending today (or yesterday if today
- * isn't done yet). Not meaningful for "timesPerWeek" habits — use
- * computeThisWeekProgress for those instead.
+ * Consecutive trackable days completed, ending today.
  */
 export function computeCurrentStreak(habit: Habit): number {
   if (habit.frequency.type === "timesPerWeek") return 0;
@@ -103,7 +94,7 @@ export function computeCurrentStreak(habit: Habit): number {
     const dateStr = dateStrOffset(offset);
     if (!isTrackableDate(habit.frequency, dateStr)) {
       offset--;
-      continue; // non-trackable days don't count and don't break the streak
+      continue;
     }
     if (!set.has(dateStr)) break;
     streak++;
@@ -113,8 +104,7 @@ export function computeCurrentStreak(habit: Habit): number {
 }
 
 /**
- * Longest run of consecutive trackable days completed since the habit was
- * created. Not meaningful for "timesPerWeek" habits.
+ * Longest run of consecutive trackable days completed.
  */
 export function computeBestStreak(habit: Habit): number {
   if (habit.frequency.type === "timesPerWeek") return 0;
@@ -136,7 +126,7 @@ export function computeBestStreak(habit: Habit): number {
   return best;
 }
 
-/** For "timesPerWeek" habits, progress within the current Monday-start week. */
+/** For "timesPerWeek" habits, progress within the current week. */
 export function computeThisWeekProgress(
   habit: Habit
 ): { completed: number; target: number } | null {
@@ -156,12 +146,6 @@ export interface OnTrackStatus {
   onTrack: boolean;
 }
 
-/**
- * Whether the habit is within its allowed misses (`missAllowance`) for the
- * current Monday-start week so far. Only trackable days from the start of the
- * week through yesterday count as potential misses — today isn't judged until
- * it's actually over, mirroring how a streak survives while today is pending.
- */
 export function computeOnTrackStatus(habit: Habit): OnTrackStatus {
   const allowance = habit.missAllowance ?? 0;
   const set = new Set(habit.history);
@@ -197,7 +181,7 @@ export function getPeriodRange(
     }
     case "month": {
       start = new Date(today.getFullYear(), today.getMonth(), 1);
-      label = today.toLocaleDateString(undefined, {
+      label = today.toLocaleDateString("en-US", {
         month: "long",
         year: "numeric",
       });
@@ -226,15 +210,34 @@ export interface CategoryStat {
   rate: number;
 }
 
+export interface DomainStat {
+  domain: HabitDomain;
+  completed: number;
+  trackable: number;
+  rate: number;
+}
+
+export interface HabitReportRow {
+  habit: Habit;
+  completed: number;
+  trackable: number;
+  rate: number;
+  streak: number;
+  bestStreak: number;
+}
+
 export interface Report {
   label: string;
   completed: number;
   trackable: number;
   missed: number;
   rate: number;
+  activeStreaksCount: number;
   topHabit: { habit: Habit; rate: number } | null;
   weakestHabit: { habit: Habit; rate: number } | null;
   categories: CategoryStat[];
+  domains: DomainStat[];
+  rows: HabitReportRow[];
 }
 
 export function buildReport(habits: Habit[], period: ReportPeriod): Report {
@@ -242,14 +245,31 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
 
   let completed = 0;
   let trackable = 0;
+  let activeStreaksCount = 0;
   let topHabit: { habit: Habit; rate: number } | null = null;
   let weakestHabit: { habit: Habit; rate: number } | null = null;
+
   const categoryTotals = new Map<HabitCategory, { completed: number; trackable: number }>();
+  const domainTotals = new Map<HabitDomain, { completed: number; trackable: number }>();
+  const rows: HabitReportRow[] = [];
 
   for (const habit of habits) {
     const sr = successRateForRange(habit, start, end);
     completed += sr.completed;
     trackable += sr.trackable;
+
+    const streak = computeCurrentStreak(habit);
+    const bestStreak = computeBestStreak(habit);
+    if (streak > 0) activeStreaksCount++;
+
+    rows.push({
+      habit,
+      completed: sr.completed,
+      trackable: sr.trackable,
+      rate: sr.rate,
+      streak,
+      bestStreak,
+    });
 
     if (sr.trackable > 0) {
       if (!topHabit || sr.rate > topHabit.rate) topHabit = { habit, rate: sr.rate };
@@ -258,15 +278,32 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
       }
     }
 
-    const totals = categoryTotals.get(habit.category) ?? { completed: 0, trackable: 0 };
-    totals.completed += sr.completed;
-    totals.trackable += sr.trackable;
-    categoryTotals.set(habit.category, totals);
+    const catTot = categoryTotals.get(habit.category) ?? { completed: 0, trackable: 0 };
+    catTot.completed += sr.completed;
+    catTot.trackable += sr.trackable;
+    categoryTotals.set(habit.category, catTot);
+
+    const domTot = domainTotals.get(habit.domain) ?? { completed: 0, trackable: 0 };
+    domTot.completed += sr.completed;
+    domTot.trackable += sr.trackable;
+    domainTotals.set(habit.domain, domTot);
   }
+
+  // Sort rows descending by success rate
+  rows.sort((a, b) => b.rate - a.rate);
 
   const categories: CategoryStat[] = Array.from(categoryTotals.entries())
     .map(([category, t]) => ({
       category,
+      completed: t.completed,
+      trackable: t.trackable,
+      rate: t.trackable ? t.completed / t.trackable : 0,
+    }))
+    .sort((a, b) => b.rate - a.rate);
+
+  const domains: DomainStat[] = Array.from(domainTotals.entries())
+    .map(([domain, t]) => ({
+      domain,
       completed: t.completed,
       trackable: t.trackable,
       rate: t.trackable ? t.completed / t.trackable : 0,
@@ -279,8 +316,11 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
     trackable,
     missed: trackable - completed,
     rate: trackable ? completed / trackable : 0,
+    activeStreaksCount,
     topHabit,
     weakestHabit,
     categories,
+    domains,
+    rows,
   };
 }

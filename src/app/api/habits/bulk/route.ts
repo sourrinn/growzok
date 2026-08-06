@@ -26,6 +26,8 @@ export async function POST(request: Request) {
 
     const body = await request.json().catch(() => ({}));
     const items = Array.isArray(body.habits) ? body.habits : [];
+    const templateKey = typeof body.templateKey === "string" ? body.templateKey : undefined;
+
     if (items.length === 0) {
       return NextResponse.json({ error: "No habits provided." }, { status: 400 });
     }
@@ -47,7 +49,6 @@ export async function POST(request: Request) {
         const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
         const category = parseCategory(v.category);
         const domain = parseDomain(v.domain);
-        // suggestedLabel from template; fall back to category string
         const userLabel = parseUserLabel(v.suggestedLabel ?? v.userLabel ?? v.category);
         const frequency = parseFrequency(v.frequency);
         const target = parseTarget(v.target);
@@ -63,7 +64,8 @@ export async function POST(request: Request) {
               target,
               missAllowance,
               domain,
-              userLabel
+              userLabel,
+              templateKey
             )
           : null;
       })

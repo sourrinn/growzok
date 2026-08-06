@@ -34,7 +34,8 @@ export async function createHabit(
   target: HabitTarget | null = null,
   missAllowance = 0,
   domain: HabitDomain = DEFAULT_DOMAIN,
-  userLabel: string = DEFAULT_USER_LABEL
+  userLabel: string = DEFAULT_USER_LABEL,
+  templateKey?: string
 ): Promise<Habit> {
   const col = await collection();
   const doc: HabitDoc = {
@@ -45,6 +46,7 @@ export async function createHabit(
     category,
     userLabel,
     domain,
+    templateKey,
     frequency,
     missAllowance,
     target,
@@ -65,11 +67,6 @@ export async function deleteHabit(userId: string, id: string): Promise<boolean> 
   return result.deletedCount === 1;
 }
 
-/**
- * Add the date if missing, remove it if present. Atomic via update pipeline.
- * `completions` (used for completion-time analytics) is kept in sync with
- * `history` in the same pipeline stage.
- */
 export async function toggleHabit(
   userId: string,
   id: string,
@@ -116,13 +113,6 @@ export async function toggleHabit(
   return updated ? serializeHabit(updated) : null;
 }
 
-/**
- * Log a numeric value for a target-based habit on a given date. `history`
- * membership is derived from whether the value meets the habit's goal, so
- * every existing streak/success-rate/heatmap consumer keeps working unchanged.
- * Kept as its own atomic operation, separate from the plain toggle above, so
- * binary habits are untouched by this logic.
- */
 export async function logProgress(
   userId: string,
   id: string,

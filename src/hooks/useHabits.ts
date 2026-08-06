@@ -26,7 +26,7 @@ interface UseHabits {
   loading: boolean;
   error: string | null;
   addHabit: (input: NewHabitInput) => Promise<void>;
-  addFromTemplate: (items: TemplateHabitOverride[]) => Promise<void>;
+  addFromTemplate: (items: TemplateHabitOverride[], templateKey?: string) => Promise<void>;
   toggleHabit: (id: string) => Promise<void>;
   logProgress: (id: string, value: number) => Promise<void>;
   deleteHabit: (id: string) => Promise<void>;
@@ -97,15 +97,14 @@ export function useHabits(): UseHabits {
 
   /**
    * Bulk-create from a customized list of TemplateHabitOverride items.
-   * The items may have been filtered/edited by the user in the customizer drawer.
    */
-  const addFromTemplate = useCallback(async (items: TemplateHabitOverride[]) => {
+  const addFromTemplate = useCallback(async (items: TemplateHabitOverride[], templateKey?: string) => {
     if (items.length === 0) return;
     try {
       const res = await fetch("/api/habits/bulk", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ habits: items }),
+        body: JSON.stringify({ habits: items, templateKey }),
       });
       if (res.status === 401) {
         setHabits([]);
@@ -123,7 +122,6 @@ export function useHabits(): UseHabits {
   const toggleHabit = useCallback(
     async (id: string) => {
       const date = todayStr();
-      // Optimistic update for an instant response.
       setHabits((prev) =>
         prev.map((h) =>
           h.id === id
@@ -187,7 +185,7 @@ export function useHabits(): UseHabits {
   const deleteHabit = useCallback(
     async (id: string) => {
       const snapshot = habits;
-      setHabits((prev) => prev.filter((h) => h.id !== id)); // optimistic
+      setHabits((prev) => prev.filter((h) => h.id !== id));
       try {
         const res = await fetch(`/api/habits/${id}`, { method: "DELETE" });
         if (res.status === 401) {
@@ -197,7 +195,7 @@ export function useHabits(): UseHabits {
         if (!res.ok) throw new Error("delete");
       } catch {
         setError("Couldn't delete that habit.");
-        setHabits(snapshot); // rollback
+        setHabits(snapshot);
       }
     },
     [habits]

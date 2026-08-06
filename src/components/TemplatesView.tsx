@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TemplateCard from "@/components/TemplateCard";
 import { HABIT_TEMPLATES, getAvailableCategories } from "@/lib/templates";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
-import type { TemplateCategory } from "@/types/template";
+import type { HabitTemplate, TemplateCategory } from "@/types/template";
+import type { TemplateRealtimeStats } from "@/app/api/templates/stats/route";
 
 type SortMode = "popularity" | "rating" | "time";
 
@@ -13,11 +14,34 @@ export default function TemplatesView() {
   const [domainFilter, setDomainFilter] = useState<HabitDomain | "All">("All");
   const [search, setSearch] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("popularity");
+  const [realtimeStats, setRealtimeStats] = useState<Record<string, TemplateRealtimeStats>>({});
+
+  useEffect(() => {
+    fetch("/api/templates/stats")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.stats) setRealtimeStats(data.stats);
+      })
+      .catch(() => {});
+  }, []);
 
   const availableCategories = useMemo(() => getAvailableCategories(), []);
 
+  // Merge real-time DB stats with template definitions
+  const mergedTemplates = useMemo(() => {
+    return HABIT_TEMPLATES.map((t) => {
+      const stats = realtimeStats[t.key];
+      if (!stats) return t;
+      return {
+        ...t,
+        activeUsersCount: stats.activeUsersCount > 0 ? stats.activeUsersCount : t.activeUsersCount,
+        completionRatePct: stats.completionRatePct > 0 ? stats.completionRatePct : t.completionRatePct,
+      };
+    });
+  }, [realtimeStats]);
+
   const filteredAndSorted = useMemo(() => {
-    let list = HABIT_TEMPLATES.filter((t) => {
+    let list = mergedTemplates.filter((t) => {
       if (categoryFilter !== "All" && t.category !== categoryFilter) return false;
       if (domainFilter !== "All") {
         const domains = t.habits.map((h) => h.domain);
@@ -41,7 +65,7 @@ export default function TemplatesView() {
     });
 
     return list;
-  }, [categoryFilter, domainFilter, search, sortMode]);
+  }, [mergedTemplates, categoryFilter, domainFilter, search, sortMode]);
 
   const hasActiveFilters = categoryFilter !== "All" || domainFilter !== "All" || search.trim() !== "";
 

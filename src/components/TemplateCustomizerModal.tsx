@@ -74,10 +74,10 @@ export default function TemplateCustomizerModal({ template, onClose }: Props) {
       };
     });
 
-    await addFromTemplate(items);
+    await addFromTemplate(items, template.key);
     setSubmitting(false);
     onClose();
-    router.push("/");
+    router.push("/dashboard");
   };
 
   return (

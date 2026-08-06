@@ -48,10 +48,16 @@ export default function TemplateCard({ template }: Props) {
             {template.category}
           </span>
           <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-[#737970]">
-            <span className="font-semibold text-[#232f26]">
-              Rating {template.rating.toFixed(1)}
-            </span>
-            <span>({template.reviewsCount.toLocaleString()})</span>
+            {template.reviewsCount > 0 ? (
+              <>
+                <span className="font-semibold text-[#232f26]">
+                  Rating {template.rating.toFixed(1)}
+                </span>
+                <span>({template.reviewsCount.toLocaleString()})</span>
+              </>
+            ) : (
+              <span className="font-medium text-[#737970]">New Protocol</span>
+            )}
           </div>
         </div>
 

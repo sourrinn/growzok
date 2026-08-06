@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import TemplateCard from "@/components/TemplateCard";
 import { HABIT_TEMPLATES, getAvailableCategories } from "@/lib/templates";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
-import type { HabitTemplate, TemplateCategory } from "@/types/template";
+import type { TemplateCategory } from "@/types/template";
 import type { TemplateRealtimeStats } from "@/app/api/templates/stats/route";
 
 type SortMode = "popularity" | "rating" | "time";
@@ -31,11 +31,10 @@ export default function TemplatesView() {
   const mergedTemplates = useMemo(() => {
     return HABIT_TEMPLATES.map((t) => {
       const stats = realtimeStats[t.key];
-      if (!stats) return t;
       return {
         ...t,
-        activeUsersCount: stats.activeUsersCount > 0 ? stats.activeUsersCount : t.activeUsersCount,
-        completionRatePct: stats.completionRatePct > 0 ? stats.completionRatePct : t.completionRatePct,
+        activeUsersCount: stats ? stats.activeUsersCount : 0,
+        completionRatePct: stats ? stats.completionRatePct : 0,
       };
     });
   }, [realtimeStats]);

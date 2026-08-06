@@ -37,14 +37,13 @@ export async function GET() {
 
     const statsMap: Record<string, TemplateRealtimeStats> = {};
 
-    // Initialize with template defaults or real DB counts
     for (const template of HABIT_TEMPLATES) {
       const dbStat = results.find((r) => r._id === template.key);
       const activeUsersCount = dbStat ? dbStat.distinctUsers.length : 0;
       const completionRatePct =
         dbStat && dbStat.totalTrackable > 0
           ? Math.round((dbStat.totalHistory / dbStat.totalTrackable) * 100)
-          : template.completionRatePct;
+          : 0;
 
       statsMap[template.key] = {
         templateKey: template.key,

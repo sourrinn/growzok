@@ -43,8 +43,8 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
   return (
     <li className="group relative flex flex-col justify-between rounded-xl border border-mist/80 bg-white p-4 shadow-sm transition-all hover:border-charcoal/30 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
-        {/* Toggle / Target Input */}
-        <div className="flex items-center gap-3">
+        {/* Toggle / Target Input (Aligned Top Left) */}
+        <div className="flex items-start gap-3">
           {habit.target ? (
             <input
               type="number"
@@ -56,7 +56,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
                 if (e.key === "Enter") (e.target as HTMLInputElement).blur();
               }}
               aria-label={`Log today's ${habit.name}`}
-              className={`h-8 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+              className={`h-8 shrink-0 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
                 doneToday
                   ? "border-transparent text-ink shadow-sm"
                   : "border-mist text-charcoal focus:border-sage"
@@ -73,7 +73,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
               aria-label={
                 doneToday ? `Mark ${habit.name} not done` : `Mark ${habit.name} done`
               }
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
+              className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
               style={{
                 borderColor: habit.color,
                 backgroundColor: doneToday ? habit.color : "transparent",

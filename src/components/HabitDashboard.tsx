@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
-import TemplateStarterGrid from "@/components/TemplateStarterGrid";
 import DashboardSidebar from "@/components/DashboardSidebar";
 
 export default function HabitDashboard() {
@@ -13,7 +12,6 @@ export default function HabitDashboard() {
     loading,
     error,
     addHabit,
-    addFromTemplate,
     toggleHabit,
     logProgress,
     deleteHabit,
@@ -58,10 +56,6 @@ export default function HabitDashboard() {
         {/* Left / Center Main Content (8 cols on desktop) */}
         <div className="space-y-6 lg:col-span-8">
           <AddHabit onAdd={addHabit} />
-
-          {!loading && habits.length === 0 && (
-            <TemplateStarterGrid onAdopt={addFromTemplate} />
-          )}
 
           {error && (
             <p className="rounded-lg border border-ember/30 bg-ember/5 px-4 py-2.5 text-sm text-ember">

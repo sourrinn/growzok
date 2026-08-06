@@ -107,20 +107,34 @@ export default function DashboardSidebar({ habits }: Props) {
         </div>
       )}
 
-      {/* Quick Template Marketplace Shortcut Card */}
-      <div className="rounded-2xl border border-dashed border-mist bg-white p-5 shadow-sm">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted">
-          Need Inspiration?
-        </h2>
-        <p className="mt-1.5 text-xs text-muted">
-          Discover science-backed morning protocols, deep work setups, and fitness routines.
-        </p>
-        <Link
-          href="/templates"
-          className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal hover:underline"
-        >
-          Explore All Templates →
-        </Link>
+      {/* Premium Template Marketplace Ad / Promo Card */}
+      <div className="group relative overflow-hidden rounded-2xl border border-charcoal/20 bg-gradient-to-br from-charcoal via-slate-800 to-black p-5 text-white shadow-md transition-all hover:shadow-lg">
+        {/* Glow effect background */}
+        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-sage/20 blur-2xl transition-all group-hover:bg-sage/30" />
+
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-white uppercase backdrop-blur-sm">
+              ✨ Presets & Protocols
+            </span>
+            <span className="text-[10px] text-white/70">6+ Systems</span>
+          </div>
+
+          <h2 className="mt-3 text-base font-semibold tracking-tight text-white">
+            Habit Systems Marketplace
+          </h2>
+          <p className="mt-1 text-xs leading-relaxed text-slate-300">
+            Adopt science-backed morning routines, deep work hyper-focus setups, or stoic night wind-downs.
+          </p>
+
+          <Link
+            href="/templates"
+            className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl bg-white py-2 text-xs font-semibold text-charcoal transition-all hover:bg-slate-100 active:scale-[0.98]"
+          >
+            <span>Explore Template Hub</span>
+            <span>→</span>
+          </Link>
+        </div>
       </div>
     </aside>
   );

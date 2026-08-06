@@ -54,6 +54,8 @@ export default function AdminPortalView() {
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [showCreateCatalogModal, setShowCreateCatalogModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  /** Map of habitKey → number of users who have that habit active in their dashboard */
+  const [userUsageMap, setUserUsageMap] = useState<Record<string, number>>({});
 
   // Catalog Form State
   const [cName, setCName] = useState("");
@@ -84,9 +86,17 @@ export default function AdminPortalView() {
       .finally(() => setLoadingCatalog(false));
   };
 
+  const fetchUsage = () => {
+    fetch("/api/admin/catalog/usage")
+      .then((res) => res.json())
+      .then((data) => setUserUsageMap(data.usage || {}))
+      .catch(() => {});
+  };
+
   useEffect(() => {
     fetchTemplates();
     fetchCatalog();
+    fetchUsage();
   }, []);
 
   // Merge static HABIT_TEMPLATES and custom MongoDB templates (custom overrides static if same key)
@@ -282,6 +292,7 @@ export default function AdminPortalView() {
         setErrorMsg(data.error || "Could not delete habit.");
       } else {
         fetchCatalog();
+        fetchUsage();
       }
     } catch {
       setErrorMsg("Network error trying to delete habit.");
@@ -338,12 +349,14 @@ export default function AdminPortalView() {
                     <th className="pb-3 font-semibold">Habit Name</th>
                     <th className="pb-3 font-semibold">Biological Domain</th>
                     <th className="pb-3 font-semibold">Template Usage</th>
+                    <th className="pb-3 font-semibold">User Adoption</th>
                     <th className="pb-3 font-semibold text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e1d7]/60">
                   {masterHabitsList.map((h) => {
                     const usages = habitUsageMap[h.habitKey] || [];
+                    const activeUsers = userUsageMap[h.habitKey] || 0;
                     return (
                       <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
                         <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
@@ -362,6 +375,15 @@ export default function AdminPortalView() {
                             <span className="text-[#737970]">Unlinked</span>
                           )}
                         </td>
+                        <td className="py-3">
+                          {activeUsers > 0 ? (
+                            <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e]">
+                              {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-[#737970]">No users</span>
+                          )}
+                        </td>
                         <td className="py-3 text-right font-medium text-[#737970]">Core Protocol Standard</td>
                       </tr>
                     );
@@ -369,6 +391,8 @@ export default function AdminPortalView() {
                   {catalog.map((h) => {
                     const usages = habitUsageMap[h.habitKey] || habitUsageMap[normalizeName(h.name)] || [];
                     const isInUse = usages.length > 0;
+                    const activeUsers = userUsageMap[h.habitKey] || 0;
+                    const isProtected = isInUse || activeUsers > 0;
 
                     return (
                       <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
@@ -388,14 +412,23 @@ export default function AdminPortalView() {
                             <span className="text-[#737970]">Unlinked</span>
                           )}
                         </td>
+                        <td className="py-3">
+                          {activeUsers > 0 ? (
+                            <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e]">
+                              {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-[#737970]">No users</span>
+                          )}
+                        </td>
                         <td className="py-3 text-right">
                           <button
                             onClick={() => handleDeleteCatalog(h.id, h.name, h.habitKey)}
                             className={`font-semibold ${
-                              isInUse ? "text-[#737970] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
+                              isProtected ? "text-[#737970] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
                             }`}
                           >
-                            {isInUse ? "Protected" : "Delete"}
+                            {isProtected ? "Protected" : "Delete"}
                           </button>
                         </td>
                       </tr>

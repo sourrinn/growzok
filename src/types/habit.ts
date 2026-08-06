@@ -113,6 +113,12 @@ export interface HabitDoc {
   domain?: HabitDomain;
   templateKey?: string;
   habitKey?: string;
+  /**
+   * `true`  → user created this habit manually via the dashboard (personal, not in master catalog).
+   * `false` → adopted from a template protocol (references `habitKey` in master catalog).
+   * `undefined` (legacy) → treated as false when `habitKey` present, personal when habitKey absent.
+   */
+  isPersonal?: boolean;
   frequency: HabitFrequency;
   /** Allowed misses per Monday-start week before the habit reads as "off track". 0 = strict. */
   missAllowance: number;
@@ -135,6 +141,8 @@ export interface Habit {
   domain: HabitDomain;
   templateKey?: string;
   habitKey?: string;
+  /** true = user's personal habit (not in master catalog); false/undefined = template-adopted */
+  isPersonal?: boolean;
   frequency: HabitFrequency;
   missAllowance: number;
   target: HabitTarget | null;
@@ -149,6 +157,10 @@ export function serializeHabit(doc: HabitDoc): Habit {
   const userLabel = doc.userLabel ?? doc.category ?? DEFAULT_USER_LABEL;
   const domain = doc.domain ?? inferDomainFromCategory(doc.category);
 
+  // Infer isPersonal from stored flag; fall back to: personal if no habitKey, catalog-linked if habitKey present
+  const isPersonal =
+    typeof doc.isPersonal === "boolean" ? doc.isPersonal : !doc.habitKey;
+
   return {
     id: doc._id.toString(),
     name: doc.name,
@@ -158,6 +170,7 @@ export function serializeHabit(doc: HabitDoc): Habit {
     domain,
     templateKey: doc.templateKey,
     habitKey: doc.habitKey,
+    isPersonal,
     frequency: doc.frequency ?? DEFAULT_FREQUENCY,
     missAllowance: doc.missAllowance ?? 0,
     target: doc.target ?? null,

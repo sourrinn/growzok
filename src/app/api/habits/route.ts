@@ -70,7 +70,10 @@ export async function POST(request: Request) {
       target,
       missAllowance,
       domain,
-      userLabel
+      userLabel,
+      undefined,   // templateKey — none for personal habits
+      undefined,   // habitKey   — none for personal habits
+      true         // isPersonal — always true when created from the dashboard form
     );
     return NextResponse.json({ habit }, { status: 201 });
   } catch (error) {

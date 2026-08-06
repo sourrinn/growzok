@@ -36,9 +36,12 @@ export async function createHabit(
   domain: HabitDomain = DEFAULT_DOMAIN,
   userLabel: string = DEFAULT_USER_LABEL,
   templateKey?: string,
-  habitKey?: string
+  habitKey?: string,
+  isPersonal?: boolean
 ): Promise<Habit> {
   const col = await collection();
+  // If not explicitly set: personal if no habitKey (custom habit), catalog-linked if habitKey present
+  const resolvedIsPersonal = typeof isPersonal === "boolean" ? isPersonal : !habitKey;
   const doc: HabitDoc = {
     _id: new ObjectId(),
     userId,
@@ -49,6 +52,7 @@ export async function createHabit(
     domain,
     templateKey,
     habitKey,
+    isPersonal: resolvedIsPersonal,
     frequency,
     missAllowance,
     target,

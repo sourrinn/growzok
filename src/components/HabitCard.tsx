@@ -118,6 +118,18 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
                 </span>
               )}
             </div>
+            {/* Provenance badge — subtle but informative */}
+            <div className="mt-1">
+              {habit.isPersonal ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#f4efe2] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923]">
+                  ✦ Personal
+                </span>
+              ) : habit.templateKey ? (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e]">
+                  ◈ Protocol
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
 

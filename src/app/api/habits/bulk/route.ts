@@ -108,7 +108,8 @@ export async function POST(request: Request) {
           domain,
           userLabel,
           templateKey,
-          habitKey
+          habitKey,
+          false  // isPersonal — false for all template-adopted habits
         );
       })
     );

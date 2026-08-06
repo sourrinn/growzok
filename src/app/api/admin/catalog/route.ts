@@ -143,6 +143,19 @@ export async function DELETE(request: Request) {
       );
     }
 
+    // Check 3: Active user habits — block if any user has this habitKey in their habits collection
+    const habitsCol = db.collection("habits");
+    const activeUserCount = await habitsCol.countDocuments({ habitKey });
+
+    if (activeUserCount > 0) {
+      return NextResponse.json(
+        {
+          error: `Cannot delete habit "${habitDoc.name}": ${activeUserCount} user${activeUserCount === 1 ? "" : "s"} currently ${activeUserCount === 1 ? "has" : "have"} this habit active in their dashboard. Users must remove it from their account first.`,
+        },
+        { status: 400 }
+      );
+    }
+
     await catalogCol.deleteOne({ _id: new ObjectId(id) });
 
     return NextResponse.json({ success: true });

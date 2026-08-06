@@ -51,6 +51,16 @@ export default function AppSidebar({
         </svg>
       ),
     },
+    {
+      label: "Admin Portal",
+      href: "/admin",
+      active: pathname.startsWith("/admin"),
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
   ];
 
   const isAccountActive = pathname === "/account";

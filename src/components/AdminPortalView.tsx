@@ -31,7 +31,7 @@ export default function AdminPortalView() {
   const [activeSection, setActiveSection] = useState<"habits" | "templates">("habits");
 
   // State for Custom Templates
-  const [templates, setTemplates] = useState<any[]>([]);
+  const [customTemplates, setCustomTemplates] = useState<any[]>([]);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
   const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
 
@@ -69,7 +69,7 @@ export default function AdminPortalView() {
     setLoadingTemplates(true);
     fetch("/api/admin/templates")
       .then((res) => res.json())
-      .then((data) => setTemplates(data.templates || []))
+      .then((data) => setCustomTemplates(data.templates || []))
       .catch(() => {})
       .finally(() => setLoadingTemplates(false));
   };
@@ -88,9 +88,12 @@ export default function AdminPortalView() {
     fetchCatalog();
   }, []);
 
+  // Merge static HABIT_TEMPLATES and custom MongoDB templates
   const allTemplatesList = useMemo(() => {
-    return [...HABIT_TEMPLATES, ...templates];
-  }, [templates]);
+    const staticList = HABIT_TEMPLATES.map((t) => ({ ...t, isCustom: false }));
+    const customList = customTemplates.map((t) => ({ ...t, isCustom: true }));
+    return [...staticList, ...customList];
+  }, [customTemplates]);
 
   // Compute template usage mapping per habitKey / name
   const habitUsageMap = useMemo(() => {
@@ -254,7 +257,7 @@ export default function AdminPortalView() {
           activeSection={activeSection}
           onSelectSection={setActiveSection}
           habitsCount={allHabitItems.length}
-          templatesCount={templates.length}
+          templatesCount={allTemplatesList.length}
         />
       }
     >
@@ -374,7 +377,7 @@ export default function AdminPortalView() {
                   Organization Habit Systems & Templates
                 </h1>
                 <p className="text-xs text-[#737970]">
-                  Build, publish, and delete habit protocols. Automatically synced to the Marketplace in real-time.
+                  Build, publish, and manage habit protocols. Synchronized with the Marketplace in real-time.
                 </p>
               </div>
 
@@ -388,12 +391,9 @@ export default function AdminPortalView() {
 
             {loadingTemplates ? (
               <p className="py-12 text-center text-sm text-[#737970]">Loading templates…</p>
-            ) : templates.length === 0 ? (
+            ) : allTemplatesList.length === 0 ? (
               <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
-                <h3 className="text-lg font-semibold text-[#232f26]">No Custom Protocols Published Yet</h3>
-                <p className="mt-1 text-xs text-[#737970]">
-                  Create your organization's first custom habit protocol to publish it to the Marketplace.
-                </p>
+                <h3 className="text-lg font-semibold text-[#232f26]">No Protocol Templates Available</h3>
                 <button
                   onClick={() => setShowCreateTemplateModal(true)}
                   className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
@@ -403,8 +403,8 @@ export default function AdminPortalView() {
               </div>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
-                {templates.map((t) => (
-                  <div key={t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-4">
+                {allTemplatesList.map((t: any) => (
+                  <div key={t.key || t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-4">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852]">
@@ -414,7 +414,14 @@ export default function AdminPortalView() {
                       </div>
 
                       <div>
-                        <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
+                          {!t.isCustom && (
+                            <span className="rounded-md bg-[#e5e1d7] px-2 py-0.5 text-[10px] font-semibold text-[#232f26]">
+                              Curated Standard
+                            </span>
+                          )}
+                        </div>
                         <p className="mt-1 line-clamp-2 text-xs text-[#737970]">{t.tagline}</p>
                       </div>
 
@@ -429,13 +436,19 @@ export default function AdminPortalView() {
                     </div>
 
                     <div className="flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs">
-                      <span className="text-[#737970]">Author: {t.author?.name}</span>
-                      <button
-                        onClick={() => handleDeleteTemplate(t.id)}
-                        className="font-semibold text-[#be5a38] hover:underline"
-                      >
-                        Delete Protocol
-                      </button>
+                      <span className="text-[#737970]">
+                        Author: {t.author?.name || "Growzok Lab"}
+                      </span>
+                      {t.isCustom ? (
+                        <button
+                          onClick={() => handleDeleteTemplate(t.id)}
+                          className="font-semibold text-[#be5a38] hover:underline"
+                        >
+                          Delete Protocol
+                        </button>
+                      ) : (
+                        <span className="font-medium text-[#737970]">Standard Protocol</span>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -108,7 +108,7 @@ export default function OverviewClient() {
             {/* Hero Left Content */}
             <div className="space-y-6 lg:col-span-7">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#406852]/20 bg-[#e3ede6] px-3.5 py-1 text-xs font-semibold text-[#406852]">
-                <span>🌿</span> Human Biology & Behavioral Science
+                Human Biology & Behavioral Science
               </span>
 
               <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] sm:text-5xl lg:text-6xl">
@@ -191,7 +191,7 @@ export default function OverviewClient() {
                     </div>
                     <div className="text-right">
                       <span className="text-xs font-semibold tabular-nums text-[#232f26]">
-                        🔥 {demoDone ? "15d" : "14d"} streak
+                        {demoDone ? "15d" : "14d"} streak
                       </span>
                     </div>
                   </div>
@@ -215,13 +215,13 @@ export default function OverviewClient() {
                       </div>
                     </div>
                     <span className="text-xs font-semibold text-[#406852]">
-                      {demoCount * 250 >= 1000 ? "Goal Met ✓" : "In Progress"}
+                      {demoCount * 250 >= 1000 ? "Goal Met" : "In Progress"}
                     </span>
                   </div>
                 </div>
 
                 <div className="mt-5 rounded-xl bg-[#fbf9f5] p-3 text-center text-xs text-[#737970]">
-                  💡 14-day growth stems show your completion rhythm at a glance.
+                  14-day growth stems show your completion rhythm at a glance.
                 </div>
               </div>
             </div>
@@ -243,40 +243,28 @@ export default function OverviewClient() {
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e3ede6] text-lg font-bold text-[#406852]">
-                🧬
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-[#232f26]">3-Tier Biological Taxonomy</h3>
+              <h3 className="mt-2 text-base font-semibold text-[#232f26]">3-Tier Biological Taxonomy</h3>
               <p className="mt-2 text-xs leading-relaxed text-[#737970]">
                 Every habit is anchored to 16 biological & behavioral domains (Sleep, Hydration, Recovery) for scientific tracking.
               </p>
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e3ede6] text-lg font-bold text-[#406852]">
-                ⚡
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-[#232f26]">Frequency-Aware Streaks</h3>
+              <h3 className="mt-2 text-base font-semibold text-[#232f26]">Frequency-Aware Streaks</h3>
               <p className="mt-2 text-xs leading-relaxed text-[#737970]">
                 Weekday habits aren't penalized on weekends. Times-per-week goals measure target completion without daily stress.
               </p>
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e3ede6] text-lg font-bold text-[#406852]">
-                🎯
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-[#232f26]">Numeric Target Tracking</h3>
+              <h3 className="mt-2 text-base font-semibold text-[#232f26]">Numeric Target Tracking</h3>
               <p className="mt-2 text-xs leading-relaxed text-[#737970]">
                 Track glasses, minutes, kilometers, or currency. Log values seamlessly while streaks update underneath.
               </p>
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e3ede6] text-lg font-bold text-[#406852]">
-                📦
-              </div>
-              <h3 className="mt-4 text-base font-semibold text-[#232f26]">1-Tap Preset Systems</h3>
+              <h3 className="mt-2 text-base font-semibold text-[#232f26]">1-Tap Preset Systems</h3>
               <p className="mt-2 text-xs leading-relaxed text-[#737970]">
                 Adopt morning neuro-resets, deep work focus setups, and financial hygiene bundles in a single click.
               </p>
@@ -359,7 +347,7 @@ export default function OverviewClient() {
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span>★ 4.9 (1,420 reviews)</span>
+                <span>Rating 4.9 (1,420 reviews)</span>
                 <Link
                   href="/templates/huberman-morning"
                   className="font-semibold text-[#232f26] hover:underline"
@@ -382,7 +370,7 @@ export default function OverviewClient() {
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span>★ 4.95 (890 reviews)</span>
+                <span>Rating 4.95 (890 reviews)</span>
                 <Link
                   href="/templates/deep-work-focus"
                   className="font-semibold text-[#232f26] hover:underline"
@@ -405,7 +393,7 @@ export default function OverviewClient() {
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span>★ 4.94 (1,120 reviews)</span>
+                <span>Rating 4.94 (1,120 reviews)</span>
                 <Link
                   href="/templates/stoic-evening"
                   className="font-semibold text-[#232f26] hover:underline"

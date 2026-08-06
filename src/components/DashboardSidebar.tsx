@@ -56,7 +56,7 @@ export default function DashboardSidebar({ habits }: Props) {
 
         {totalHabits > 0 && completionPct === 100 && (
           <p className="mt-2 text-xs font-medium text-sage">
-            🎉 All habits completed for today! Great momentum.
+            All habits completed for today. Great momentum.
           </p>
         )}
       </div>
@@ -79,8 +79,8 @@ export default function DashboardSidebar({ habits }: Props) {
                     {habit.name}
                   </span>
                 </div>
-                <span className="shrink-0 rounded-full bg-mist/60 px-2 py-0.5 text-xs font-medium tabular-nums text-charcoal">
-                  🔥 {streak}d
+                <span className="shrink-0 rounded-full bg-mist/60 px-2.5 py-0.5 text-xs font-medium tabular-nums text-charcoal">
+                  {streak}d streak
                 </span>
               </li>
             ))}
@@ -115,7 +115,7 @@ export default function DashboardSidebar({ habits }: Props) {
         <div className="relative z-10">
           <div className="flex items-center justify-between">
             <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-white uppercase backdrop-blur-sm">
-              ✨ Presets & Protocols
+              Presets & Protocols
             </span>
             <span className="text-[10px] text-white/70">6+ Systems</span>
           </div>

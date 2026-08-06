@@ -45,8 +45,7 @@ export default function TemplateCard({ template }: Props) {
           {template.category}
         </span>
         <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-muted">
-          <span className="text-amber-600">★</span>
-          <span className="font-medium text-charcoal">{template.rating.toFixed(1)}</span>
+          <span className="font-semibold text-charcoal">Rating {template.rating.toFixed(1)}</span>
           <span>({template.reviewsCount.toLocaleString()})</span>
         </div>
       </div>

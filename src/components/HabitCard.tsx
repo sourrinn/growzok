@@ -146,7 +146,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
             ) : weekProgress ? (
               `${weekProgress.completed}/${weekProgress.target} this wk`
             ) : streak > 0 ? (
-              `🔥 ${streak}d streak`
+              `${streak}d streak`
             ) : (
               "—"
             )}

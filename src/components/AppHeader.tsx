@@ -24,7 +24,7 @@ export default function AppHeader({
 
           <nav className="flex items-center gap-4 text-sm font-medium">
             <Link
-              href="/"
+              href="/dashboard"
               className={`transition-colors ${
                 active === "habits"
                   ? "text-charcoal underline underline-offset-8"

@@ -48,7 +48,7 @@ export default function TemplatesPage() {
               </span>
             </Link>
             <nav className="flex items-center gap-4 text-sm font-medium">
-              <Link href="/" className="text-muted transition-colors hover:text-charcoal">
+              <Link href="/dashboard" className="text-muted transition-colors hover:text-charcoal">
                 Habits
               </Link>
               <Link href="/reports" className="text-muted transition-colors hover:text-charcoal">

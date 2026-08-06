@@ -26,22 +26,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const DOMAIN_COLORS: Record<string, string> = {
-  Sleep: "bg-indigo-50 text-indigo-700",
-  Hydration: "bg-sky-50 text-sky-700",
-  Nutrition: "bg-lime-50 text-lime-700",
-  Cardio: "bg-red-50 text-red-700",
-  Strength: "bg-orange-50 text-orange-700",
-  Mobility: "bg-teal-50 text-teal-700",
-  Breathing: "bg-cyan-50 text-cyan-700",
-  Grooming: "bg-rose-50 text-rose-700",
-  Preventive: "bg-yellow-50 text-yellow-700",
-  Recovery: "bg-purple-50 text-purple-700",
-  Productivity: "bg-blue-50 text-blue-700",
-  Finance: "bg-emerald-50 text-emerald-700",
-  Social: "bg-pink-50 text-pink-700",
-  Learning: "bg-violet-50 text-violet-700",
-  "Digital Minimalism": "bg-slate-100 text-slate-700",
-  "Gut Health": "bg-green-50 text-green-700",
+  Sleep: "bg-[#e8ebf5] text-[#2c3e6b]",
+  Hydration: "bg-[#e2f0f4] text-[#1f5669]",
+  Nutrition: "bg-[#e8f1e3] text-[#345c29]",
+  Cardio: "bg-[#f5e9e5] text-[#7a3322]",
+  Strength: "bg-[#f4efe2] text-[#6b4923]",
+  Mobility: "bg-[#e5f2ee] text-[#235848]",
+  Breathing: "bg-[#e0f2f5] text-[#1b5e6b]",
+  Grooming: "bg-[#f5e8ed] text-[#6e2840]",
+  Preventive: "bg-[#f5f0df] text-[#6e561c]",
+  Recovery: "bg-[#eee8f5] text-[#502e6b]",
+  Productivity: "bg-[#e3ede6] text-[#232f26]",
+  Finance: "bg-[#e4ede6] text-[#2d4a3e]",
+  Social: "bg-[#f5e8e3] text-[#7a422d]",
+  Learning: "bg-[#ebdcd3] text-[#5c3e31]",
+  "Digital Minimalism": "bg-[#e5e1d7] text-[#424541]",
+  "Gut Health": "bg-[#e8f0e5] text-[#385c2c]",
 };
 
 function domainColor(domain: string): string {
@@ -73,7 +73,7 @@ export default async function TemplateDetailPage({ params }: Props) {
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-5 py-8">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -90,10 +90,10 @@ export default async function TemplateDetailPage({ params }: Props) {
 
       {/* Hero */}
       <header className="mb-8">
-        <span className="rounded-full bg-mist px-2.5 py-0.5 text-xs font-medium text-charcoal">
+        <span className="rounded-full bg-mist/70 px-2.5 py-0.5 text-xs font-medium text-charcoal">
           {template.category}
         </span>
-        <h1 className="mt-3 font-display text-3xl font-medium tracking-tight text-charcoal">
+        <h1 className="mt-3 font-display text-3xl font-medium tracking-tight text-charcoal sm:text-4xl">
           {template.name}
         </h1>
         <p className="mt-2 text-base text-muted">{template.tagline}</p>
@@ -101,7 +101,7 @@ export default async function TemplateDetailPage({ params }: Props) {
         {/* Stats row */}
         <div className="mt-4 flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-1 text-muted">
-            <span className="text-amber-400">★</span>
+            <span className="text-amber-600">★</span>
             <span className="font-medium text-charcoal">{template.rating.toFixed(1)}</span>
             <span>({template.reviewsCount.toLocaleString()} reviews)</span>
           </div>
@@ -127,7 +127,7 @@ export default async function TemplateDetailPage({ params }: Props) {
       </header>
 
       {/* Author */}
-      <div className="mb-8 flex items-center gap-3 rounded-lg border border-mist p-4">
+      <div className="mb-8 flex items-center gap-3 rounded-xl border border-mist bg-white p-4 shadow-sm">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist text-sm font-semibold text-charcoal">
           {template.author.name[0]}
         </div>
@@ -159,17 +159,17 @@ export default async function TemplateDetailPage({ params }: Props) {
           {template.habits.map((habit, idx) => (
             <li
               key={idx}
-              className="flex items-start gap-3 rounded-lg border border-mist p-4"
+              className="flex items-start gap-3 rounded-xl border border-mist bg-white p-4 shadow-sm"
             >
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="font-medium text-charcoal">{habit.name}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${domainColor(habit.domain)}`}
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${domainColor(habit.domain)}`}
                   >
                     {habit.domain}
                   </span>
-                  <span className="rounded-full bg-mist px-1.5 py-0.5 text-[10px] text-muted">
+                  <span className="rounded-full bg-mist/60 px-2 py-0.5 text-[10px] text-muted">
                     {habit.suggestedLabel}
                   </span>
                   {habit.timeOfDay && habit.timeOfDay !== "Anytime" && (
@@ -202,7 +202,7 @@ export default async function TemplateDetailPage({ params }: Props) {
           {template.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-mist px-2.5 py-0.5 text-xs text-muted"
+              className="rounded-full border border-mist bg-white px-2.5 py-0.5 text-xs text-muted"
             >
               {tag}
             </span>

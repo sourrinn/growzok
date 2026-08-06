@@ -12,7 +12,8 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const PALETTE = ["#5c7a5c", "#7a6a5c", "#5c6a7a", "#7a5c6a", "#6a7a5c"];
+// Organic Nature Palette: Forest Pine, Terracotta Clay, Meadow Olive, Warm Ochre, Mineral Blue, Cedar Bark
+const PALETTE = ["#2d4a3e", "#b86b53", "#6b8259", "#b38340", "#3a5a6b", "#855b4e"];
 const MAX_BULK = 10;
 
 /** Bulk-create habits (used by template adopt / custom template import flows). */

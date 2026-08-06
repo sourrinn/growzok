@@ -5,24 +5,24 @@ interface Props {
   template: HabitTemplate;
 }
 
-/** Domain badge colour palette — cycles through subtle accent tones. */
+/** Domain badge colour palette — organic nature-inspired hues. */
 const DOMAIN_COLORS: Record<string, string> = {
-  Sleep: "bg-indigo-50 text-indigo-700",
-  Hydration: "bg-sky-50 text-sky-700",
-  Nutrition: "bg-lime-50 text-lime-700",
-  Cardio: "bg-red-50 text-red-700",
-  Strength: "bg-orange-50 text-orange-700",
-  Mobility: "bg-teal-50 text-teal-700",
-  Breathing: "bg-cyan-50 text-cyan-700",
-  Grooming: "bg-rose-50 text-rose-700",
-  Preventive: "bg-yellow-50 text-yellow-700",
-  Recovery: "bg-purple-50 text-purple-700",
-  Productivity: "bg-blue-50 text-blue-700",
-  Finance: "bg-emerald-50 text-emerald-700",
-  Social: "bg-pink-50 text-pink-700",
-  Learning: "bg-violet-50 text-violet-700",
-  "Digital Minimalism": "bg-slate-100 text-slate-700",
-  "Gut Health": "bg-green-50 text-green-700",
+  Sleep: "bg-[#e8ebf5] text-[#2c3e6b]",
+  Hydration: "bg-[#e2f0f4] text-[#1f5669]",
+  Nutrition: "bg-[#e8f1e3] text-[#345c29]",
+  Cardio: "bg-[#f5e9e5] text-[#7a3322]",
+  Strength: "bg-[#f4efe2] text-[#6b4923]",
+  Mobility: "bg-[#e5f2ee] text-[#235848]",
+  Breathing: "bg-[#e0f2f5] text-[#1b5e6b]",
+  Grooming: "bg-[#f5e8ed] text-[#6e2840]",
+  Preventive: "bg-[#f5f0df] text-[#6e561c]",
+  Recovery: "bg-[#eee8f5] text-[#502e6b]",
+  Productivity: "bg-[#e3ede6] text-[#232f26]",
+  Finance: "bg-[#e4ede6] text-[#2d4a3e]",
+  Social: "bg-[#f5e8e3] text-[#7a422d]",
+  Learning: "bg-[#ebdcd3] text-[#5c3e31]",
+  "Digital Minimalism": "bg-[#e5e1d7] text-[#424541]",
+  "Gut Health": "bg-[#e8f0e5] text-[#385c2c]",
 };
 
 function domainColor(domain: string): string {
@@ -41,11 +41,11 @@ export default function TemplateCard({ template }: Props) {
     >
       {/* Category + rating */}
       <div className="flex items-start justify-between gap-2">
-        <span className="rounded-full bg-mist px-2.5 py-0.5 text-xs font-medium text-charcoal">
+        <span className="rounded-full bg-mist/70 px-2.5 py-0.5 text-xs font-medium text-charcoal">
           {template.category}
         </span>
         <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-muted">
-          <span className="text-amber-400">★</span>
+          <span className="text-amber-600">★</span>
           <span className="font-medium text-charcoal">{template.rating.toFixed(1)}</span>
           <span>({template.reviewsCount.toLocaleString()})</span>
         </div>
@@ -64,20 +64,20 @@ export default function TemplateCard({ template }: Props) {
         {uniqueDomains.map((d) => (
           <span
             key={d}
-            className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${domainColor(d)}`}
+            className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${domainColor(d)}`}
           >
             {d}
           </span>
         ))}
         {template.habits.length > 3 && (
-          <span className="rounded-full bg-mist px-2 py-0.5 text-[11px] text-muted">
+          <span className="rounded-full bg-mist/60 px-2 py-0.5 text-[11px] text-muted">
             +{template.habits.length - 3} more
           </span>
         )}
       </div>
 
       {/* Footer stats */}
-      <div className="mt-auto flex items-center gap-4 border-t border-mist pt-3 text-xs text-muted">
+      <div className="mt-auto flex items-center gap-4 border-t border-mist/60 pt-3 text-xs text-muted">
         <span>
           <span className="font-medium text-charcoal">
             {template.activeUsersCount.toLocaleString()}

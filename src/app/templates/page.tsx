@@ -127,14 +127,6 @@ export default function TemplatesPage() {
             ))}
           </div>
         )}
-
-        {/* Bottom CTA */}
-        <p className="mt-12 text-center text-xs text-muted">
-          Want to track custom habits without a template?{" "}
-          <Link href="/" className="font-semibold text-charcoal underline underline-offset-2 hover:text-sage">
-            Go to your habits dashboard →
-          </Link>
-        </p>
       </main>
     </div>
   );

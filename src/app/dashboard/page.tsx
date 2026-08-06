@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import AppHeader from "@/components/AppHeader";
+import AppShell from "@/components/AppShell";
 import HabitDashboard from "@/components/HabitDashboard";
 
 export default async function DashboardPage() {
@@ -10,11 +10,8 @@ export default async function DashboardPage() {
   const userName = session.user.name || session.user.email || "";
 
   return (
-    <div className="min-h-screen bg-slate-50/40">
-      <AppHeader userLabel={userName} active="habits" />
-      <main className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <HabitDashboard />
-      </main>
-    </div>
+    <AppShell userLabel={userName}>
+      <HabitDashboard />
+    </AppShell>
   );
 }

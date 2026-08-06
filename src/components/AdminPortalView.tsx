@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
+import { HABIT_TEMPLATES } from "@/lib/templates";
 
 const CATEGORIES: TemplateCategory[] = [
   "Morning Routine",
@@ -19,6 +20,10 @@ const CATEGORIES: TemplateCategory[] = [
 ];
 
 const DIFFICULTIES: TemplateDifficulty[] = ["Beginner", "Intermediate", "Advanced"];
+
+function normalizeName(name: string): string {
+  return name.trim().toLowerCase();
+}
 
 export default function AdminPortalView() {
   const [activeSection, setActiveSection] = useState<"habits" | "templates">("habits");
@@ -45,6 +50,7 @@ export default function AdminPortalView() {
   const [catalog, setCatalog] = useState<any[]>([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [showCreateCatalogModal, setShowCreateCatalogModal] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Catalog Form State
   const [cName, setCName] = useState("");
@@ -79,6 +85,27 @@ export default function AdminPortalView() {
     fetchTemplates();
     fetchCatalog();
   }, []);
+
+  const allTemplatesList = useMemo(() => {
+    return [...HABIT_TEMPLATES, ...templates];
+  }, [templates]);
+
+  // Compute template usage mapping per habitKey / name
+  const habitUsageMap = useMemo(() => {
+    const map: Record<string, string[]> = {};
+    allTemplatesList.forEach((t) => {
+      t.habits.forEach((h: any) => {
+        const key = h.habitKey || normalizeName(h.name);
+        if (!map[key]) map[key] = [];
+        if (!map[key].includes(t.name)) map[key].push(t.name);
+
+        const nameKey = normalizeName(h.name);
+        if (!map[nameKey]) map[nameKey] = [];
+        if (!map[nameKey].includes(t.name)) map[nameKey].push(t.name);
+      });
+    });
+    return map;
+  }, [allTemplatesList]);
 
   const handleCreateTemplate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,12 +218,27 @@ export default function AdminPortalView() {
     }
   };
 
-  const handleDeleteCatalog = async (id: string) => {
-    if (!confirm("Delete this standalone catalog habit item?")) return;
+  const handleDeleteCatalog = async (id: string, name: string, habitKey: string) => {
+    const usages = habitUsageMap[habitKey] || habitUsageMap[normalizeName(name)] || [];
+    if (usages.length > 0) {
+      alert(`Cannot delete "${name}": It is currently included in template protocol "${usages[0]}". Please remove it from that template first.`);
+      return;
+    }
+
+    if (!confirm(`Delete standalone catalog habit "${name}"?`)) return;
+
     try {
+      setErrorMsg(null);
       const res = await fetch(`/api/admin/catalog?id=${id}`, { method: "DELETE" });
-      if (res.ok) fetchCatalog();
-    } catch {}
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Could not delete habit.");
+      } else {
+        fetchCatalog();
+      }
+    } catch {
+      setErrorMsg("Network error trying to delete habit.");
+    }
   };
 
   const masterHabitsList = Object.values(MASTER_HABIT_CATALOG);
@@ -247,7 +289,15 @@ export default function AdminPortalView() {
 
       {/* MAIN CANVAS CONTENT */}
       <main className="flex-1 space-y-6">
-        {/* SECTION 1: STANDALONE HABITS (No Template Involvement) */}
+        {/* Error Alert */}
+        {errorMsg && (
+          <div className="flex items-center justify-between rounded-2xl border border-[#be5a38]/30 bg-[#be5a38]/10 p-4 text-xs font-semibold text-[#be5a38]">
+            <span>{errorMsg}</span>
+            <button onClick={() => setErrorMsg(null)} className="ml-2 font-bold">✕</button>
+          </div>
+        )}
+
+        {/* SECTION 1: STANDALONE HABITS */}
         {activeSection === "habits" && (
           <div className="space-y-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
@@ -256,7 +306,7 @@ export default function AdminPortalView() {
                   Standalone Habits (Master Catalog)
                 </h1>
                 <p className="text-xs text-[#737970]">
-                  Manage biological habits independent of any template protocol. Fully synchronized across the platform.
+                  Manage master catalog habits. Habits included in active template protocols are protected from deletion.
                 </p>
               </div>
 
@@ -275,47 +325,70 @@ export default function AdminPortalView() {
                     <th className="pb-3 font-semibold">Habit Key</th>
                     <th className="pb-3 font-semibold">Habit Name</th>
                     <th className="pb-3 font-semibold">Biological Domain</th>
-                    <th className="pb-3 font-semibold">Label</th>
-                    <th className="pb-3 font-semibold">Time of Day</th>
+                    <th className="pb-3 font-semibold">Template Usage</th>
                     <th className="pb-3 font-semibold text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e1d7]/60">
-                  {masterHabitsList.map((h) => (
-                    <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
-                      <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                      <td className="py-3 font-semibold text-[#232f26]">{h.name}</td>
-                      <td className="py-3">
-                        <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
-                          {h.domain}
-                        </span>
-                      </td>
-                      <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
-                      <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
-                      <td className="py-3 text-right font-medium text-[#737970]">Core Standard</td>
-                    </tr>
-                  ))}
-                  {catalog.map((h) => (
-                    <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
-                      <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                      <td className="py-3 font-semibold text-[#232f26]">{h.name} (Org Custom)</td>
-                      <td className="py-3">
-                        <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
-                          {h.domain}
-                        </span>
-                      </td>
-                      <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
-                      <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
-                      <td className="py-3 text-right">
-                        <button
-                          onClick={() => handleDeleteCatalog(h.id)}
-                          className="text-[#be5a38] font-semibold hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {masterHabitsList.map((h) => {
+                    const usages = habitUsageMap[h.habitKey] || [];
+                    return (
+                      <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26]">{h.name}</td>
+                        <td className="py-3">
+                          <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                            {h.domain}
+                          </span>
+                        </td>
+                        <td className="py-3">
+                          {usages.length > 0 ? (
+                            <span className="rounded-md bg-[#f4efe2] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923]">
+                              In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
+                            </span>
+                          ) : (
+                            <span className="text-[#737970]">Unlinked</span>
+                          )}
+                        </td>
+                        <td className="py-3 text-right font-medium text-[#737970]">Core Protocol Standard</td>
+                      </tr>
+                    );
+                  })}
+                  {catalog.map((h) => {
+                    const usages = habitUsageMap[h.habitKey] || habitUsageMap[normalizeName(h.name)] || [];
+                    const isInUse = usages.length > 0;
+
+                    return (
+                      <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26]">{h.name} (Org Custom)</td>
+                        <td className="py-3">
+                          <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                            {h.domain}
+                          </span>
+                        </td>
+                        <td className="py-3">
+                          {isInUse ? (
+                            <span className="rounded-md bg-[#f4efe2] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923]">
+                              In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
+                            </span>
+                          ) : (
+                            <span className="text-[#737970]">Unlinked</span>
+                          )}
+                        </td>
+                        <td className="py-3 text-right">
+                          <button
+                            onClick={() => handleDeleteCatalog(h.id, h.name, h.habitKey)}
+                            className={`font-semibold ${
+                              isInUse ? "text-[#737970] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
+                            }`}
+                          >
+                            {isInUse ? "Protected" : "Delete"}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

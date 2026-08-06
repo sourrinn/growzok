@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { HABIT_TEMPLATES } from "@/lib/templates";
 
 export const dynamic = "force-dynamic";
 
@@ -95,8 +96,52 @@ export async function DELETE(request: Request) {
     }
 
     const db = await getDb();
-    const col = db.collection("custom_catalog_habits");
-    await col.deleteOne({ _id: new ObjectId(id) });
+    const catalogCol = db.collection("custom_catalog_habits");
+    const habitDoc = await catalogCol.findOne({ _id: new ObjectId(id) });
+    if (!habitDoc) {
+      return NextResponse.json({ error: "Catalog habit not found." }, { status: 404 });
+    }
+
+    const habitKey = habitDoc.habitKey;
+    const habitName = habitDoc.name.trim().toLowerCase();
+
+    // Check 1: Static HABIT_TEMPLATES
+    const matchingStaticTemplate = HABIT_TEMPLATES.find((t) =>
+      t.habits.some((h) => h.habitKey === habitKey || h.name.trim().toLowerCase() === habitName)
+    );
+
+    if (matchingStaticTemplate) {
+      return NextResponse.json(
+        {
+          error: `Cannot delete habit "${habitDoc.name}": It is included in active template "${matchingStaticTemplate.name}". Remove it from that template protocol first.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Check 2: MongoDB custom_templates
+    const templatesCol = db.collection("custom_templates");
+    const matchingCustomTemplate = await templatesCol.findOne({
+      habits: {
+        $elemMatch: {
+          $or: [
+            { habitKey },
+            { name: { $regex: new RegExp(`^${habitName}$`, "i") } },
+          ],
+        },
+      },
+    });
+
+    if (matchingCustomTemplate) {
+      return NextResponse.json(
+        {
+          error: `Cannot delete habit "${habitDoc.name}": It is included in custom template "${matchingCustomTemplate.name}". Remove it from that template protocol first.`,
+        },
+        { status: 400 }
+      );
+    }
+
+    await catalogCol.deleteOne({ _id: new ObjectId(id) });
 
     return NextResponse.json({ success: true });
   } catch (error) {

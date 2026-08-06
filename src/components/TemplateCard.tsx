@@ -26,7 +26,7 @@ const DOMAIN_COLORS: Record<string, string> = {
 };
 
 function domainColor(domain: string): string {
-  return DOMAIN_COLORS[domain] ?? "bg-mist text-charcoal";
+  return DOMAIN_COLORS[domain] ?? "bg-[#e5e1d7] text-[#232f26]";
 }
 
 export default function TemplateCard({ template }: Props) {
@@ -34,60 +34,88 @@ export default function TemplateCard({ template }: Props) {
     new Set(template.habits.map((h) => h.domain))
   ).slice(0, 3);
 
+  const previewHabits = template.habits.slice(0, 3);
+
   return (
     <Link
       href={`/templates/${template.slug}`}
-      className="group flex flex-col gap-3 rounded-xl border border-mist bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+      className="group flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm transition-all hover:border-[#232f26]/30 hover:shadow-md"
     >
-      {/* Category + rating */}
-      <div className="flex items-start justify-between gap-2">
-        <span className="rounded-full bg-mist/70 px-2.5 py-0.5 text-xs font-medium text-charcoal">
-          {template.category}
-        </span>
-        <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-muted">
-          <span className="font-semibold text-charcoal">Rating {template.rating.toFixed(1)}</span>
-          <span>({template.reviewsCount.toLocaleString()})</span>
+      <div className="space-y-4">
+        {/* Category Badge & Rating */}
+        <div className="flex items-start justify-between gap-2">
+          <span className="rounded-full bg-[#e3ede6] px-3 py-1 text-xs font-semibold text-[#406852]">
+            {template.category}
+          </span>
+          <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-[#737970]">
+            <span className="font-semibold text-[#232f26]">
+              Rating {template.rating.toFixed(1)}
+            </span>
+            <span>({template.reviewsCount.toLocaleString()})</span>
+          </div>
+        </div>
+
+        {/* Name & Tagline */}
+        <div>
+          <h3 className="text-lg font-semibold text-[#232f26] group-hover:underline group-hover:underline-offset-2">
+            {template.name}
+          </h3>
+          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#737970]">
+            {template.tagline}
+          </p>
+        </div>
+
+        {/* Protocol Habits Preview List */}
+        <div className="rounded-xl border border-[#e5e1d7]/70 bg-[#fbf9f5] p-3 text-xs">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#737970]">
+            Includes {template.habits.length} Habits
+          </p>
+          <ul className="mt-1.5 space-y-1 text-[#232f26]">
+            {previewHabits.map((h, i) => (
+              <li key={i} className="flex items-center gap-1.5 truncate">
+                <span className="text-[#406852]">✓</span>
+                <span className="truncate font-medium">{h.name}</span>
+                {h.target && (
+                  <span className="shrink-0 text-[10px] text-[#737970]">
+                    ({h.target.goal} {h.target.unit})
+                  </span>
+                )}
+              </li>
+            ))}
+            {template.habits.length > 3 && (
+              <li className="pt-0.5 text-[10px] text-[#737970]">
+                +{template.habits.length - 3} more habit{template.habits.length - 3 === 1 ? "" : "s"}
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Domain Badges */}
+        <div className="flex flex-wrap gap-1.5">
+          {uniqueDomains.map((d) => (
+            <span
+              key={d}
+              className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${domainColor(d)}`}
+            >
+              {d}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Name & tagline */}
-      <div>
-        <h3 className="text-base font-semibold text-charcoal group-hover:underline group-hover:underline-offset-2">
-          {template.name}
-        </h3>
-        <p className="mt-1 line-clamp-2 text-sm text-muted">{template.tagline}</p>
-      </div>
-
-      {/* Domain badges */}
-      <div className="flex flex-wrap gap-1.5">
-        {uniqueDomains.map((d) => (
-          <span
-            key={d}
-            className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${domainColor(d)}`}
-          >
-            {d}
+      {/* Footer Metrics & Action CTA */}
+      <div className="mt-5 border-t border-[#e5e1d7] pt-4">
+        <div className="flex items-center justify-between text-xs text-[#737970]">
+          <div>
+            <span className="font-semibold text-[#232f26]">
+              {template.activeUsersCount.toLocaleString()}
+            </span>{" "}
+            active · {template.estimatedDailyMinutes} min/day
+          </div>
+          <span className="font-semibold text-[#232f26] group-hover:translate-x-0.5 transition-transform">
+            Adopt System →
           </span>
-        ))}
-        {template.habits.length > 3 && (
-          <span className="rounded-full bg-mist/60 px-2 py-0.5 text-[11px] text-muted">
-            +{template.habits.length - 3} more
-          </span>
-        )}
-      </div>
-
-      {/* Footer stats */}
-      <div className="mt-auto flex items-center gap-4 border-t border-mist/60 pt-3 text-xs text-muted">
-        <span>
-          <span className="font-medium text-charcoal">
-            {template.activeUsersCount.toLocaleString()}
-          </span>{" "}
-          active
-        </span>
-        <span>
-          <span className="font-medium text-charcoal">{template.completionRatePct}%</span>{" "}
-          completion
-        </span>
-        <span className="ml-auto">{template.estimatedDailyMinutes} min/day</span>
+        </div>
       </div>
     </Link>
   );

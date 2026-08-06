@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import AppShell from "@/components/AppShell";
+import OrgSidebar from "@/components/OrgSidebar";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
@@ -245,50 +247,18 @@ export default function AdminPortalView() {
   const allHabitItems = [...masterHabitsList, ...catalog];
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row">
-      {/* ORGANIZATION ADMIN SIDEBAR (Dedicated Org Sub-Nav Rail) */}
-      <aside className="w-full lg:w-64 shrink-0 rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm h-fit space-y-4">
-        <div>
-          <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852]">
-            Org Management
-          </span>
-          <h2 className="mt-2 font-display text-lg font-semibold text-[#232f26]">Organization Portal</h2>
-          <p className="mt-0.5 text-xs text-[#737970]">Data synchronization & CRUD control center.</p>
-        </div>
-
-        <nav className="space-y-1 border-t border-[#e5e1d7] pt-3">
-          <button
-            onClick={() => setActiveSection("habits")}
-            className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
-              activeSection === "habits"
-                ? "bg-[#232f26] text-white shadow-sm"
-                : "text-[#737970] hover:bg-[#fbf9f5] hover:text-[#232f26]"
-            }`}
-          >
-            <span>Standalone Habits</span>
-            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-              {allHabitItems.length}
-            </span>
-          </button>
-
-          <button
-            onClick={() => setActiveSection("templates")}
-            className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
-              activeSection === "templates"
-                ? "bg-[#232f26] text-white shadow-sm"
-                : "text-[#737970] hover:bg-[#fbf9f5] hover:text-[#232f26]"
-            }`}
-          >
-            <span>Protocol Templates</span>
-            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
-              {templates.length}
-            </span>
-          </button>
-        </nav>
-      </aside>
-
-      {/* MAIN CANVAS CONTENT */}
-      <main className="flex-1 space-y-6">
+    <AppShell
+      userLabel="Admin Portal"
+      secondarySidebar={
+        <OrgSidebar
+          activeSection={activeSection}
+          onSelectSection={setActiveSection}
+          habitsCount={allHabitItems.length}
+          templatesCount={templates.length}
+        />
+      }
+    >
+      <div className="w-full space-y-6">
         {/* Error Alert */}
         {errorMsg && (
           <div className="flex items-center justify-between rounded-2xl border border-[#be5a38]/30 bg-[#be5a38]/10 p-4 text-xs font-semibold text-[#be5a38]">
@@ -302,7 +272,7 @@ export default function AdminPortalView() {
           <div className="space-y-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
               <div>
-                <h1 className="font-display text-2xl font-semibold text-[#232f26]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26]">
                   Standalone Habits (Master Catalog)
                 </h1>
                 <p className="text-xs text-[#737970]">
@@ -400,7 +370,7 @@ export default function AdminPortalView() {
           <div className="space-y-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
               <div>
-                <h1 className="font-display text-2xl font-semibold text-[#232f26]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26]">
                   Organization Habit Systems & Templates
                 </h1>
                 <p className="text-xs text-[#737970]">
@@ -473,7 +443,7 @@ export default function AdminPortalView() {
             )}
           </div>
         )}
-      </main>
+      </div>
 
       {/* CREATE TEMPLATE MODAL */}
       {showCreateTemplateModal && (
@@ -707,6 +677,6 @@ export default function AdminPortalView() {
           </div>
         </div>
       )}
-    </div>
+    </AppShell>
   );
 }

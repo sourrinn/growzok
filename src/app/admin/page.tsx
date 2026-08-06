@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AppShell from "@/components/AppShell";
 import AdminPortalView from "@/components/AdminPortalView";
 
 export const metadata: Metadata = {
@@ -8,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminPage() {
-  return (
-    <AppShell userLabel="Admin Portal">
-      <AdminPortalView />
-    </AppShell>
-  );
+  return <AdminPortalView />;
 }

@@ -6,10 +6,11 @@ import AppSidebar from "@/components/AppSidebar";
 
 interface Props {
   userLabel?: string;
+  secondarySidebar?: React.ReactNode;
   children: React.ReactNode;
 }
 
-export default function AppShell({ userLabel = "Workspace", children }: Props) {
+export default function AppShell({ userLabel = "Workspace", secondarySidebar, children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -30,9 +31,9 @@ export default function AppShell({ userLabel = "Workspace", children }: Props) {
 
   return (
     <div className="min-h-screen bg-[#fbf9f5]/50">
-      {/* Desktop Fixed Left Sidebar */}
+      {/* Primary Fixed Left Sidebar */}
       <div
-        className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col transition-all duration-300 ${
+        className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col z-30 transition-all duration-300 ${
           isCollapsed ? "md:w-16" : "md:w-64"
         }`}
       >
@@ -42,6 +43,17 @@ export default function AppShell({ userLabel = "Workspace", children }: Props) {
           onToggleCollapse={toggleCollapse}
         />
       </div>
+
+      {/* Secondary Fixed Sub-Sidebar (Attached to the right of primary sidebar) */}
+      {secondarySidebar && (
+        <div
+          className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col z-20 transition-all duration-300 ${
+            isCollapsed ? "md:left-16" : "md:left-64"
+          }`}
+        >
+          {secondarySidebar}
+        </div>
+      )}
 
       {/* Mobile Top Navigation Bar */}
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-[#e5e1d7] bg-[#fbf9f5]/90 px-4 py-3 backdrop-blur-md md:hidden">
@@ -73,16 +85,27 @@ export default function AppShell({ userLabel = "Workspace", children }: Props) {
               ✕ Close
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto space-y-4">
             <AppSidebar userLabel={userLabel} isCollapsed={false} />
+            {secondarySidebar && (
+              <div className="border-t border-[#e5e1d7] pt-4">
+                {secondarySidebar}
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Main Content Area (Dynamic padding matching sidebar state) */}
+      {/* Main Content Area (Dynamic padding matching primary + secondary sidebar states) */}
       <div
         className={`transition-all duration-300 ${
-          isCollapsed ? "md:pl-16" : "md:pl-64"
+          secondarySidebar
+            ? isCollapsed
+              ? "md:pl-[19rem]" // 4rem (w-16) + 15rem (w-60)
+              : "md:pl-[31rem]" // 16rem (w-64) + 15rem (w-60)
+            : isCollapsed
+              ? "md:pl-16"
+              : "md:pl-64"
         }`}
       >
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

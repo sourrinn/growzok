@@ -35,6 +35,7 @@ Derived from human physiology & neurobiology studies, this 30-day morning protoc
     tags: ["Circadian Rhythm", "Energy", "Focus", "Morning"],
     habits: [
       {
+        habitKey: "sunlight-exposure",
         name: "Sunlight Outdoor Exposure",
         domain: "Sleep",
         suggestedLabel: "Health",
@@ -44,6 +45,7 @@ Derived from human physiology & neurobiology studies, this 30-day morning protoc
         description: "Get direct outdoor sunlight within 30–60 minutes of waking.",
       },
       {
+        habitKey: "hydrate-electrolytes",
         name: "Hydrate + Electrolytes",
         domain: "Hydration",
         suggestedLabel: "Health",
@@ -53,6 +55,7 @@ Derived from human physiology & neurobiology studies, this 30-day morning protoc
         description: "Rehydrate with water and a pinch of unrefined salt before coffee.",
       },
       {
+        habitKey: "cold-shower-reset",
         name: "Cold Shower Reset",
         domain: "Recovery",
         suggestedLabel: "Health",
@@ -62,6 +65,7 @@ Derived from human physiology & neurobiology studies, this 30-day morning protoc
         description: "End shower with 2 minutes of cold water for a dopamine boost.",
       },
       {
+        habitKey: "delay-caffeine",
         name: "Delay Caffeine 90 Mins",
         domain: "Nutrition",
         suggestedLabel: "Health",
@@ -102,6 +106,7 @@ Context switching destroys cognitive capacity. This system enforces strict bound
     tags: ["Deep Work", "Focus", "Flow State", "Career"],
     habits: [
       {
+        habitKey: "uninterrupted-focus-block",
         name: "Uninterrupted Focus Block",
         domain: "Productivity",
         suggestedLabel: "Work",
@@ -111,6 +116,7 @@ Context switching destroys cognitive capacity. This system enforces strict bound
         description: "Single-task on priority #1 with zero notifications or open tabs.",
       },
       {
+        habitKey: "zero-phone-first-hour",
         name: "Zero Phone First Hour",
         domain: "Digital Minimalism",
         suggestedLabel: "Mindset",
@@ -120,6 +126,7 @@ Context switching destroys cognitive capacity. This system enforces strict bound
         description: "Do not open email or social media during your first waking hour.",
       },
       {
+        habitKey: "evening-daily-shutdown",
         name: "Evening Daily Shutdown",
         domain: "Productivity",
         suggestedLabel: "Work",
@@ -157,6 +164,7 @@ Intensity without consistency leads to burnout. This 30-day program focuses on d
     tags: ["Fitness", "Strength", "Movement", "Health"],
     habits: [
       {
+        habitKey: "daily-movement-workout",
         name: "Daily Movement / Workout",
         domain: "Strength",
         suggestedLabel: "Fitness",
@@ -166,6 +174,7 @@ Intensity without consistency leads to burnout. This 30-day program focuses on d
         description: "Resistance training, run, or brisk exercise session.",
       },
       {
+        habitKey: "daily-step-goal",
         name: "Daily Step Goal",
         domain: "Cardio",
         suggestedLabel: "Fitness",
@@ -175,6 +184,7 @@ Intensity without consistency leads to burnout. This 30-day program focuses on d
         description: "Maintain active non-exercise activity thermogenesis (NEAT).",
       },
       {
+        habitKey: "post-workout-mobility",
         name: "Post-Workout Mobility",
         domain: "Mobility",
         suggestedLabel: "Health",
@@ -212,6 +222,7 @@ Prevent engineering burnout while consistently shipping code and keeping up with
     tags: ["Coding", "Developer", "Learning", "Career"],
     habits: [
       {
+        habitKey: "code-side-project",
         name: "Code Side Project / OSS",
         domain: "Learning",
         suggestedLabel: "Learning",
@@ -221,6 +232,7 @@ Prevent engineering burnout while consistently shipping code and keeping up with
         description: "Build personal projects or contribute to open-source repos.",
       },
       {
+        habitKey: "read-engineering-docs",
         name: "Read Engineering Docs/Articles",
         domain: "Learning",
         suggestedLabel: "Learning",
@@ -230,6 +242,7 @@ Prevent engineering burnout while consistently shipping code and keeping up with
         description: "Stay current on architecture patterns, blog posts, or RFCs.",
       },
       {
+        habitKey: "ergonomic-stretch-walk",
         name: "Ergonomic Stretch & Walk",
         domain: "Preventive",
         suggestedLabel: "Health",
@@ -267,6 +280,7 @@ Small daily awareness practices prevent end-of-month budget surprises.
     tags: ["Finance", "Money", "Budgeting", "Wealth"],
     habits: [
       {
+        habitKey: "log-daily-expenses",
         name: "Log Daily Expenses",
         domain: "Finance",
         suggestedLabel: "Finance",
@@ -275,6 +289,7 @@ Small daily awareness practices prevent end-of-month budget surprises.
         description: "Record all transactions for complete financial visibility.",
       },
       {
+        habitKey: "zero-impulse-buy",
         name: "Zero Impulse Buy Challenge",
         domain: "Finance",
         suggestedLabel: "Finance",
@@ -284,6 +299,7 @@ Small daily awareness practices prevent end-of-month budget surprises.
         description: "Enforce a 48-hour cooling period for non-essential purchases.",
       },
       {
+        habitKey: "weekly-budget-audit",
         name: "Weekly Net Worth & Budget Audit",
         domain: "Finance",
         suggestedLabel: "Finance",
@@ -321,6 +337,7 @@ Seneca & Marcus Aurelius practiced reviewing their day before sleep.
     tags: ["Mindfulness", "Stoicism", "Sleep", "Personal"],
     habits: [
       {
+        habitKey: "nightly-stoic-journal",
         name: "Nightly Stoic Journal",
         domain: "Sleep",
         suggestedLabel: "Personal",
@@ -330,6 +347,7 @@ Seneca & Marcus Aurelius practiced reviewing their day before sleep.
         description: "Answer: What went well? What could I have done better?",
       },
       {
+        habitKey: "screen-free-before-sleep",
         name: "Screen-Free 60 Mins Before Sleep",
         domain: "Digital Minimalism",
         suggestedLabel: "Health",
@@ -339,6 +357,7 @@ Seneca & Marcus Aurelius practiced reviewing their day before sleep.
         description: "Turn off phone/laptop screens to allow natural melatonin production.",
       },
       {
+        habitKey: "prepare-environment-tomorrow",
         name: "Prepare Environment for Tomorrow",
         domain: "Productivity",
         suggestedLabel: "Personal",

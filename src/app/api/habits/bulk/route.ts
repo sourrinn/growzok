@@ -20,7 +20,7 @@ function normalizeName(name: string): string {
   return name.trim().toLowerCase();
 }
 
-/** Bulk-create habits with server-side duplicate prevention. */
+/** Bulk-create habits with server-side 2-tier duplicate prevention (habitKey + normalized name). */
 export async function POST(request: Request) {
   try {
     const session = await auth();
@@ -42,8 +42,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // Fetch existing user habits for duplicate detection
+    // Fetch existing user habits for 2-tier duplicate detection
     const existingHabits = await listHabits(session.user.id);
+    const existingKeysSet = new Set(
+      existingHabits.map((h) => h.habitKey).filter((k): k is string => Boolean(k))
+    );
     const existingNamesSet = new Set(existingHabits.map((h) => normalizeName(h.name)));
 
     const skippedDuplicates: string[] = [];
@@ -54,15 +57,26 @@ export async function POST(request: Request) {
         unknown
       >;
       const rawName = typeof v.name === "string" ? v.name.trim().slice(0, 60) : "";
+      const habitKey = typeof v.habitKey === "string" ? v.habitKey : undefined;
+
       if (!rawName) return false;
 
       const normalized = normalizeName(rawName);
+
+      // Tier 1 Check: habitKey match
+      if (habitKey && existingKeysSet.has(habitKey)) {
+        skippedDuplicates.push(rawName);
+        return false;
+      }
+
+      // Tier 2 Check: Normalized name match
       if (existingNamesSet.has(normalized)) {
         skippedDuplicates.push(rawName);
         return false;
       }
 
-      // Add to set to prevent duplicates within the same bulk payload
+      // Add to sets to prevent duplicates within the same bulk payload
+      if (habitKey) existingKeysSet.add(habitKey);
       existingNamesSet.add(normalized);
       return true;
     });
@@ -74,6 +88,7 @@ export async function POST(request: Request) {
           unknown
         >;
         const name = typeof v.name === "string" ? v.name.trim().slice(0, 60) : "";
+        const habitKey = typeof v.habitKey === "string" ? v.habitKey : undefined;
         const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
         const category = parseCategory(v.category);
         const domain = parseDomain(v.domain);
@@ -92,7 +107,8 @@ export async function POST(request: Request) {
           missAllowance,
           domain,
           userLabel,
-          templateKey
+          templateKey,
+          habitKey
         );
       })
     );

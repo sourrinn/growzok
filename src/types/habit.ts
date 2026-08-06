@@ -112,6 +112,7 @@ export interface HabitDoc {
   userLabel?: string;
   domain?: HabitDomain;
   templateKey?: string;
+  habitKey?: string;
   frequency: HabitFrequency;
   /** Allowed misses per Monday-start week before the habit reads as "off track". 0 = strict. */
   missAllowance: number;
@@ -133,6 +134,7 @@ export interface Habit {
   userLabel: string;
   domain: HabitDomain;
   templateKey?: string;
+  habitKey?: string;
   frequency: HabitFrequency;
   missAllowance: number;
   target: HabitTarget | null;
@@ -155,6 +157,7 @@ export function serializeHabit(doc: HabitDoc): Habit {
     userLabel,
     domain,
     templateKey: doc.templateKey,
+    habitKey: doc.habitKey,
     frequency: doc.frequency ?? DEFAULT_FREQUENCY,
     missAllowance: doc.missAllowance ?? 0,
     target: doc.target ?? null,

@@ -35,7 +35,8 @@ export async function createHabit(
   missAllowance = 0,
   domain: HabitDomain = DEFAULT_DOMAIN,
   userLabel: string = DEFAULT_USER_LABEL,
-  templateKey?: string
+  templateKey?: string,
+  habitKey?: string
 ): Promise<Habit> {
   const col = await collection();
   const doc: HabitDoc = {
@@ -47,6 +48,7 @@ export async function createHabit(
     userLabel,
     domain,
     templateKey,
+    habitKey,
     frequency,
     missAllowance,
     target,

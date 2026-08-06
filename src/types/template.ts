@@ -8,11 +8,11 @@ export interface TemplateAuthor {
 }
 
 /**
- * A single habit within a template bundle. Each item carries its scientific
- * Domain, a suggested User Label for dashboard organization, and optional
- * target / miss allowance overrides.
+ * A single habit within a template bundle. Each item carries its unique master
+ * habitKey, scientific Domain, suggested User Label, and optional target / miss allowance overrides.
  */
 export interface TemplateHabitOverride {
+  habitKey: string;              // Immutable master habit key (e.g. "sunlight-exposure")
   name: string;
   domain: HabitDomain;           // 16-enum scientific domain (immutable)
   suggestedLabel: string;        // Suggested user-facing label (e.g. "Health", "Work")
@@ -45,7 +45,6 @@ export interface HabitTemplate {
   tagline: string;
   description: string;
   overviewMarkdown: string;
-  /** Template Category — the curatorial label for the marketplace page. */
   category: TemplateCategory;
   difficulty: TemplateDifficulty;
   estimatedDailyMinutes: number;

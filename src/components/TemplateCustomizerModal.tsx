@@ -42,7 +42,13 @@ export default function TemplateCustomizerModal({ template, onClose }: Props) {
   const router = useRouter();
   const { habits: existingHabits, addFromTemplate } = useHabits();
 
-  // Map normalized existing habit names
+  // Maps for 2-tier duplicate matching: habitKey + normalized name
+  const existingKeysSet = useMemo(() => {
+    return new Set(
+      existingHabits.map((h) => h.habitKey).filter((k): k is string => Boolean(k))
+    );
+  }, [existingHabits]);
+
   const existingNamesSet = useMemo(() => {
     return new Set(existingHabits.map((h) => normalizeName(h.name)));
   }, [existingHabits]);
@@ -51,18 +57,22 @@ export default function TemplateCustomizerModal({ template, onClose }: Props) {
   const duplicateIndices = useMemo(() => {
     const set = new Set<number>();
     template.habits.forEach((h, i) => {
-      if (existingNamesSet.has(normalizeName(h.name))) {
+      const keyMatch = h.habitKey && existingKeysSet.has(h.habitKey);
+      const nameMatch = existingNamesSet.has(normalizeName(h.name));
+      if (keyMatch || nameMatch) {
         set.add(i);
       }
     });
     return set;
-  }, [template.habits, existingNamesSet]);
+  }, [template.habits, existingKeysSet, existingNamesSet]);
 
   // State: selected habits (exclude duplicates by default)
   const [selected, setSelected] = useState<Set<number>>(() => {
     const initial = new Set<number>();
-    template.habits.forEach((_, i) => {
-      if (!existingNamesSet.has(normalizeName(template.habits[i].name))) {
+    template.habits.forEach((h, i) => {
+      const keyMatch = h.habitKey && existingKeysSet.has(h.habitKey);
+      const nameMatch = existingNamesSet.has(normalizeName(h.name));
+      if (!keyMatch && !nameMatch) {
         initial.add(i);
       }
     });
@@ -77,7 +87,7 @@ export default function TemplateCustomizerModal({ template, onClose }: Props) {
   const [submitting, setSubmitting] = useState(false);
 
   const toggleHabit = (idx: number) => {
-    if (duplicateIndices.has(idx)) return; // prevent toggling existing habit
+    if (duplicateIndices.has(idx)) return;
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx);

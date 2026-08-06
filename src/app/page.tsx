@@ -7,13 +7,14 @@ export default async function Home() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
+  const userName = session.user.name || session.user.email || "";
+
   return (
-    <main className="mx-auto max-w-xl px-5 pb-24 pt-12">
-      <AppHeader
-        userLabel={session.user.name || session.user.email || ""}
-        active="habits"
-      />
-      <HabitDashboard />
-    </main>
+    <div className="min-h-screen bg-slate-50/40">
+      <AppHeader userLabel={userName} active="habits" />
+      <main className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
+        <HabitDashboard />
+      </main>
+    </div>
   );
 }

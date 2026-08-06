@@ -38,10 +38,11 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
   };
 
   return (
-    <li className="group flex items-center justify-between gap-4 border-b border-mist py-5">
-      <div className="flex min-w-0 flex-1 items-center gap-3.5">
-        {habit.target ? (
-          <div className="flex shrink-0 items-center gap-1">
+    <li className="group relative flex flex-col justify-between rounded-xl border border-mist/80 bg-white p-4 shadow-sm transition-all hover:border-charcoal/30 hover:shadow-md">
+      <div className="flex items-start justify-between gap-3">
+        {/* Toggle / Target Input */}
+        <div className="flex items-center gap-3">
+          {habit.target ? (
             <input
               type="number"
               min={0}
@@ -52,92 +53,106 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
                 if (e.key === "Enter") (e.target as HTMLInputElement).blur();
               }}
               aria-label={`Log today's ${habit.name}`}
-              className={`h-6.5 w-14 rounded-sm border px-1.5 text-center text-sm outline-none transition-colors ${
+              className={`h-7 w-14 rounded border px-1.5 text-center text-sm font-semibold outline-none transition-colors ${
                 doneToday
                   ? "border-transparent text-ink"
                   : "border-mist text-charcoal focus:border-sage"
               }`}
               style={doneToday ? { backgroundColor: habit.color } : undefined}
             />
-          </div>
-        ) : (
-          <button
-            onClick={() => onToggle(habit.id)}
-            aria-pressed={doneToday}
-            aria-label={
-              doneToday ? `Mark ${habit.name} not done` : `Mark ${habit.name} done`
-            }
-            className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
-            style={{
-              borderColor: habit.color,
-              backgroundColor: doneToday ? habit.color : "transparent",
-            }}
-          >
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              className={`h-3 w-3 transition-opacity ${
-                doneToday ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <path
-                d="M3 8.5L6.5 12L13 4"
-                stroke="#fafaf9"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        )}
-
-        <div className="min-w-0">
-          <Link
-            href={`/habit/${habit.id}`}
-            className="block truncate text-base font-medium text-charcoal hover:underline"
-          >
-            {habit.name}
-          </Link>
-          <p className="mt-0.5 truncate text-xs text-muted">
-            <span className="rounded-sm bg-mist px-1 py-0.5 text-[10px] font-medium text-charcoal">{habit.domain}</span>
-            {" "}{habit.userLabel} · {frequencyLabel(habit.frequency)}
-            {habit.target ? ` · goal ${habit.target.goal} ${habit.target.unit}` : ""}
-          </p>
-          <StreakStem history={habit.history} color={habit.color} />
-        </div>
-      </div>
-
-      <div className="whitespace-nowrap text-right text-sm tabular-nums text-muted">
-        <div>
-          <span className="font-medium text-charcoal">
-            {Math.round(successRate.rate * 100)}%
-          </span>{" "}
-          success
-        </div>
-        <div className="text-xs">
-          {onTrack ? (
-            <span className={onTrack.onTrack ? "text-sage" : "text-ember"}>
-              {onTrack.onTrack
-                ? "On track"
-                : `${onTrack.misses - onTrack.allowance} over`}
-            </span>
-          ) : weekProgress ? (
-            `${weekProgress.completed}/${weekProgress.target} this week`
-          ) : streak > 0 ? (
-            `${streak} day${streak === 1 ? "" : "s"}`
           ) : (
-            "—"
+            <button
+              onClick={() => onToggle(habit.id)}
+              aria-pressed={doneToday}
+              aria-label={
+                doneToday ? `Mark ${habit.name} not done` : `Mark ${habit.name} done`
+              }
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
+              style={{
+                borderColor: habit.color,
+                backgroundColor: doneToday ? habit.color : "transparent",
+              }}
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                className={`h-3.5 w-3.5 transition-opacity ${
+                  doneToday ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <path
+                  d="M3 8.5L6.5 12L13 4"
+                  stroke="#fafaf9"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           )}
+
+          {/* Title & Badges */}
+          <div className="min-w-0">
+            <Link
+              href={`/habit/${habit.id}`}
+              className="block truncate text-base font-semibold text-charcoal hover:underline"
+            >
+              {habit.name}
+            </Link>
+            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted">
+              <span className="rounded-md bg-mist/70 px-1.5 py-0.5 text-[10px] font-medium text-charcoal">
+                {habit.domain}
+              </span>
+              <span>{habit.userLabel}</span>
+              <span>·</span>
+              <span>{frequencyLabel(habit.frequency)}</span>
+              {habit.target && (
+                <span>
+                  · goal {habit.target.goal} {habit.target.unit}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
+
+        {/* Delete Button */}
+        <button
+          onClick={() => onDelete(habit.id)}
+          aria-label={`Delete ${habit.name}`}
+          className="p-1 text-base text-muted opacity-0 transition-opacity hover:text-ember group-hover:opacity-100"
+        >
+          &times;
+        </button>
       </div>
 
-      <button
-        onClick={() => onDelete(habit.id)}
-        aria-label={`Delete ${habit.name}`}
-        className="p-1 text-lg leading-none text-muted opacity-0 transition-opacity hover:text-ember group-hover:opacity-100"
-      >
-        &times;
-      </button>
+      {/* Footer: Stem Chart & Stats */}
+      <div className="mt-4 flex items-end justify-between border-t border-mist/50 pt-3">
+        <StreakStem history={habit.history} color={habit.color} />
+
+        <div className="whitespace-nowrap text-right text-xs tabular-nums text-muted">
+          <div>
+            <span className="font-semibold text-charcoal">
+              {Math.round(successRate.rate * 100)}%
+            </span>{" "}
+            success
+          </div>
+          <div>
+            {onTrack ? (
+              <span className={onTrack.onTrack ? "text-sage font-medium" : "text-ember font-medium"}>
+                {onTrack.onTrack
+                  ? "On track"
+                  : `${onTrack.misses - onTrack.allowance} over`}
+              </span>
+            ) : weekProgress ? (
+              `${weekProgress.completed}/${weekProgress.target} this wk`
+            ) : streak > 0 ? (
+              `🔥 ${streak}d streak`
+            ) : (
+              "—"
+            )}
+          </div>
+        </div>
+      </div>
     </li>
   );
 }

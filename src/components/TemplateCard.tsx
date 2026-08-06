@@ -73,7 +73,7 @@ export default function TemplateCard({ template }: Props) {
           <ul className="mt-1.5 space-y-1 text-[#232f26]">
             {previewHabits.map((h, i) => (
               <li key={i} className="flex items-center gap-1.5 truncate">
-                <span className="text-[#406852]">✓</span>
+                <span className="text-[#406852] font-bold">•</span>
                 <span className="truncate font-medium">{h.name}</span>
                 {h.target && (
                   <span className="shrink-0 text-[10px] text-[#737970]">

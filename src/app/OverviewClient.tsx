@@ -136,13 +136,13 @@ export default function OverviewClient() {
 
               <div className="flex items-center gap-6 pt-4 text-xs text-[#737970]">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#be5a38]">✓</span> 100% Free Core Tracking
+                  <span className="text-[#be5a38] font-bold">•</span> 100% Free Core Tracking
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#be5a38]">✓</span> No Credit Card Required
+                  <span className="text-[#be5a38] font-bold">•</span> No Credit Card Required
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#be5a38]">✓</span> Frequency-Aware Streaks
+                  <span className="text-[#be5a38] font-bold">•</span> Frequency-Aware Streaks
                 </div>
               </div>
             </div>
@@ -172,10 +172,10 @@ export default function OverviewClient() {
                         className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all ${
                           demoDone
                             ? "border-transparent bg-[#406852] text-white scale-105"
-                            : "border-[#406852] bg-transparent text-transparent"
+                            : "border-[#406852] bg-transparent"
                         }`}
                       >
-                        ✓
+                        <span className={`h-2 w-2 rounded-full ${demoDone ? "bg-white" : "bg-[#406852]"}`} />
                       </button>
                       <div>
                         <h4 className="text-base font-semibold text-[#232f26]">

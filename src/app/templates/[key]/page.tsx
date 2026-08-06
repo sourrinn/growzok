@@ -101,8 +101,7 @@ export default async function TemplateDetailPage({ params }: Props) {
         {/* Stats row */}
         <div className="mt-4 flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-1 text-muted">
-            <span className="text-amber-600">★</span>
-            <span className="font-medium text-charcoal">{template.rating.toFixed(1)}</span>
+            <span className="font-semibold text-charcoal">Rating {template.rating.toFixed(1)}</span>
             <span>({template.reviewsCount.toLocaleString()} reviews)</span>
           </div>
           <span className="text-muted">
@@ -135,7 +134,7 @@ export default async function TemplateDetailPage({ params }: Props) {
           <p className="text-sm font-medium text-charcoal">
             {template.author.name}
             {template.author.verified && (
-              <span className="ml-1.5 text-xs text-sage">✓ Verified</span>
+              <span className="ml-1.5 text-xs font-medium text-sage">Verified Author</span>
             )}
           </p>
           <p className="text-xs text-muted">{template.author.role}</p>

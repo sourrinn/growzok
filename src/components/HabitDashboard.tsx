@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
@@ -18,12 +18,17 @@ export default function HabitDashboard() {
   } = useHabits();
 
   const [filter, setFilter] = useState<string>("All");
+  const [todayFormatted, setTodayFormatted] = useState<string>("");
 
-  const today = new Date().toLocaleDateString(undefined, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
+  useEffect(() => {
+    setTodayFormatted(
+      new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      })
+    );
+  }, []);
 
   // Filter tabs are built from userLabel, not category
   const labelsPresent = useMemo(
@@ -42,7 +47,9 @@ export default function HabitDashboard() {
           <h1 className="font-display text-4xl font-semibold tracking-tight text-charcoal">
             Daily Habits
           </h1>
-          <p className="mt-1 text-sm tabular-nums text-muted">{today}</p>
+          {todayFormatted && (
+            <p className="mt-1 text-sm tabular-nums text-muted">{todayFormatted}</p>
+          )}
         </div>
         {!loading && habits.length > 0 && (
           <div className="text-xs text-muted">

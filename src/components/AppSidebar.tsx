@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface Props {
   userLabel?: string;
@@ -9,13 +10,18 @@ interface Props {
   onToggleCollapse?: () => void;
 }
 
+const ADMIN_EMAIL = "sourinbiswas002@gmail.com";
+
 export default function AppSidebar({
   isCollapsed = false,
   onToggleCollapse,
 }: Props) {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const navItems = [
+  const isAdmin = session?.user?.email === ADMIN_EMAIL;
+
+  const baseNavItems = [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -51,17 +57,20 @@ export default function AppSidebar({
         </svg>
       ),
     },
-    {
-      label: "Admin Portal",
-      href: "/admin",
-      active: pathname.startsWith("/admin"),
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ),
-    },
   ];
+
+  const adminNavItem = {
+    label: "Admin Portal",
+    href: "/admin",
+    active: pathname.startsWith("/admin"),
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  };
+
+  const navItems = isAdmin ? [...baseNavItems, adminNavItem] : baseNavItems;
 
   const isAccountActive = pathname === "/account";
 

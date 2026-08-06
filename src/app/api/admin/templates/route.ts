@@ -5,6 +5,8 @@ import { ObjectId } from "mongodb";
 
 export const dynamic = "force-dynamic";
 
+const ADMIN_EMAIL = "sourinbiswas002@gmail.com";
+
 export async function GET() {
   try {
     const db = await getDb();
@@ -36,8 +38,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.user?.email || session.user.email !== ADMIN_EMAIL) {
+      return NextResponse.json({ error: "Forbidden: Admin access required." }, { status: 403 });
     }
 
     const body = await request.json();
@@ -96,8 +98,8 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.user?.email || session.user.email !== ADMIN_EMAIL) {
+      return NextResponse.json({ error: "Forbidden: Admin access required." }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);

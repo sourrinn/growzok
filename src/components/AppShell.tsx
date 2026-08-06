@@ -5,11 +5,11 @@ import Link from "next/link";
 import AppSidebar from "@/components/AppSidebar";
 
 interface Props {
-  userLabel: string;
+  userLabel?: string;
   children: React.ReactNode;
 }
 
-export default function AppShell({ userLabel, children }: Props) {
+export default function AppShell({ userLabel = "Workspace", children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 

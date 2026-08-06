@@ -15,9 +15,9 @@ export default function AdoptSection({ template }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="mt-2 w-full rounded-lg bg-charcoal py-3 text-sm font-semibold text-ink transition-opacity hover:opacity-80 active:opacity-60"
+        className="w-full rounded-xl bg-[#232f26] py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-black active:scale-[0.98]"
       >
-        Adopt Habit System
+        Adopt Habit System →
       </button>
 
       {open && (

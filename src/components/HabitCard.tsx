@@ -37,6 +37,9 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
     if (Number.isFinite(value) && value >= 0) onLogProgress(habit.id, value);
   };
 
+  // Dynamic input width calculated based on digit length to prevent clipping numbers (e.g. 10000 steps)
+  const inputWidthRem = Math.max(3.5, (draftValue || "0").length * 0.7 + 1.2);
+
   return (
     <li className="group relative flex flex-col justify-between rounded-xl border border-mist/80 bg-white p-4 shadow-sm transition-all hover:border-charcoal/30 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
@@ -53,12 +56,15 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
                 if (e.key === "Enter") (e.target as HTMLInputElement).blur();
               }}
               aria-label={`Log today's ${habit.name}`}
-              className={`h-7 w-14 rounded border px-1.5 text-center text-sm font-semibold outline-none transition-colors ${
+              className={`h-8 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
                 doneToday
-                  ? "border-transparent text-ink"
+                  ? "border-transparent text-ink shadow-sm"
                   : "border-mist text-charcoal focus:border-sage"
               }`}
-              style={doneToday ? { backgroundColor: habit.color } : undefined}
+              style={{
+                width: `${inputWidthRem}rem`,
+                backgroundColor: doneToday ? habit.color : undefined,
+              }}
             />
           ) : (
             <button
@@ -67,7 +73,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
               aria-label={
                 doneToday ? `Mark ${habit.name} not done` : `Mark ${habit.name} done`
               }
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-transform active:scale-90"
               style={{
                 borderColor: habit.color,
                 backgroundColor: doneToday ? habit.color : "transparent",
@@ -76,7 +82,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
               <svg
                 viewBox="0 0 16 16"
                 fill="none"
-                className={`h-3.5 w-3.5 transition-opacity ${
+                className={`h-4 w-4 transition-opacity ${
                   doneToday ? "opacity-100" : "opacity-0"
                 }`}
               >

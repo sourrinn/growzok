@@ -11,7 +11,7 @@ interface Props {
 export default function AppSidebar({ userLabel }: Props) {
   const pathname = usePathname();
 
-  const navItems = [
+  const workspaceItems = [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -47,22 +47,13 @@ export default function AppSidebar({ userLabel }: Props) {
         </svg>
       ),
     },
-    {
-      label: "Account Settings",
-      href: "/account",
-      active: pathname === "/account",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
-        </svg>
-      ),
-    },
   ];
+
+  const isAccountActive = pathname === "/account";
 
   return (
     <aside className="flex h-full flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-4 text-[#232f26]">
-      {/* Top Section: Brand & Nav Links */}
+      {/* Top Section: Brand & Workspace Nav */}
       <div className="space-y-6">
         {/* Brand Header */}
         <div className="flex items-center justify-between px-2 py-1">
@@ -81,13 +72,13 @@ export default function AppSidebar({ userLabel }: Props) {
           </Link>
         </div>
 
-        {/* Navigation Group */}
+        {/* Workspace Navigation Group */}
         <div className="space-y-1">
           <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970]">
             Workspace
           </p>
           <nav className="mt-2 space-y-1">
-            {navItems.map((item) => (
+            {workspaceItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -105,14 +96,28 @@ export default function AppSidebar({ userLabel }: Props) {
         </div>
       </div>
 
-      {/* Bottom Section: User Profile Link Card */}
-      <div className="border-t border-[#e5e1d7] pt-4">
+      {/* Bottom Section: Account Settings Nav Item & Profile Card */}
+      <div className="space-y-3 border-t border-[#e5e1d7] pt-4">
+        {/* Dedicated Bottom Account Nav Item */}
+        <Link
+          href="/account"
+          className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
+            isAccountActive
+              ? "bg-[#232f26] text-[#fbf9f5] shadow-sm font-semibold"
+              : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+          }`}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
+          </svg>
+          <span>Account Settings</span>
+        </Link>
+
+        {/* User Card with Sign Out Action */}
         {userLabel ? (
-          <Link
-            href="/account"
-            className="group flex items-center justify-between rounded-xl bg-white p-3 border border-[#e5e1d7] shadow-sm transition-all hover:border-[#232f26]/30"
-          >
-            <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-[#e5e1d7] shadow-sm">
+            <Link href="/account" className="flex items-center gap-2.5 min-w-0 flex-1 hover:opacity-80">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#232f26] text-xs font-bold text-white uppercase">
                 {userLabel[0]}
               </div>
@@ -120,16 +125,13 @@ export default function AppSidebar({ userLabel }: Props) {
                 <p className="truncate text-xs font-semibold text-[#232f26]">
                   {userLabel}
                 </p>
-                <p className="text-[10px] text-[#737970]">Account Settings</p>
+                <p className="text-[10px] text-[#737970]">Active Member</p>
               </div>
-            </div>
+            </Link>
 
             <button
               type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                signOut({ callbackUrl: "/login" });
-              }}
+              onClick={() => signOut({ callbackUrl: "/login" })}
               title="Sign out"
               className="rounded-lg p-1.5 text-xs text-[#737970] transition-colors hover:bg-[#be5a38]/10 hover:text-[#be5a38]"
             >
@@ -137,7 +139,7 @@ export default function AppSidebar({ userLabel }: Props) {
                 <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-          </Link>
+          </div>
         ) : (
           <div className="flex gap-2">
             <Link

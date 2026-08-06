@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import TemplateCard from "@/components/TemplateCard";
 import { HABIT_TEMPLATES, getAvailableCategories } from "@/lib/templates";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
-import type { TemplateCategory } from "@/types/template";
+import type { HabitTemplate, TemplateCategory } from "@/types/template";
 import type { TemplateRealtimeStats } from "@/app/api/templates/stats/route";
 
 type SortMode = "popularity" | "rating" | "time";
@@ -15,21 +15,39 @@ export default function TemplatesView() {
   const [search, setSearch] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("popularity");
   const [realtimeStats, setRealtimeStats] = useState<Record<string, TemplateRealtimeStats>>({});
+  const [customTemplates, setCustomTemplates] = useState<HabitTemplate[]>([]);
 
   useEffect(() => {
+    // Fetch real-time stats
     fetch("/api/templates/stats")
       .then((res) => res.json())
       .then((data) => {
         if (data?.stats) setRealtimeStats(data.stats);
       })
       .catch(() => {});
+
+    // Fetch custom org templates
+    fetch("/api/admin/templates")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.templates) setCustomTemplates(data.templates);
+      })
+      .catch(() => {});
   }, []);
 
-  const availableCategories = useMemo(() => getAvailableCategories(), []);
+  const allTemplates = useMemo(() => {
+    return [...HABIT_TEMPLATES, ...customTemplates];
+  }, [customTemplates]);
+
+  const availableCategories = useMemo(() => {
+    const set = new Set<TemplateCategory>(getAvailableCategories());
+    customTemplates.forEach((t) => set.add(t.category));
+    return Array.from(set);
+  }, [customTemplates]);
 
   // Merge real-time DB stats with template definitions
   const mergedTemplates = useMemo(() => {
-    return HABIT_TEMPLATES.map((t) => {
+    return allTemplates.map((t) => {
       const stats = realtimeStats[t.key];
       return {
         ...t,
@@ -37,7 +55,7 @@ export default function TemplatesView() {
         completionRatePct: stats ? stats.completionRatePct : 0,
       };
     });
-  }, [realtimeStats]);
+  }, [allTemplates, realtimeStats]);
 
   const filteredAndSorted = useMemo(() => {
     let list = mergedTemplates.filter((t) => {
@@ -82,7 +100,7 @@ export default function TemplatesView() {
           Habit Systems Marketplace
         </h1>
         <p className="mt-1.5 text-sm text-[#737970]">
-          Expert-curated biological & behavioral protocols. Preview habit routines and adopt into your account in one tap.
+          Expert-curated & organization habit protocols. Preview habit routines and adopt into your account in one tap.
         </p>
       </div>
 

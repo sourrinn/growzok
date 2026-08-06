@@ -21,7 +21,7 @@ const CATEGORIES: TemplateCategory[] = [
 const DIFFICULTIES: TemplateDifficulty[] = ["Beginner", "Intermediate", "Advanced"];
 
 export default function AdminPortalView() {
-  const [activeTab, setActiveTab] = useState<"templates" | "catalog">("templates");
+  const [activeSection, setActiveSection] = useState<"habits" | "templates">("habits");
 
   // State for Custom Templates
   const [templates, setTemplates] = useState<any[]>([]);
@@ -41,7 +41,7 @@ export default function AdminPortalView() {
   const [tSelectedHabits, setTSelectedHabits] = useState<string[]>([]);
   const [creatingTemplate, setCreatingTemplate] = useState(false);
 
-  // State for Master Catalog
+  // State for Standalone Master Catalog Habits
   const [catalog, setCatalog] = useState<any[]>([]);
   const [loadingCatalog, setLoadingCatalog] = useState(true);
   const [showCreateCatalogModal, setShowCreateCatalogModal] = useState(false);
@@ -97,6 +97,19 @@ export default function AdminPortalView() {
           target: def.defaultTarget,
           timeOfDay: def.timeOfDay,
           description: def.description,
+        };
+      }
+      const customItem = catalog.find((c) => c.habitKey === key || c.id === key);
+      if (customItem) {
+        return {
+          habitKey: customItem.habitKey,
+          name: customItem.name,
+          domain: customItem.domain,
+          suggestedLabel: customItem.suggestedLabel,
+          frequency: customItem.defaultFrequency,
+          target: customItem.defaultTarget,
+          timeOfDay: customItem.timeOfDay,
+          description: customItem.description,
         };
       }
       return {
@@ -179,7 +192,7 @@ export default function AdminPortalView() {
   };
 
   const handleDeleteCatalog = async (id: string) => {
-    if (!confirm("Delete this catalog habit item?")) return;
+    if (!confirm("Delete this standalone catalog habit item?")) return;
     try {
       const res = await fetch(`/api/admin/catalog?id=${id}`, { method: "DELETE" });
       if (res.ok) fetchCatalog();
@@ -187,191 +200,207 @@ export default function AdminPortalView() {
   };
 
   const masterHabitsList = Object.values(MASTER_HABIT_CATALOG);
+  const allHabitItems = [...masterHabitsList, ...catalog];
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-6 lg:flex-row">
+      {/* ORGANIZATION ADMIN SIDEBAR (Dedicated Org Sub-Nav Rail) */}
+      <aside className="w-full lg:w-64 shrink-0 rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm h-fit space-y-4">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26]">
-            Organization Admin Portal
-          </h1>
-          <p className="mt-1 text-sm text-[#737970]">
-            Manage organization habit systems, master protocols, and biological domain mappings.
-          </p>
+          <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852]">
+            Org Management
+          </span>
+          <h2 className="mt-2 font-display text-lg font-semibold text-[#232f26]">Organization Portal</h2>
+          <p className="mt-0.5 text-xs text-[#737970]">Data synchronization & CRUD control center.</p>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white p-1 shadow-sm">
+        <nav className="space-y-1 border-t border-[#e5e1d7] pt-3">
           <button
-            onClick={() => setActiveTab("templates")}
-            className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
-              activeTab === "templates"
+            onClick={() => setActiveSection("habits")}
+            className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
+              activeSection === "habits"
                 ? "bg-[#232f26] text-white shadow-sm"
-                : "text-[#737970] hover:text-[#232f26]"
+                : "text-[#737970] hover:bg-[#fbf9f5] hover:text-[#232f26]"
             }`}
           >
-            Habit Systems ({templates.length})
+            <span>Standalone Habits</span>
+            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              {allHabitItems.length}
+            </span>
           </button>
+
           <button
-            onClick={() => setActiveTab("catalog")}
-            className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all ${
-              activeTab === "catalog"
+            onClick={() => setActiveSection("templates")}
+            className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
+              activeSection === "templates"
                 ? "bg-[#232f26] text-white shadow-sm"
-                : "text-[#737970] hover:text-[#232f26]"
+                : "text-[#737970] hover:bg-[#fbf9f5] hover:text-[#232f26]"
             }`}
           >
-            Master Catalog ({masterHabitsList.length + catalog.length})
+            <span>Protocol Templates</span>
+            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px]">
+              {templates.length}
+            </span>
           </button>
-        </div>
-      </div>
+        </nav>
+      </aside>
 
-      {/* TAB 1: HABIT SYSTEMS MANAGEMENT */}
-      {activeTab === "templates" && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-4">
-            <div>
-              <h2 className="text-base font-semibold text-[#232f26]">Organization Habit Protocols</h2>
-              <p className="text-xs text-[#737970]">Custom published bundles deployed across your organization.</p>
-            </div>
-            <button
-              onClick={() => setShowCreateTemplateModal(true)}
-              className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
-            >
-              Publish New Protocol →
-            </button>
-          </div>
+      {/* MAIN CANVAS CONTENT */}
+      <main className="flex-1 space-y-6">
+        {/* SECTION 1: STANDALONE HABITS (No Template Involvement) */}
+        {activeSection === "habits" && (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
+              <div>
+                <h1 className="font-display text-2xl font-semibold text-[#232f26]">
+                  Standalone Habits (Master Catalog)
+                </h1>
+                <p className="text-xs text-[#737970]">
+                  Manage biological habits independent of any template protocol. Fully synchronized across the platform.
+                </p>
+              </div>
 
-          {loadingTemplates ? (
-            <p className="py-12 text-center text-sm text-[#737970]">Loading organization templates…</p>
-          ) : templates.length === 0 ? (
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
-              <h3 className="text-lg font-semibold text-[#232f26]">No Custom Protocols Published Yet</h3>
-              <p className="mt-1 text-xs text-[#737970]">Publish custom habit systems for your organization members.</p>
               <button
-                onClick={() => setShowCreateTemplateModal(true)}
-                className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
+                onClick={() => setShowCreateCatalogModal(true)}
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
               >
-                Create First Protocol
+                + Add Standalone Habit
               </button>
             </div>
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {templates.map((t) => (
-                <div key={t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852]">
-                        {t.category}
-                      </span>
-                      <span className="text-xs text-[#737970]">{t.difficulty}</span>
-                    </div>
 
-                    <div>
-                      <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
-                      <p className="mt-1 line-clamp-2 text-xs text-[#737970]">{t.tagline}</p>
-                    </div>
-
-                    <div className="rounded-xl bg-[#fbf9f5] p-3 text-xs">
-                      <span className="font-semibold text-[#232f26]">{t.habits.length} Included Habits:</span>
-                      <ul className="mt-1 space-y-1 text-[#737970]">
-                        {t.habits.slice(0, 3).map((h: any, i: number) => (
-                          <li key={i} className="truncate">• {h.name}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs">
-                    <span className="text-[#737970]">Author: {t.author?.name}</span>
-                    <button
-                      onClick={() => handleDeleteTemplate(t.id)}
-                      className="font-semibold text-[#be5a38] hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* TAB 2: MASTER CATALOG MANAGEMENT */}
-      {activeTab === "catalog" && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-4">
-            <div>
-              <h2 className="text-base font-semibold text-[#232f26]">Biological Master Habit Catalog</h2>
-              <p className="text-xs text-[#737970]">Standardized habit protocols with 16 biological domain taxonomy.</p>
-            </div>
-            <button
-              onClick={() => setShowCreateCatalogModal(true)}
-              className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
-            >
-              Add Master Habit →
-            </button>
-          </div>
-
-          <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-[#e5e1d7] text-[#737970]">
-                  <th className="pb-3 font-semibold">Habit Key</th>
-                  <th className="pb-3 font-semibold">Habit Name</th>
-                  <th className="pb-3 font-semibold">Biological Domain</th>
-                  <th className="pb-3 font-semibold">Label</th>
-                  <th className="pb-3 font-semibold">Time of Day</th>
-                  <th className="pb-3 font-semibold text-right">Target</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#e5e1d7]/60">
-                {masterHabitsList.map((h) => (
-                  <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
-                    <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                    <td className="py-3 font-semibold text-[#232f26]">{h.name}</td>
-                    <td className="py-3">
-                      <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
-                        {h.domain}
-                      </span>
-                    </td>
-                    <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
-                    <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
-                    <td className="py-3 text-right font-semibold text-[#232f26]">
-                      {h.defaultTarget ? `${h.defaultTarget.goal} ${h.defaultTarget.unit}` : "Binary"}
-                    </td>
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#e5e1d7] text-[#737970]">
+                    <th className="pb-3 font-semibold">Habit Key</th>
+                    <th className="pb-3 font-semibold">Habit Name</th>
+                    <th className="pb-3 font-semibold">Biological Domain</th>
+                    <th className="pb-3 font-semibold">Label</th>
+                    <th className="pb-3 font-semibold">Time of Day</th>
+                    <th className="pb-3 font-semibold text-right">Actions</th>
                   </tr>
-                ))}
-                {catalog.map((h) => (
-                  <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
-                    <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                    <td className="py-3 font-semibold text-[#232f26]">{h.name} (Custom)</td>
-                    <td className="py-3">
-                      <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
-                        {h.domain}
-                      </span>
-                    </td>
-                    <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
-                    <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
-                    <td className="py-3 text-right flex items-center justify-end gap-3">
-                      <span className="font-semibold text-[#232f26]">
-                        {h.defaultTarget ? `${h.defaultTarget.goal} ${h.defaultTarget.unit}` : "Binary"}
-                      </span>
+                </thead>
+                <tbody className="divide-y divide-[#e5e1d7]/60">
+                  {masterHabitsList.map((h) => (
+                    <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
+                      <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
+                      <td className="py-3 font-semibold text-[#232f26]">{h.name}</td>
+                      <td className="py-3">
+                        <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                          {h.domain}
+                        </span>
+                      </td>
+                      <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
+                      <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
+                      <td className="py-3 text-right font-medium text-[#737970]">Core Standard</td>
+                    </tr>
+                  ))}
+                  {catalog.map((h) => (
+                    <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
+                      <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
+                      <td className="py-3 font-semibold text-[#232f26]">{h.name} (Org Custom)</td>
+                      <td className="py-3">
+                        <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                          {h.domain}
+                        </span>
+                      </td>
+                      <td className="py-3 text-[#737970]">{h.suggestedLabel}</td>
+                      <td className="py-3 text-[#737970]">{h.timeOfDay || "Anytime"}</td>
+                      <td className="py-3 text-right">
+                        <button
+                          onClick={() => handleDeleteCatalog(h.id)}
+                          className="text-[#be5a38] font-semibold hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* SECTION 2: PROTOCOL TEMPLATES MANAGEMENT */}
+        {activeSection === "templates" && (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
+              <div>
+                <h1 className="font-display text-2xl font-semibold text-[#232f26]">
+                  Organization Habit Systems & Templates
+                </h1>
+                <p className="text-xs text-[#737970]">
+                  Build, publish, and delete habit protocols. Automatically synced to the Marketplace in real-time.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowCreateTemplateModal(true)}
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+              >
+                + Create Protocol System
+              </button>
+            </div>
+
+            {loadingTemplates ? (
+              <p className="py-12 text-center text-sm text-[#737970]">Loading templates…</p>
+            ) : templates.length === 0 ? (
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
+                <h3 className="text-lg font-semibold text-[#232f26]">No Custom Protocols Published Yet</h3>
+                <p className="mt-1 text-xs text-[#737970]">
+                  Create your organization's first custom habit protocol to publish it to the Marketplace.
+                </p>
+                <button
+                  onClick={() => setShowCreateTemplateModal(true)}
+                  className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
+                >
+                  Create Protocol
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2">
+                {templates.map((t) => (
+                  <div key={t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852]">
+                          {t.category}
+                        </span>
+                        <span className="text-xs text-[#737970]">{t.difficulty}</span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
+                        <p className="mt-1 line-clamp-2 text-xs text-[#737970]">{t.tagline}</p>
+                      </div>
+
+                      <div className="rounded-xl bg-[#fbf9f5] p-3 text-xs">
+                        <span className="font-semibold text-[#232f26]">{t.habits.length} Included Habits:</span>
+                        <ul className="mt-1 space-y-1 text-[#737970]">
+                          {t.habits.slice(0, 3).map((h: any, i: number) => (
+                            <li key={i} className="truncate">• {h.name}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs">
+                      <span className="text-[#737970]">Author: {t.author?.name}</span>
                       <button
-                        onClick={() => handleDeleteCatalog(h.id)}
-                        className="text-[#be5a38] font-semibold hover:underline"
+                        onClick={() => handleDeleteTemplate(t.id)}
+                        className="font-semibold text-[#be5a38] hover:underline"
                       >
-                        Delete
+                        Delete Protocol
                       </button>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )}
+      </main>
 
       {/* CREATE TEMPLATE MODAL */}
       {showCreateTemplateModal && (
@@ -472,14 +501,15 @@ export default function AdminPortalView() {
               <div className="space-y-2 border-t border-[#e5e1d7] pt-3">
                 <label className="font-semibold text-[#232f26]">Select Included Catalog Habits</label>
                 <div className="grid gap-2 max-h-40 overflow-y-auto sm:grid-cols-2 p-1">
-                  {masterHabitsList.map((h) => (
-                    <label key={h.habitKey} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] p-2 cursor-pointer hover:bg-[#fbf9f5]">
+                  {allHabitItems.map((h) => (
+                    <label key={h.habitKey || h.id} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] p-2 cursor-pointer hover:bg-[#fbf9f5]">
                       <input
                         type="checkbox"
-                        checked={tSelectedHabits.includes(h.habitKey)}
+                        checked={tSelectedHabits.includes(h.habitKey || h.id)}
                         onChange={(e) => {
-                          if (e.target.checked) setTSelectedHabits([...tSelectedHabits, h.habitKey]);
-                          else setTSelectedHabits(tSelectedHabits.filter((k) => k !== h.habitKey));
+                          const key = h.habitKey || h.id;
+                          if (e.target.checked) setTSelectedHabits([...tSelectedHabits, key]);
+                          else setTSelectedHabits(tSelectedHabits.filter((k) => k !== key));
                         }}
                         className="accent-[#232f26]"
                       />
@@ -505,7 +535,7 @@ export default function AdminPortalView() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3">
-              <h3 className="text-lg font-semibold text-[#232f26]">Add Master Catalog Habit</h3>
+              <h3 className="text-lg font-semibold text-[#232f26]">Add Standalone Master Habit</h3>
               <button onClick={() => setShowCreateCatalogModal(false)} className="text-[#737970]">✕</button>
             </div>
 
@@ -597,7 +627,7 @@ export default function AdminPortalView() {
               <div className="flex justify-end gap-2 border-t border-[#e5e1d7] pt-4">
                 <button type="button" onClick={() => setShowCreateCatalogModal(false)} className="rounded-xl border border-[#e5e1d7] px-4 py-2 font-semibold">Cancel</button>
                 <button type="submit" disabled={creatingCatalog} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white">
-                  {creatingCatalog ? "Adding…" : "Add Master Habit →"}
+                  {creatingCatalog ? "Adding…" : "Add Standalone Habit →"}
                 </button>
               </div>
             </form>

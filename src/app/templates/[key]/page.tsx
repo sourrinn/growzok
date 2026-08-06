@@ -5,14 +5,50 @@ import AppShell from "@/components/AppShell";
 import { getTemplateByKey } from "@/lib/templates";
 import { frequencyLabel } from "@/lib/frequency";
 import AdoptSection from "./AdoptSection";
+import { getDb } from "@/lib/mongodb";
+import type { HabitTemplate } from "@/types/template";
 
 interface Props {
   params: Promise<{ key: string }>;
 }
 
+async function resolveTemplate(key: string): Promise<HabitTemplate | undefined> {
+  const staticT = getTemplateByKey(key);
+  if (staticT) return staticT;
+
+  try {
+    const db = await getDb();
+    const col = db.collection("custom_templates");
+    const doc = await col.findOne({ $or: [{ key }, { slug: key }] });
+    if (!doc) return undefined;
+
+    return {
+      key: doc.key,
+      slug: doc.slug || doc.key,
+      name: doc.name,
+      tagline: doc.tagline,
+      description: doc.description || "",
+      overviewMarkdown: doc.overviewMarkdown || "",
+      category: doc.category,
+      difficulty: doc.difficulty || "Intermediate",
+      estimatedDailyMinutes: doc.estimatedDailyMinutes || 30,
+      durationDays: doc.durationDays,
+      rating: doc.rating || 0,
+      reviewsCount: doc.reviewsCount || 0,
+      activeUsersCount: doc.activeUsersCount || 0,
+      completionRatePct: doc.completionRatePct || 0,
+      author: doc.author || { name: "Org Admin", role: "Custom Protocol", verified: true },
+      tags: doc.tags || [],
+      habits: doc.habits || [],
+    };
+  } catch {
+    return undefined;
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { key } = await params;
-  const template = getTemplateByKey(key);
+  const template = await resolveTemplate(key);
   if (!template) return { title: "Template not found" };
 
   return {
@@ -55,13 +91,13 @@ function cleanOverviewText(raw?: string): string {
 
 export default async function TemplateDetailPage({ params }: Props) {
   const { key } = await params;
-  const template = getTemplateByKey(key);
+  const template = await resolveTemplate(key);
   if (!template) notFound();
 
   const formattedOverview = cleanOverviewText(template.overviewMarkdown);
 
   return (
-    <AppShell>
+    <AppShell userLabel="Habit Systems">
       <div className="w-full space-y-8">
         {/* Top Breadcrumb & Hero */}
         <div>

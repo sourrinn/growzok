@@ -34,6 +34,7 @@ export default function AdminPortalView() {
   const [customTemplates, setCustomTemplates] = useState<any[]>([]);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
   const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<any | null>(null);
 
   // Template Form State
   const [tName, setTName] = useState("");
@@ -46,7 +47,7 @@ export default function AdminPortalView() {
   const [tAuthorRole, setTAuthorRole] = useState("Lead Specialist");
   const [tTags, setTTags] = useState("Morning, Focus, Health");
   const [tSelectedHabits, setTSelectedHabits] = useState<string[]>([]);
-  const [creatingTemplate, setCreatingTemplate] = useState(false);
+  const [submittingTemplate, setSubmittingTemplate] = useState(false);
 
   // State for Standalone Master Catalog Habits
   const [catalog, setCatalog] = useState<any[]>([]);
@@ -88,11 +89,12 @@ export default function AdminPortalView() {
     fetchCatalog();
   }, []);
 
-  // Merge static HABIT_TEMPLATES and custom MongoDB templates
+  // Merge static HABIT_TEMPLATES and custom MongoDB templates (custom overrides static if same key)
   const allTemplatesList = useMemo(() => {
-    const staticList = HABIT_TEMPLATES.map((t) => ({ ...t, isCustom: false }));
+    const customKeys = new Set(customTemplates.map((t) => t.key));
+    const staticFiltered = HABIT_TEMPLATES.filter((t) => !customKeys.has(t.key)).map((t) => ({ ...t, isCustom: false }));
     const customList = customTemplates.map((t) => ({ ...t, isCustom: true }));
-    return [...staticList, ...customList];
+    return [...customList, ...staticFiltered];
   }, [customTemplates]);
 
   // Compute template usage mapping per habitKey / name
@@ -112,10 +114,44 @@ export default function AdminPortalView() {
     return map;
   }, [allTemplatesList]);
 
-  const handleCreateTemplate = async (e: React.FormEvent) => {
+  const masterHabitsList = Object.values(MASTER_HABIT_CATALOG);
+  const allHabitItems = [...masterHabitsList, ...catalog];
+
+  const openCreateTemplateModal = () => {
+    setEditingTemplate(null);
+    setTName("");
+    setTTagline("");
+    setTOverview("");
+    setTCategory("Morning Routine");
+    setTDifficulty("Intermediate");
+    setTMinutes(20);
+    setTAuthorName("Org Performance Lab");
+    setTAuthorRole("Lead Specialist");
+    setTTags("Morning, Focus, Health");
+    setTSelectedHabits([]);
+    setShowCreateTemplateModal(true);
+  };
+
+  const openEditTemplateModal = (template: any) => {
+    setEditingTemplate(template);
+    setTName(template.name);
+    setTTagline(template.tagline);
+    setTOverview(template.overviewMarkdown || template.description || "");
+    setTCategory(template.category);
+    setTDifficulty(template.difficulty || "Intermediate");
+    setTMinutes(template.estimatedDailyMinutes || 20);
+    setTAuthorName(template.author?.name || "Org Performance Lab");
+    setTAuthorRole(template.author?.role || "Lead Specialist");
+    setTTags(Array.isArray(template.tags) ? template.tags.join(", ") : "");
+    const habitKeys = template.habits.map((h: any) => h.habitKey || h.id || h.name);
+    setTSelectedHabits(habitKeys);
+    setShowCreateTemplateModal(true);
+  };
+
+  const handleSaveTemplate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!tName || !tTagline) return;
-    setCreatingTemplate(true);
+    setSubmittingTemplate(true);
 
     const habitsToInclude = tSelectedHabits.map((key) => {
       const def = MASTER_HABIT_CATALOG[key];
@@ -153,33 +189,39 @@ export default function AdminPortalView() {
       };
     });
 
+    const isEdit = Boolean(editingTemplate);
+    const method = isEdit ? "PUT" : "POST";
+    const payload: any = {
+      name: tName,
+      tagline: tTagline,
+      overviewMarkdown: tOverview,
+      category: tCategory,
+      difficulty: tDifficulty,
+      estimatedDailyMinutes: tMinutes,
+      authorName: tAuthorName,
+      authorRole: tAuthorRole,
+      tags: tTags.split(",").map((s) => s.trim()).filter(Boolean),
+      habits: habitsToInclude,
+    };
+
+    if (isEdit) {
+      if (editingTemplate.id) payload.id = editingTemplate.id;
+      if (editingTemplate.key) payload.key = editingTemplate.key;
+    }
+
     try {
       const res = await fetch("/api/admin/templates", {
-        method: "POST",
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: tName,
-          tagline: tTagline,
-          overviewMarkdown: tOverview,
-          category: tCategory,
-          difficulty: tDifficulty,
-          estimatedDailyMinutes: tMinutes,
-          authorName: tAuthorName,
-          authorRole: tAuthorRole,
-          tags: tTags.split(",").map((s) => s.trim()).filter(Boolean),
-          habits: habitsToInclude,
-        }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setShowCreateTemplateModal(false);
-        setTName("");
-        setTTagline("");
-        setTOverview("");
-        setTSelectedHabits([]);
+        setEditingTemplate(null);
         fetchTemplates();
       }
     } catch {} finally {
-      setCreatingTemplate(false);
+      setSubmittingTemplate(false);
     }
   };
 
@@ -245,9 +287,6 @@ export default function AdminPortalView() {
       setErrorMsg("Network error trying to delete habit.");
     }
   };
-
-  const masterHabitsList = Object.values(MASTER_HABIT_CATALOG);
-  const allHabitItems = [...masterHabitsList, ...catalog];
 
   return (
     <AppShell
@@ -377,12 +416,12 @@ export default function AdminPortalView() {
                   Organization Habit Systems & Templates
                 </h1>
                 <p className="text-xs text-[#737970]">
-                  Build, publish, and manage habit protocols. Synchronized with the Marketplace in real-time.
+                  Full CRUD: Create, Edit metadata, Update habits, and Delete habit protocols in real-time.
                 </p>
               </div>
 
               <button
-                onClick={() => setShowCreateTemplateModal(true)}
+                onClick={openCreateTemplateModal}
                 className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
               >
                 + Create Protocol System
@@ -395,7 +434,7 @@ export default function AdminPortalView() {
               <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
                 <h3 className="text-lg font-semibold text-[#232f26]">No Protocol Templates Available</h3>
                 <button
-                  onClick={() => setShowCreateTemplateModal(true)}
+                  onClick={openCreateTemplateModal}
                   className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
                 >
                   Create Protocol
@@ -439,16 +478,22 @@ export default function AdminPortalView() {
                       <span className="text-[#737970]">
                         Author: {t.author?.name || "Growzok Lab"}
                       </span>
-                      {t.isCustom ? (
+                      <div className="flex items-center gap-3">
                         <button
-                          onClick={() => handleDeleteTemplate(t.id)}
-                          className="font-semibold text-[#be5a38] hover:underline"
+                          onClick={() => openEditTemplateModal(t)}
+                          className="font-semibold text-[#232f26] hover:underline"
                         >
-                          Delete Protocol
+                          Edit Protocol
                         </button>
-                      ) : (
-                        <span className="font-medium text-[#737970]">Standard Protocol</span>
-                      )}
+                        {t.isCustom && (
+                          <button
+                            onClick={() => handleDeleteTemplate(t.id)}
+                            className="font-semibold text-[#be5a38] hover:underline"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -458,16 +503,18 @@ export default function AdminPortalView() {
         )}
       </div>
 
-      {/* CREATE TEMPLATE MODAL */}
+      {/* CREATE / EDIT TEMPLATE MODAL */}
       {showCreateTemplateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3">
-              <h3 className="text-lg font-semibold text-[#232f26]">Publish Custom Habit Protocol</h3>
+              <h3 className="text-lg font-semibold text-[#232f26]">
+                {editingTemplate ? `Edit Protocol — ${editingTemplate.name}` : "Publish Custom Habit Protocol"}
+              </h3>
               <button onClick={() => setShowCreateTemplateModal(false)} className="text-[#737970]">✕</button>
             </div>
 
-            <form onSubmit={handleCreateTemplate} className="space-y-4 text-xs">
+            <form onSubmit={handleSaveTemplate} className="space-y-4 text-xs">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <label className="font-semibold text-[#232f26]">Protocol Name *</label>
@@ -557,28 +604,30 @@ export default function AdminPortalView() {
               <div className="space-y-2 border-t border-[#e5e1d7] pt-3">
                 <label className="font-semibold text-[#232f26]">Select Included Catalog Habits</label>
                 <div className="grid gap-2 max-h-40 overflow-y-auto sm:grid-cols-2 p-1">
-                  {allHabitItems.map((h) => (
-                    <label key={h.habitKey || h.id} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] p-2 cursor-pointer hover:bg-[#fbf9f5]">
-                      <input
-                        type="checkbox"
-                        checked={tSelectedHabits.includes(h.habitKey || h.id)}
-                        onChange={(e) => {
-                          const key = h.habitKey || h.id;
-                          if (e.target.checked) setTSelectedHabits([...tSelectedHabits, key]);
-                          else setTSelectedHabits(tSelectedHabits.filter((k) => k !== key));
-                        }}
-                        className="accent-[#232f26]"
-                      />
-                      <span className="font-semibold text-[#232f26] truncate">{h.name}</span>
-                    </label>
-                  ))}
+                  {allHabitItems.map((h) => {
+                    const key = h.habitKey || h.id || h.name;
+                    return (
+                      <label key={key} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] p-2 cursor-pointer hover:bg-[#fbf9f5]">
+                        <input
+                          type="checkbox"
+                          checked={tSelectedHabits.includes(key)}
+                          onChange={(e) => {
+                            if (e.target.checked) setTSelectedHabits([...tSelectedHabits, key]);
+                            else setTSelectedHabits(tSelectedHabits.filter((k) => k !== key));
+                          }}
+                          className="accent-[#232f26]"
+                        />
+                        <span className="font-semibold text-[#232f26] truncate">{h.name}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
               <div className="flex justify-end gap-2 border-t border-[#e5e1d7] pt-4">
                 <button type="button" onClick={() => setShowCreateTemplateModal(false)} className="rounded-xl border border-[#e5e1d7] px-4 py-2 font-semibold">Cancel</button>
-                <button type="submit" disabled={creatingTemplate} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white">
-                  {creatingTemplate ? "Publishing…" : "Publish Protocol →"}
+                <button type="submit" disabled={submittingTemplate} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white">
+                  {submittingTemplate ? "Saving…" : editingTemplate ? "Save Changes →" : "Publish Protocol →"}
                 </button>
               </div>
             </form>

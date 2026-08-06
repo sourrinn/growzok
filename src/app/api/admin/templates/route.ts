@@ -95,6 +95,63 @@ export async function POST(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  try {
+    const session = await auth();
+    if (!session?.user?.email || session.user.email !== ADMIN_EMAIL) {
+      return NextResponse.json({ error: "Forbidden: Admin access required." }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { id, key, name, tagline, description, overviewMarkdown, category, difficulty, estimatedDailyMinutes, authorName, authorRole, tags, habits } = body;
+
+    if (!name || !tagline || !category) {
+      return NextResponse.json({ error: "Name, tagline, and category are required." }, { status: 400 });
+    }
+
+    const db = await getDb();
+    const col = db.collection("custom_templates");
+
+    const updateFields = {
+      name: name.trim(),
+      tagline: tagline.trim(),
+      description: (description || tagline).trim(),
+      overviewMarkdown: (overviewMarkdown || "").trim(),
+      category,
+      difficulty: difficulty || "Intermediate",
+      estimatedDailyMinutes: Number(estimatedDailyMinutes) || 20,
+      author: {
+        name: (authorName || "Org Admin").trim(),
+        role: (authorRole || "Organization Protocol").trim(),
+        verified: true,
+      },
+      tags: Array.isArray(tags) ? tags : [],
+      habits: Array.isArray(habits) ? habits : [],
+      updatedAt: new Date(),
+    };
+
+    if (id && ObjectId.isValid(id)) {
+      await col.updateOne({ _id: new ObjectId(id) }, { $set: updateFields });
+    } else if (key) {
+      await col.updateOne(
+        { key },
+        {
+          $set: { ...updateFields, key, slug: key },
+          $setOnInsert: { _id: new ObjectId(), createdAt: new Date(), rating: 0, reviewsCount: 0, activeUsersCount: 0, completionRatePct: 0 },
+        },
+        { upsert: true }
+      );
+    } else {
+      return NextResponse.json({ error: "Template ID or key required for update." }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("PUT /api/admin/templates", error);
+    return NextResponse.json({ error: "Could not update template." }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: Request) {
   try {
     const session = await auth();

@@ -95,7 +95,7 @@ export default function AddHabit({
           onClick={submit}
           className="rounded-xl bg-[#232f26] px-5 py-2.5 text-xs font-semibold text-white transition-all hover:bg-black active:scale-[0.98]"
         >
-          + Plant Habit
+          Plant Habit
         </button>
       </div>
 
@@ -193,7 +193,7 @@ export default function AddHabit({
               : "border-[#e5e1d7] bg-white text-[#737970] hover:border-[#232f26]/30 hover:text-[#232f26]"
           }`}
         >
-          {showAdvanced ? "Hide Goal Config" : "+ Add Numeric Goal"}
+          {showAdvanced ? "Hide Goal Config" : "Add Numeric Goal"}
         </button>
       </div>
 

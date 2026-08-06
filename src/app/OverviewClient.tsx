@@ -431,7 +431,19 @@ export default function OverviewClient() {
                     className="flex w-full items-center justify-between p-5 text-left text-sm font-semibold text-[#232f26]"
                   >
                     <span>{faq.q}</span>
-                    <span className="ml-3 shrink-0 text-base">{isOpen ? "−" : "+"}</span>
+                    <span className="ml-3 shrink-0 text-[#737970]">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      >
+                        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
                   </button>
                   {isOpen && (
                     <div className="border-t border-[#e5e1d7] p-5 pt-3 text-xs leading-relaxed text-[#737970]">

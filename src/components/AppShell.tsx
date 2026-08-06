@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppSidebar from "@/components/AppSidebar";
 
@@ -11,12 +11,36 @@ interface Props {
 
 export default function AppShell({ userLabel, children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("growzok_sidebar_collapsed");
+    if (saved !== null) {
+      setIsCollapsed(saved === "true");
+    }
+  }, []);
+
+  const toggleCollapse = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("growzok_sidebar_collapsed", String(next));
+      return next;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#fbf9f5]/50">
       {/* Desktop Fixed Left Sidebar */}
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-        <AppSidebar userLabel={userLabel} />
+      <div
+        className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col transition-all duration-300 ${
+          isCollapsed ? "md:w-16" : "md:w-64"
+        }`}
+      >
+        <AppSidebar
+          userLabel={userLabel}
+          isCollapsed={isCollapsed}
+          onToggleCollapse={toggleCollapse}
+        />
       </div>
 
       {/* Mobile Top Navigation Bar */}
@@ -50,13 +74,17 @@ export default function AppShell({ userLabel, children }: Props) {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <AppSidebar userLabel={userLabel} />
+            <AppSidebar userLabel={userLabel} isCollapsed={false} />
           </div>
         </div>
       )}
 
-      {/* Main Content Area (Pushed over by 64 cols on desktop) */}
-      <div className="md:pl-64">
+      {/* Main Content Area (Dynamic padding matching sidebar state) */}
+      <div
+        className={`transition-all duration-300 ${
+          isCollapsed ? "md:pl-16" : "md:pl-64"
+        }`}
+      >
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {children}
         </main>

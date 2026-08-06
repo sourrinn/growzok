@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 
 interface Props {
-  userLabel: string;
+  userLabel?: string;
 }
 
-export default function AppSidebar({ userLabel }: Props) {
+export default function AppSidebar({ userLabel: _userLabel }: Props) {
   const pathname = usePathname();
 
   const navItems = [
@@ -96,9 +95,8 @@ export default function AppSidebar({ userLabel }: Props) {
         </div>
       </div>
 
-      {/* Bottom Section: Account Settings Nav Item & Profile Bar */}
-      <div className="space-y-3 border-t border-[#e5e1d7] pt-4">
-        {/* Account Settings Nav Item */}
+      {/* Bottom Section: Account Settings Nav Item */}
+      <div className="border-t border-[#e5e1d7] pt-4">
         <Link
           href="/account"
           className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
@@ -113,43 +111,6 @@ export default function AppSidebar({ userLabel }: Props) {
           </svg>
           <span>Account Settings</span>
         </Link>
-
-        {/* User Profile Bar */}
-        {userLabel ? (
-          <div className="flex items-center justify-between rounded-xl bg-white p-3 border border-[#e5e1d7] shadow-sm">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#232f26] text-xs font-bold text-white uppercase">
-                {userLabel[0]}
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-semibold text-[#232f26]">
-                  {userLabel}
-                </p>
-                <p className="text-[10px] text-[#737970]">Active User</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => signOut({ callbackUrl: "/login" })}
-              title="Sign out"
-              className="rounded-lg p-1.5 text-xs text-[#737970] transition-colors hover:bg-[#be5a38]/10 hover:text-[#be5a38]"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-2">
-            <Link
-              href="/login"
-              className="flex-1 rounded-xl border border-[#e5e1d7] py-2 text-center text-xs font-semibold text-[#232f26]"
-            >
-              Sign In
-            </Link>
-          </div>
-        )}
       </div>
     </aside>
   );

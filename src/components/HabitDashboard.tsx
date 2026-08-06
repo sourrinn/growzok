@@ -1,12 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { useHabits } from "@/hooks/useHabits";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
-import { HABIT_TEMPLATES } from "@/lib/templates";
-import type { TemplateHabitOverride } from "@/types/template";
+import TemplateStarterGrid from "@/components/TemplateStarterGrid";
 
 export default function HabitDashboard() {
   const {
@@ -37,10 +35,6 @@ export default function HabitDashboard() {
   const filteredHabits =
     filter === "All" ? habits : habits.filter((h) => h.userLabel === filter);
 
-  const handleQuickTemplate = async (habits: TemplateHabitOverride[]) => {
-    await addFromTemplate(habits);
-  };
-
   return (
     <div>
       <header className="mb-10">
@@ -53,27 +47,7 @@ export default function HabitDashboard() {
       <AddHabit onAdd={addHabit} />
 
       {!loading && habits.length === 0 && (
-        <div className="mb-9">
-          <p className="mb-2 text-sm text-muted">Or start from a template:</p>
-          <div className="flex flex-wrap gap-2">
-            {HABIT_TEMPLATES.map((t) => (
-              <button
-                key={t.key}
-                onClick={() => handleQuickTemplate(t.habits)}
-                title={t.description}
-                className="rounded-sm border border-mist px-3 py-1.5 text-sm text-muted transition-colors hover:text-charcoal"
-              >
-                + {t.name}
-              </button>
-            ))}
-          </div>
-          <Link
-            href="/templates"
-            className="mt-3 inline-block text-xs text-muted underline-offset-2 hover:text-charcoal hover:underline"
-          >
-            Browse all templates →
-          </Link>
-        </div>
+        <TemplateStarterGrid onAdopt={addFromTemplate} />
       )}
 
       {error && (

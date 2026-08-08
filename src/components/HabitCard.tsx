@@ -31,17 +31,33 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onEdit, onDe
   const weekProgress = computeThisWeekProgress(habit);
   const onTrack = habit.missAllowance > 0 ? computeOnTrackStatus(habit) : null;
 
-  const [draftValue, setDraftValue] = useState(
-    habit.progress[today] !== undefined ? String(habit.progress[today]) : ""
-  );
+  const savedValue = habit.progress[today] !== undefined ? String(habit.progress[today]) : "";
+  const [draftValue, setDraftValue] = useState(savedValue);
+  const [isSaving, setIsSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
 
-  const commitValue = () => {
-    const value = Number(draftValue);
-    if (Number.isFinite(value) && value >= 0) onLogProgress(habit.id, value);
+  // Sync draft value if saved progress changes externally
+  const isDirty = draftValue !== savedValue;
+
+  const handleSaveProgress = async () => {
+    const num = Number(draftValue);
+    if (!Number.isFinite(num) || num < 0) return;
+    setIsSaving(true);
+    try {
+      await onLogProgress(habit.id, num);
+      setJustSaved(true);
+      setTimeout(() => setJustSaved(false), 1800);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  // Dynamic input width calculated based on digit length to prevent clipping numbers (e.g. 10000 steps)
+  const handleDiscard = () => {
+    setDraftValue(savedValue);
+  };
+
+  // Dynamic input width calculated based on digit length to prevent clipping numbers
   const inputWidthRem = Math.max(3.5, (draftValue || "0").length * 0.7 + 1.2);
 
   return (
@@ -50,26 +66,65 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onEdit, onDe
         {/* Toggle / Target Input (Aligned Top Left) */}
         <div className="flex items-start gap-3">
           {habit.target ? (
-            <input
-              type="number"
-              min={0}
-              value={draftValue}
-              onChange={(e) => setDraftValue(e.target.value)}
-              onBlur={commitValue}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-              }}
-              aria-label={`Log today's ${habit.name}`}
-              className={`h-8 shrink-0 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
-                doneToday
-                  ? "border-transparent text-ink shadow-sm"
-                  : "border-mist text-charcoal focus:border-sage"
-              }`}
-              style={{
-                width: `${inputWidthRem}rem`,
-                backgroundColor: doneToday ? habit.color : undefined,
-              }}
-            />
+            <div className="flex flex-wrap items-center gap-1.5">
+              <input
+                type="number"
+                min={0}
+                value={draftValue}
+                onChange={(e) => setDraftValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveProgress();
+                  if (e.key === "Escape") handleDiscard();
+                }}
+                aria-label={`Log today's ${habit.name}`}
+                className={`h-8 shrink-0 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
+                  doneToday
+                    ? "border-transparent text-white font-bold shadow-sm"
+                    : "border-[#e5e1d7] bg-white text-[#232f26] focus:border-[#232f26]"
+                }`}
+                style={{
+                  width: `${inputWidthRem}rem`,
+                  backgroundColor: doneToday ? habit.color : undefined,
+                }}
+              />
+
+              {/* Explicit Save and Discard Buttons */}
+              {isDirty ? (
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={handleSaveProgress}
+                    disabled={isSaving}
+                    title="Save progress (Enter)"
+                    className="flex h-8 items-center gap-1 rounded-lg bg-[#232f26] px-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-black active:scale-95 disabled:opacity-50"
+                  >
+                    {isSaving ? (
+                      "…"
+                    ) : (
+                      <>
+                        <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+                          <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>Save</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleDiscard}
+                    title="Discard changes (Esc)"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e5e1d7] text-xs font-semibold text-[#737970] transition-colors hover:bg-[#e5e1d7]/40 hover:text-[#232f26]"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : justSaved ? (
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#e3ede6] px-2 py-1 text-[11px] font-semibold text-[#406852]">
+                  <svg viewBox="0 0 16 16" fill="none" className="h-3 w-3">
+                    <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  Saved!
+                </span>
+              ) : null}
+            </div>
           ) : (
             <button
               onClick={() => onToggle(habit.id)}

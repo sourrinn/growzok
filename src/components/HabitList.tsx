@@ -3,6 +3,7 @@
 import type { Habit } from "@/types/habit";
 import HabitCard from "@/components/HabitCard";
 import type { EditHabitInput } from "@/hooks/useHabits";
+import { SkeletonHabitCard } from "@/components/Skeleton";
 
 interface Props {
   habits: Habit[];
@@ -24,30 +25,51 @@ export default function HabitList({
   onDelete,
 }: Props) {
   if (loading) {
-    return <p className="py-16 text-center text-sm text-muted">Loading habits…</p>;
+    return (
+      <div className="grid gap-3.5 sm:grid-cols-1 md:grid-cols-2">
+        <SkeletonHabitCard delayClass="animation-delay-75" />
+        <SkeletonHabitCard delayClass="animation-delay-150" />
+        <SkeletonHabitCard delayClass="animation-delay-200" />
+        <SkeletonHabitCard delayClass="animation-delay-300" />
+      </div>
+    );
   }
 
   if (habits.length === 0) {
     return (
-      <p className="py-16 text-center font-display text-lg italic text-muted">
-        Nothing planted yet. Add your first habit above or pick a preset system.
-      </p>
+      <div className="rounded-2xl border border-dashed border-[#e5e1d7] dark:border-[#27272a] p-12 text-center animate-fade-in">
+        <p className="font-display text-lg italic text-[#737970] dark:text-[#a1a1aa]">
+          Nothing planted yet. Add your first habit above or pick a preset system.
+        </p>
+      </div>
     );
   }
 
   return (
     <ul className="grid gap-3.5 sm:grid-cols-1 md:grid-cols-2">
-      {habits.map((habit) => (
-        <HabitCard
-          key={habit.id}
-          habit={habit}
-          isManaging={isManaging}
-          onToggle={onToggle}
-          onLogProgress={onLogProgress}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ))}
+      {habits.map((habit, idx) => {
+        const delays = [
+          "animation-delay-75",
+          "animation-delay-100",
+          "animation-delay-150",
+          "animation-delay-200",
+          "animation-delay-300",
+        ];
+        const delayClass = delays[idx % delays.length];
+
+        return (
+          <li key={habit.id} className={`animate-slide-up ${delayClass}`}>
+            <HabitCard
+              habit={habit}
+              isManaging={isManaging}
+              onToggle={onToggle}
+              onLogProgress={onLogProgress}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          </li>
+        );
+      })}
     </ul>
   );
 }

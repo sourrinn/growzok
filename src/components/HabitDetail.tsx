@@ -17,12 +17,31 @@ import Heatmap from "@/components/Heatmap";
 import StatTile from "@/components/StatTile";
 import EditHabitModal from "@/components/EditHabitModal";
 
+import { Skeleton, SkeletonStatTile } from "@/components/Skeleton";
+
 export default function HabitDetail({ habitId }: { habitId: string }) {
   const { habits, loading, editHabit } = useHabits();
   const [showEdit, setShowEdit] = useState(false);
 
   if (loading) {
-    return <p className="py-16 text-center text-sm text-muted">Loading…</p>;
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <Skeleton className="h-4 w-28" />
+        <div className="flex justify-between items-center">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <Skeleton className="h-9 w-20 rounded-xl" />
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <SkeletonStatTile delayClass="animation-delay-75" />
+          <SkeletonStatTile delayClass="animation-delay-150" />
+          <SkeletonStatTile delayClass="animation-delay-200" />
+          <SkeletonStatTile delayClass="animation-delay-300" />
+        </div>
+      </div>
+    );
   }
 
   const habit = habits.find((h) => h.id === habitId);

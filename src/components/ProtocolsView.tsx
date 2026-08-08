@@ -195,9 +195,21 @@ export default function ProtocolsView() {
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSorted.map((p) => (
-            <ProtocolCard key={p.key} protocol={p} />
-          ))}
+          {filteredAndSorted.map((p, idx) => {
+            const delays = [
+              "animation-delay-75",
+              "animation-delay-100",
+              "animation-delay-150",
+              "animation-delay-200",
+              "animation-delay-300",
+            ];
+            const delayClass = delays[idx % delays.length];
+            return (
+              <div key={p.key} className={`animate-slide-up ${delayClass}`}>
+                <ProtocolCard protocol={p} />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

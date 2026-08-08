@@ -6,6 +6,8 @@ import type { Protocol, ProtocolHabit } from "@/types/protocol";
 import { STANDARD_PROTOCOLS } from "@/lib/protocols";
 import ProtocolAdoptModal from "@/components/ProtocolAdoptModal";
 
+import { Spinner } from "@/components/Spinner";
+
 interface Props {
   onAdopt: (items: ProtocolHabit[]) => Promise<void>;
 }
@@ -166,9 +168,16 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
                 <button
                   onClick={() => handleQuickAdopt(protocol)}
                   disabled={isAdopting}
-                  className="flex-1 rounded-lg bg-[#232f26] py-1.5 text-xs font-medium text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#232f26] py-1.5 text-xs font-medium text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
                 >
-                  {isAdopting ? "Adding..." : "+ One-Tap Add"}
+                  {isAdopting ? (
+                    <>
+                      <Spinner className="h-3.5 w-3.5 text-white dark:text-[#f4f4f5]" />
+                      <span>Adding...</span>
+                    </>
+                  ) : (
+                    "+ One-Tap Add"
+                  )}
                 </button>
                 <button
                   onClick={() => setPreviewProtocol(protocol)}

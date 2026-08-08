@@ -8,6 +8,7 @@ import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
 import { HABIT_TEMPLATES } from "@/lib/templates";
+import { SkeletonProtocolCard } from "@/components/Skeleton";
 
 const CATEGORIES: TemplateCategory[] = [
   "Morning Routine",
@@ -463,7 +464,12 @@ export default function AdminPortalView() {
             </div>
 
             {loadingTemplates ? (
-              <p className="py-12 text-center text-sm text-[#737970] dark:text-[#a1a1aa]">Loading protocols…</p>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <SkeletonProtocolCard delayClass="animation-delay-75" />
+                <SkeletonProtocolCard delayClass="animation-delay-150" />
+                <SkeletonProtocolCard delayClass="animation-delay-200" />
+                <SkeletonProtocolCard delayClass="animation-delay-300" />
+              </div>
             ) : allTemplatesList.length === 0 ? (
               <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-12 text-center">
                 <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">No Protocols Available</h3>

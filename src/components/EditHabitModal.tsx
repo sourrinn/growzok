@@ -108,20 +108,20 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#18201a] border border-[#e5e1d7] dark:border-[#2d3c30] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3">
+        <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-3">
           <div>
-            <h2 className="text-lg font-semibold text-[#232f26]">Edit Habit</h2>
-            <p className="mt-0.5 text-xs text-[#737970]">Update name, goal, schedule, or label</p>
+            <h2 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">Edit Habit</h2>
+            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#9eb0a2]">Update name, goal, schedule, or label</p>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-full p-1 text-[#737970] transition-colors hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+            className="rounded-full p-1 text-[#737970] dark:text-[#9eb0a2] transition-colors hover:bg-[#e5e1d7]/50 dark:hover:bg-[#2d3c30] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
           >
             ✕
           </button>
@@ -130,30 +130,30 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
         <form onSubmit={handleSave} className="space-y-4 text-xs">
           {/* Name */}
           <div>
-            <label className="font-semibold text-[#232f26]">Habit Name</label>
+            <label className="font-semibold text-[#232f26] dark:text-[#f0ede6]">Habit Name</label>
             <input
               type="text"
               required
               maxLength={60}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-sm outline-none focus:border-[#232f26]/40"
+              className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#222d25] p-2.5 text-sm text-[#232f26] dark:text-[#f0ede6] outline-none focus:border-[#232f26]/40 dark:focus:border-[#5fa07c]"
             />
           </div>
 
           {/* Label + Domain */}
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className="font-semibold text-[#232f26]">Label</label>
+              <label className="font-semibold text-[#232f26] dark:text-[#f0ede6]">Label</label>
               <input
                 type="text"
                 value={userLabel}
                 onChange={(e) => setUserLabel(e.target.value.slice(0, 30))}
-                className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 outline-none focus:border-[#232f26]/40"
+                className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#222d25] p-2.5 text-[#232f26] dark:text-[#f0ede6] outline-none focus:border-[#232f26]/40 dark:focus:border-[#5fa07c]"
               />
             </div>
             <div>
-              <label className="font-semibold text-[#232f26] block mb-1">Biological Domain</label>
+              <label className="font-semibold text-[#232f26] dark:text-[#f0ede6] block mb-1">Biological Domain</label>
               <CustomSelect
                 options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
                 value={domain}
@@ -165,7 +165,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
 
           {/* Schedule */}
           <div>
-            <label className="font-semibold text-[#232f26]">Schedule</label>
+            <label className="font-semibold text-[#232f26] dark:text-[#f0ede6]">Schedule</label>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <CustomSelect
                 options={FREQ_OPTIONS}
@@ -185,7 +185,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
               )}
 
               {freqKind === "custom" && (
-                <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-1">
+                <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-1">
                   {WEEKDAY_SHORT.map((lbl, day) => (
                     <button
                       key={day}
@@ -193,8 +193,8 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
                       onClick={() => toggleDay(day)}
                       className={`h-6 w-6 rounded-lg text-[10px] font-bold transition-all ${
                         customDays.has(day)
-                          ? "bg-[#232f26] text-white"
-                          : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+                          ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e]"
+                          : "text-[#737970] dark:text-[#9eb0a2] hover:bg-[#e5e1d7]/50 dark:hover:bg-[#2d3c30] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
                       }`}
                     >
                       {lbl}
@@ -206,19 +206,19 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
           </div>
 
           {/* Goal / Target */}
-          <div className="space-y-2 border-t border-[#e5e1d7] pt-3">
-            <label className="flex items-center gap-2 font-semibold text-[#232f26] cursor-pointer">
+          <div className="space-y-2 border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-3">
+            <label className="flex items-center gap-2 font-semibold text-[#232f26] dark:text-[#f0ede6] cursor-pointer">
               <input
                 type="checkbox"
                 checked={hasTarget}
                 onChange={(e) => setHasTarget(e.target.checked)}
-                className="rounded accent-[#232f26]"
+                className="rounded accent-[#232f26] dark:accent-[#5fa07c]"
               />
               Track a numeric goal
             </label>
 
             {hasTarget && (
-              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-2.5">
+              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-2.5">
                 <CustomSelect
                   options={TARGET_TYPES}
                   value={targetType}
@@ -229,7 +229,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
                   min={1}
                   value={goal}
                   onChange={(e) => setGoal(Number(e.target.value))}
-                  className="w-20 rounded-lg border border-[#e5e1d7] bg-white px-2 py-1.5 text-center font-semibold text-[#232f26] outline-none focus:border-[#232f26]/40"
+                  className="w-20 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-2 py-1.5 text-center font-semibold text-[#232f26] dark:text-[#f0ede6] outline-none focus:border-[#232f26]/40 dark:focus:border-[#5fa07c]"
                 />
                 <input
                   type="text"
@@ -237,7 +237,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
                   onChange={(e) => setUnit(e.target.value)}
                   placeholder="unit (e.g. steps)"
                   maxLength={20}
-                  className="flex-1 rounded-lg border border-[#e5e1d7] bg-white px-2 py-1.5 text-[#232f26] outline-none placeholder:text-[#737970] focus:border-[#232f26]/40"
+                  className="flex-1 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-2 py-1.5 text-[#232f26] dark:text-[#f0ede6] outline-none placeholder:text-[#737970] dark:placeholder:text-[#9eb0a2] focus:border-[#232f26]/40 dark:focus:border-[#5fa07c]"
                 />
               </div>
             )}
@@ -246,7 +246,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
           {/* Missed days allowance */}
           {freqKind !== "timesPerWeek" && (
             <div className="flex items-center gap-3">
-              <label className="font-semibold text-[#232f26]">Allowed misses / week:</label>
+              <label className="font-semibold text-[#232f26] dark:text-[#f0ede6]">Allowed misses / week:</label>
               <CustomSelect
                 options={[0, 1, 2, 3, 4, 5, 6, 7].map((n) => ({
                   value: String(n),
@@ -259,18 +259,18 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
           )}
 
           {/* Footer */}
-          <div className="flex justify-end gap-2 border-t border-[#e5e1d7] pt-4">
+          <div className="flex justify-end gap-2 border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-[#e5e1d7] bg-white px-4 py-2 font-semibold text-[#737970] transition-colors hover:text-[#232f26]"
+              className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-4 py-2 font-semibold text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+              className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               {saving ? "Saving…" : "Save Changes →"}
             </button>

@@ -47,23 +47,23 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
 
   return (
     <div>
-      <Link href="/" className="text-sm text-muted hover:text-charcoal">
+      <Link href="/" className="text-sm text-[#737970] dark:text-[#9eb0a2] hover:text-[#232f26] dark:hover:text-[#f0ede6]">
         ← Back
       </Link>
 
       <header className="mb-8 mt-3 flex items-start justify-between">
         <div>
-          <h1 className="font-display text-3xl font-medium tracking-tight text-charcoal">
+          <h1 className="font-display text-3xl font-medium tracking-tight text-[#232f26] dark:text-[#f0ede6]">
             {habit.name}
           </h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="mt-1 text-sm text-[#737970] dark:text-[#9eb0a2]">
             {habit.category} · {frequencyLabel(habit.frequency)}
             {habit.target && ` · goal ${habit.target.goal} ${habit.target.unit}`}
           </p>
         </div>
         <button
           onClick={() => setShowEdit(true)}
-          className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#232f26] shadow-sm transition-all hover:bg-[#fbf9f5]"
+          className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-3.5 py-1.5 text-xs font-semibold text-[#232f26] dark:text-[#f0ede6] shadow-sm transition-all hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]"
         >
           ✎ Edit Habit
         </button>
@@ -111,10 +111,10 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
 
       {insights.length > 0 && (
         <div className="mb-8">
-          <p className="mb-2 text-sm font-medium text-charcoal">Insights</p>
+          <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f0ede6]">Insights</p>
           <ul className="space-y-1.5">
             {insights.map((text) => (
-              <li key={text} className="text-sm text-muted">
+              <li key={text} className="text-sm text-[#737970] dark:text-[#9eb0a2]">
                 {text}
               </li>
             ))}
@@ -122,7 +122,7 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
         </div>
       )}
 
-      <p className="mb-2 text-sm font-medium text-charcoal">History</p>
+      <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f0ede6]">History</p>
       <Heatmap history={habit.history} color={habit.color} />
     </div>
   );

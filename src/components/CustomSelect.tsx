@@ -78,19 +78,19 @@ export default function CustomSelect({
         type="button"
         disabled={disabled}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex w-full items-center justify-between gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 text-xs font-semibold text-[#232f26] shadow-sm transition-all hover:bg-white focus:border-[#232f26]/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50`}
+        className={`flex w-full items-center justify-between gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 text-xs font-semibold text-[#232f26] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#f0ede6] shadow-sm transition-all hover:bg-white dark:hover:bg-[#222d25] focus:border-[#232f26]/50 dark:focus:border-[#5fa07c] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50`}
       >
         <span className="truncate">
           {prefixLabel && (
-            <span className="font-normal text-[#737970]">{prefixLabel}</span>
+            <span className="font-normal text-[#737970] dark:text-[#9eb0a2]">{prefixLabel}</span>
           )}
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
           viewBox="0 0 16 16"
           fill="none"
-          className={`h-3.5 w-3.5 shrink-0 text-[#737970] transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-[#232f26]" : ""
+          className={`h-3.5 w-3.5 shrink-0 text-[#737970] dark:text-[#9eb0a2] transition-transform duration-200 ${
+            isOpen ? "rotate-180 text-[#232f26] dark:text-[#f0ede6]" : ""
           }`}
         >
           <path
@@ -105,7 +105,7 @@ export default function CustomSelect({
 
       {/* Popover Dropdown Menu */}
       {isOpen && (
-        <div className="absolute left-0 z-50 mt-1.5 max-h-60 w-max min-w-full overflow-y-auto rounded-xl border border-[#e5e1d7] bg-white p-1.5 shadow-xl transition-all">
+        <div className="absolute left-0 z-50 mt-1.5 max-h-60 w-max min-w-full overflow-y-auto rounded-xl border border-[#e5e1d7] bg-white p-1.5 dark:border-[#2d3c30] dark:bg-[#18201a] shadow-xl transition-all">
           <ul className="space-y-0.5">
             {normalizedOptions.map((opt) => {
               const isSelected = opt.value === value;
@@ -116,8 +116,8 @@ export default function CustomSelect({
                     onClick={() => handleSelect(opt.value)}
                     className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-xs transition-colors ${
                       isSelected
-                        ? "bg-[#e3ede6] font-semibold text-[#2d4a3e]"
-                        : "text-[#232f26] hover:bg-[#fbf9f5]"
+                        ? "bg-[#e3ede6] font-semibold text-[#2d4a3e] dark:bg-[#1d3326] dark:text-[#5fa07c]"
+                        : "text-[#232f26] dark:text-[#f0ede6] hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]"
                     }`}
                   >
                     <span>{opt.label}</span>
@@ -125,7 +125,7 @@ export default function CustomSelect({
                       <svg
                         viewBox="0 0 16 16"
                         fill="none"
-                        className="h-3.5 w-3.5 shrink-0 text-[#406852]"
+                        className="h-3.5 w-3.5 shrink-0 text-[#406852] dark:text-[#5fa07c]"
                       >
                         <path
                           d="M3 8.5L6.5 12L13 4"

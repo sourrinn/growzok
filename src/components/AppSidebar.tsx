@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+import { useTheme } from "@/components/ThemeProvider";
+
 interface Props {
   userLabel?: string;
   isCollapsed?: boolean;
@@ -18,6 +20,7 @@ export default function AppSidebar({
 }: Props) {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { theme, setTheme, isDark } = useTheme();
 
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
 
@@ -75,7 +78,7 @@ export default function AppSidebar({
   const isAccountActive = pathname === "/account";
 
   return (
-    <aside className="flex h-full flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] transition-all duration-300">
+    <aside className="flex h-full flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] dark:border-[#2d3c30] dark:bg-[#121a14] dark:text-[#f0ede6] transition-all duration-300">
       {/* Top Section */}
       <div className="space-y-5">
         {/* Brand & Toggle Header */}
@@ -83,14 +86,14 @@ export default function AppSidebar({
           {!isCollapsed ? (
             <>
               <Link href="/" className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e]">
                   G
                 </span>
                 <div>
-                  <span className="font-display text-lg font-semibold tracking-tight text-[#232f26]">
+                  <span className="font-display text-lg font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
                     Growzok
                   </span>
-                  <span className="ml-2 rounded-full bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                  <span className="ml-2 rounded-full bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:bg-[#1d3326] dark:text-[#5fa07c]">
                     v2.0
                   </span>
                 </div>
@@ -99,7 +102,7 @@ export default function AppSidebar({
                 <button
                   onClick={onToggleCollapse}
                   title="Collapse sidebar"
-                  className="rounded-lg p-1.5 text-[#737970] transition-colors hover:bg-[#e5e1d7]/60 hover:text-[#232f26]"
+                  className="rounded-lg p-1.5 text-[#737970] transition-colors hover:bg-[#e5e1d7]/60 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]"
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
                     <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -115,7 +118,7 @@ export default function AppSidebar({
                 <button
                   onClick={onToggleCollapse}
                   title="Expand sidebar"
-                  className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] text-sm font-bold text-white transition-opacity hover:opacity-90"
+                  className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] text-sm font-bold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-opacity hover:opacity-90"
                 >
                   G
                 </button>
@@ -127,7 +130,7 @@ export default function AppSidebar({
         {/* Navigation Items */}
         <div className="space-y-1">
           {!isCollapsed && (
-            <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970]">
+            <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
               Workspace
             </p>
           )}
@@ -141,8 +144,8 @@ export default function AppSidebar({
                   isCollapsed ? "justify-center py-2.5 px-0" : "gap-3 px-3 py-2.5 text-sm"
                 } font-medium ${
                   item.active
-                    ? "bg-[#232f26] text-[#fbf9f5] shadow-sm font-semibold"
-                    : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+                    ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm font-semibold"
+                    : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]"
                 }`}
               >
                 <span>{item.icon}</span>
@@ -153,8 +156,29 @@ export default function AppSidebar({
         </div>
       </div>
 
-      {/* Bottom Section: Account Settings */}
-      <div className="border-t border-[#e5e1d7] pt-3">
+      {/* Bottom Section: Theme Switcher & Account Settings */}
+      <div className="space-y-1.5 border-t border-[#e5e1d7] pt-3 dark:border-[#2d3c30]">
+        {/* Theme Switcher Button */}
+        <button
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+          title={isCollapsed ? (isDark ? "Light Mode" : "Dark Mode") : undefined}
+          className={`flex w-full items-center rounded-xl transition-all ${
+            isCollapsed ? "justify-center py-2.5 px-0" : "gap-3 px-3 py-2.5 text-sm"
+          } font-medium text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]`}
+        >
+          {isDark ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0 text-yellow-400">
+              <circle cx="12" cy="12" r="5" />
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0 text-[#232f26]">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+            </svg>
+          )}
+          {!isCollapsed && <span>{isDark ? "Light Mode" : "Dark Mode"}</span>}
+        </button>
+
         <Link
           href="/account"
           title={isCollapsed ? "Account Settings" : undefined}
@@ -162,8 +186,8 @@ export default function AppSidebar({
             isCollapsed ? "justify-center py-2.5 px-0" : "gap-3 px-3 py-2.5 text-sm"
           } font-medium ${
             isAccountActive
-              ? "bg-[#232f26] text-[#fbf9f5] shadow-sm font-semibold"
-              : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+              ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm font-semibold"
+              : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]"
           }`}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">

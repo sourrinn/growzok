@@ -123,23 +123,23 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
   return (
     /* Backdrop */
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 backdrop-blur-xs sm:items-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       {/* Drawer / Modal */}
-      <div className="w-full max-w-lg rounded-t-2xl bg-white p-6 shadow-2xl sm:rounded-2xl space-y-4">
+      <div className="w-full max-w-lg rounded-t-2xl bg-white dark:bg-[#18201a] border border-[#e5e1d7] dark:border-[#2d3c30] p-6 shadow-2xl sm:rounded-2xl space-y-4">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-[#e5e1d7] pb-4">
+        <div className="flex items-start justify-between gap-3 border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#232f26]">{protocol.name}</h2>
-            <p className="mt-0.5 text-xs text-[#737970]">{protocol.tagline}</p>
+            <h2 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">{protocol.name}</h2>
+            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#9eb0a2]">{protocol.tagline}</p>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-full p-1 text-[#737970] transition-colors hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+            className="rounded-full p-1 text-[#737970] dark:text-[#9eb0a2] transition-colors hover:bg-[#e5e1d7]/50 dark:hover:bg-[#2d3c30] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
           >
             ✕
           </button>
@@ -147,8 +147,8 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
 
         {/* Duplicate Info Banner */}
         {duplicateIndices.size > 0 && (
-          <div className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 text-xs text-[#737970]">
-            <span className="font-semibold text-[#232f26]">
+          <div className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-3 text-xs text-[#737970] dark:text-[#9eb0a2]">
+            <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
               {duplicateIndices.size} habit{duplicateIndices.size === 1 ? "" : "s"} already active
             </span>{" "}
             in your account will be preserved to prevent duplicate clutter.
@@ -158,72 +158,62 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
         {/* Habit list */}
         <ul className="space-y-3 max-h-72 overflow-y-auto pr-1">
           {protocol.habits.map((habit, idx) => {
-            const isDuplicate = duplicateIndices.has(idx);
+            const isDup = duplicateIndices.has(idx);
             const isChecked = selected.has(idx);
 
             return (
               <li
                 key={idx}
-                className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${
-                  isDuplicate
-                    ? "border-[#e5e1d7] bg-[#fbf9f5] opacity-60"
+                className={`flex flex-col gap-2 rounded-xl border p-3 text-xs transition-all ${
+                  isDup
+                    ? "border-[#e5e1d7]/50 bg-[#fbf9f5]/50 dark:border-[#2d3c30]/50 dark:bg-[#222d25]/50 opacity-60 cursor-not-allowed"
                     : isChecked
-                      ? "border-[#232f26]/30 bg-white shadow-sm"
-                      : "border-[#e5e1d7] bg-white opacity-50"
+                      ? "border-[#406852]/40 bg-[#e3ede6]/30 dark:border-[#5fa07c]/40 dark:bg-[#1d3326]/40"
+                      : "border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a]"
                 }`}
               >
-                <input
-                  type="checkbox"
-                  id={`habit-${idx}`}
-                  checked={isChecked}
-                  disabled={isDuplicate}
-                  onChange={() => toggleHabit(idx)}
-                  className="mt-0.5 h-4 w-4 accent-[#232f26] disabled:cursor-not-allowed"
-                />
-                <label
-                  htmlFor={`habit-${idx}`}
-                  className={`flex-1 ${isDuplicate ? "cursor-not-allowed" : "cursor-pointer"}`}
-                >
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-semibold text-[#232f26]">{habit.name}</span>
-                    <span
-                      className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${domainColor(
-                        habit.domain
-                      )}`}
-                    >
-                      {habit.domain}
-                    </span>
-                    {isDuplicate && (
-                      <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
-                        Already Active in Dashboard
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    disabled={isDup}
+                    checked={isChecked}
+                    onChange={() => toggleHabit(idx)}
+                    className="mt-0.5 rounded accent-[#232f26] dark:accent-[#5fa07c]"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-[#232f26] dark:text-[#f0ede6] truncate">
+                        {habit.name}
                       </span>
-                    )}
+                      {isDup && (
+                        <span className="shrink-0 rounded bg-[#e5e1d7] dark:bg-[#2d3c30] px-1.5 py-0.5 text-[10px] font-medium text-[#737970] dark:text-[#9eb0a2]">
+                          Already added
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-0.5 text-[11px] text-[#737970] dark:text-[#9eb0a2]">
+                      {habit.domain} · {frequencyLabel(habit.frequency)}
+                    </p>
                   </div>
-                  <p className="mt-1 text-xs text-[#737970]">
-                    {frequencyLabel(habit.frequency)}
-                    {habit.timeOfDay && habit.timeOfDay !== "Anytime"
-                      ? ` · ${habit.timeOfDay}`
-                      : ""}
-                  </p>
-                </label>
+                </div>
 
-                {/* Goal override input */}
-                {habit.target && isChecked && !isDuplicate && (
-                  <div className="flex shrink-0 items-center gap-1 text-xs">
+                {/* Editable Goal row */}
+                {habit.target && isChecked && !isDup && (
+                  <div className="mt-1 flex items-center gap-2 pl-7 text-[11px] text-[#737970] dark:text-[#9eb0a2]">
+                    <span>Goal:</span>
                     <input
                       type="number"
                       min={1}
-                      value={goalOverrides[idx] || ""}
+                      value={goalOverrides[idx] ?? habit.target.goal}
                       onChange={(e) =>
                         setGoalOverrides((prev) => ({
                           ...prev,
                           [idx]: Number(e.target.value),
                         }))
                       }
-                      aria-label={`Goal for ${habit.name}`}
-                      className="w-14 rounded-lg border border-[#e5e1d7] bg-white px-2 py-1 text-center font-semibold text-[#232f26] outline-none focus:border-[#232f26]"
+                      className="w-16 rounded-md border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#222d25] px-2 py-0.5 text-center font-semibold text-[#232f26] dark:text-[#f0ede6] outline-none"
                     />
-                    <span className="text-[10px] text-[#737970]">{habit.target.unit}</span>
+                    <span>{habit.target.unit}</span>
                   </div>
                 )}
               </li>
@@ -232,28 +222,23 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
         </ul>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-3 border-t border-[#e5e1d7] pt-4">
-          <p className="text-xs text-[#737970]">
-            <span className="font-semibold text-[#232f26]">{selected.size}</span> of{" "}
-            {protocol.habits.length} selected for adoption
-          </p>
+        <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4">
+          <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+            {selected.size} of {protocol.habits.length} selected
+          </span>
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="rounded-xl border border-[#e5e1d7] bg-white px-4 py-2 text-xs font-semibold text-[#737970] transition-colors hover:text-[#232f26]"
+              className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-4 py-2 text-xs font-semibold text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]"
             >
               Cancel
             </button>
             <button
               onClick={handleAdopt}
-              disabled={selected.size === 0 || submitting}
-              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+              disabled={submitting || selected.size === 0}
+              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
-              {submitting
-                ? "Adding…"
-                : selected.size === 0
-                  ? "All Habits Already Active"
-                  : `Adopt ${selected.size} Habit${selected.size === 1 ? "" : "s"} →`}
+              {submitting ? "Adopting…" : `Adopt ${selected.size} Habits →`}
             </button>
           </div>
         </div>

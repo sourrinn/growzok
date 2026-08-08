@@ -87,7 +87,7 @@ export default function AddHabit({
   };
 
   return (
-    <div className="mb-8 rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all focus-within:border-[#232f26]/40 focus-within:shadow-md">
+    <div className="mb-8 rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#2d3c30] dark:bg-[#18201a] focus-within:border-[#232f26]/40 dark:focus-within:border-[#5fa07c]/50 focus-within:shadow-md">
       {/* Primary Input Row */}
       <div className="flex items-center gap-3">
         <input
@@ -99,28 +99,28 @@ export default function AddHabit({
           }}
           maxLength={60}
           placeholder="What habit do you want to plant today? e.g. Read 10 pages"
-          className="flex-1 bg-transparent py-1.5 text-base font-medium text-[#232f26] outline-none placeholder:text-[#737970]"
+          className="flex-1 bg-transparent py-1.5 text-base font-medium text-[#232f26] dark:text-[#f0ede6] outline-none placeholder:text-[#737970] dark:placeholder:text-[#9eb0a2]"
         />
         <button
           onClick={submit}
-          className="rounded-xl bg-[#232f26] px-5 py-2.5 text-xs font-semibold text-white transition-all hover:bg-black active:scale-[0.98]"
+          className="rounded-xl bg-[#232f26] px-5 py-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-all hover:bg-black dark:hover:bg-[#4d8667] active:scale-[0.98]"
         >
           Plant Habit
         </button>
       </div>
 
       {/* Interactive Pill Controls Row */}
-      <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#e5e1d7]/60 pt-3 text-xs">
+      <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#e5e1d7]/60 dark:border-[#2d3c30] pt-3 text-xs">
         {/* User Label / Category */}
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 font-medium text-[#232f26]">
-          <span className="text-[10px] text-[#737970]">Label:</span>
+        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] px-3 py-1.5 font-medium text-[#232f26] dark:text-[#f0ede6]">
+          <span className="text-[10px] text-[#737970] dark:text-[#9eb0a2]">Label:</span>
           <input
             type="text"
             value={userLabel}
             onChange={(e) => setUserLabel(e.target.value.slice(0, 30))}
             placeholder="Personal"
             aria-label="Label"
-            className="w-20 bg-transparent text-xs font-semibold text-[#232f26] outline-none placeholder:text-[#737970]"
+            className="w-20 bg-transparent text-xs font-semibold text-[#232f26] dark:text-[#f0ede6] outline-none placeholder:text-[#737970] dark:placeholder:text-[#9eb0a2]"
           />
         </div>
 
@@ -152,7 +152,7 @@ export default function AddHabit({
         )}
 
         {freqKind === "custom" && (
-          <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-1">
+          <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-1">
             {WEEKDAY_SHORT.map((label, day) => (
               <button
                 key={day}
@@ -161,8 +161,8 @@ export default function AddHabit({
                 aria-pressed={customDays.has(day)}
                 className={`h-6 w-6 rounded-lg text-[10px] font-bold transition-all ${
                   customDays.has(day)
-                    ? "bg-[#232f26] text-white"
-                    : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26]"
+                    ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e]"
+                    : "text-[#737970] dark:text-[#9eb0a2] hover:bg-[#e5e1d7]/50 dark:hover:bg-[#2d3c30] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
                 }`}
               >
                 {label}
@@ -177,8 +177,8 @@ export default function AddHabit({
           onClick={() => setShowAdvanced((prev) => !prev)}
           className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${
             showAdvanced || hasTarget
-              ? "border-[#406852] bg-[#e3ede6] text-[#406852] font-semibold"
-              : "border-[#e5e1d7] bg-white text-[#737970] hover:border-[#232f26]/30 hover:text-[#232f26]"
+              ? "border-[#406852] bg-[#e3ede6] text-[#406852] dark:border-[#5fa07c] dark:bg-[#1d3326] dark:text-[#5fa07c] font-semibold"
+              : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#9eb0a2] hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40 hover:text-[#232f26] dark:hover:text-[#f0ede6]"
           }`}
         >
           {showAdvanced ? "Hide Goal Config" : "Add Numeric Goal"}
@@ -187,21 +187,21 @@ export default function AddHabit({
 
       {/* Expandable Advanced Options Box */}
       {showAdvanced && (
-        <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-[#e5e1d7]/60 pt-3 text-xs text-[#737970]">
+        <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-[#e5e1d7]/60 dark:border-[#2d3c30] pt-3 text-xs text-[#737970] dark:text-[#9eb0a2]">
           {/* Numeric Target Checkbox & Controls */}
           <div className="flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-1.5 font-medium text-[#232f26] cursor-pointer">
+            <label className="flex items-center gap-1.5 font-medium text-[#232f26] dark:text-[#f0ede6] cursor-pointer">
               <input
                 type="checkbox"
                 checked={hasTarget}
                 onChange={(e) => setHasTarget(e.target.checked)}
-                className="rounded accent-[#232f26]"
+                className="rounded accent-[#232f26] dark:accent-[#5fa07c]"
               />
               Track target number
             </label>
 
             {hasTarget && (
-              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-1.5">
+              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-1.5">
                 <CustomSelect
                   options={TARGET_TYPES}
                   value={targetType}
@@ -213,7 +213,7 @@ export default function AddHabit({
                   value={goal}
                   onChange={(e) => setGoal(Number(e.target.value))}
                   aria-label="Goal number"
-                  className="w-16 rounded-lg border border-[#e5e1d7] bg-white px-2 py-1 text-center font-semibold text-[#232f26] outline-none"
+                  className="w-16 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-2 py-1 text-center font-semibold text-[#232f26] dark:text-[#f0ede6] outline-none"
                 />
                 <input
                   type="text"
@@ -221,7 +221,7 @@ export default function AddHabit({
                   onChange={(e) => setUnit(e.target.value)}
                   placeholder="unit e.g. steps"
                   maxLength={20}
-                  className="w-28 rounded-lg border border-[#e5e1d7] bg-white px-2 py-1 font-medium text-[#232f26] outline-none placeholder:text-[#737970]"
+                  className="w-28 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-2 py-1 font-medium text-[#232f26] dark:text-[#f0ede6] outline-none placeholder:text-[#737970] dark:placeholder:text-[#9eb0a2]"
                 />
               </div>
             )}

@@ -14,6 +14,15 @@
   --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
 }
 
+html.dark {
+  --color-ink: #0d130e;
+  --color-charcoal: #f0ede6;
+  --color-sage: #5fa07c;
+  --color-sage-soft: #1d3326;
+  --color-mist: #2d3c30;
+  --color-muted: #9eb0a2;
+}
+
 html,
 body {
   background-color: var(--color-ink);

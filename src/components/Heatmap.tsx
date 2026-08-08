@@ -38,17 +38,20 @@ export default function Heatmap({ history, color, weeks = 20 }: Props) {
         <div key={i} className="flex flex-col gap-[3px]">
           {col.map((d) => {
             const isFuture = d > todayDateStr;
+            const isDone = set.has(d);
             return (
               <span
                 key={d}
                 title={d}
-                className="h-[10px] w-[10px] rounded-[1px]"
+                className={`h-[10px] w-[10px] rounded-[1px] ${
+                  isFuture
+                    ? "bg-transparent"
+                    : isDone
+                      ? ""
+                      : "bg-[#e8e6e1] dark:bg-[#222d25]"
+                }`}
                 style={{
-                  backgroundColor: isFuture
-                    ? "transparent"
-                    : set.has(d)
-                      ? color
-                      : "#e8e6e1",
+                  backgroundColor: !isFuture && isDone ? color : undefined,
                 }}
               />
             );

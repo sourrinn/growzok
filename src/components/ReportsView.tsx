@@ -62,21 +62,21 @@ export default function ReportsView() {
       {/* Header & Time Period Selector */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26]">
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
             Reports & Analytics
           </h1>
-          <p className="mt-1 text-sm text-[#737970]">{report.label}</p>
+          <p className="mt-1 text-sm text-[#737970] dark:text-[#9eb0a2]">{report.label}</p>
         </div>
 
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white p-1 shadow-sm">
+        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-1 shadow-sm">
           {PERIODS.map((p) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
               className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
                 period === p.value
-                  ? "bg-[#232f26] text-white shadow-sm"
-                  : "text-[#737970] hover:text-[#232f26]"
+                  ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm"
+                  : "text-[#737970] dark:text-[#9eb0a2] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
               }`}
             >
               {p.label}
@@ -88,33 +88,33 @@ export default function ReportsView() {
       {/* Top Metric KPI Cards (4 Tiles) */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Completed */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
             Total Completed
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
               {report.completed}
             </span>
-            <span className="text-xs text-[#737970]">of {report.trackable} trackable</span>
+            <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">of {report.trackable} trackable</span>
           </div>
         </div>
 
         {/* Success Rate */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
             Overall Success Rate
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
               {Math.round(report.rate * 100)}%
             </span>
             <span
               className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
                 report.rate >= 0.8
-                  ? "bg-[#e3ede6] text-[#406852]"
+                  ? "bg-[#e3ede6] text-[#406852] dark:bg-[#1d3326] dark:text-[#5fa07c]"
                   : report.rate >= 0.5
-                    ? "bg-[#f4efe2] text-[#6b4923]"
+                    ? "bg-[#f4efe2] text-[#6b4923] dark:bg-[#2d291f] dark:text-[#d4cca9]"
                     : "bg-[#be5a38]/10 text-[#be5a38]"
               }`}
             >
@@ -124,20 +124,20 @@ export default function ReportsView() {
         </div>
 
         {/* Active Streaks */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
             Active Momentum
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
               {report.activeStreaksCount}
             </span>
-            <span className="text-xs text-[#737970]">habits in streak</span>
+            <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">habits in streak</span>
           </div>
         </div>
 
         {/* Missed Days */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
             Missed Days
           </p>

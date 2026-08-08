@@ -14,13 +14,18 @@ export default function StreakStem({
 
   return (
     <div className="mt-1.5 flex h-4 items-end gap-0.75" aria-hidden="true">
-      {days.map((d) => (
-        <span
-          key={d}
-          className="h-1.25 w-1.25 rounded-[1px_6px_1px_6px] transition-colors"
-          style={{ backgroundColor: set.has(d) ? color : "#e8e6e1" }}
-        />
-      ))}
+      {days.map((d) => {
+        const isDone = set.has(d);
+        return (
+          <span
+            key={d}
+            className={`h-1.25 w-1.25 rounded-[1px_6px_1px_6px] transition-colors ${
+              isDone ? "" : "bg-[#e8e6e1] dark:bg-[#2d3c30]"
+            }`}
+            style={{ backgroundColor: isDone ? color : undefined }}
+          />
+        );
+      })}
     </div>
   );
 }

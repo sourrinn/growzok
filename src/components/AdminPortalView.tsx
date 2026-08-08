@@ -324,28 +324,28 @@ export default function AdminPortalView() {
         {/* SECTION 1: STANDALONE HABITS */}
         {activeSection === "habits" && (
           <div className="space-y-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold text-[#232f26]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f0ede6]">
                   Master Habit Catalog
                 </h1>
-                <p className="text-xs text-[#737970]">
+                <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
                   Manage master catalog habits. Habits included in active protocols or tracked by users are protected from deletion.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowCreateCatalogModal(true)}
-                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm transition-opacity hover:opacity-90"
               >
                 + Add Catalog Habit
               </button>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm overflow-x-auto">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#e5e1d7] text-[#737970]">
+                  <tr className="border-b border-[#e5e1d7] dark:border-[#2d3c30] text-[#737970] dark:text-[#9eb0a2]">
                     <th className="pb-3 font-semibold">Habit Key</th>
                     <th className="pb-3 font-semibold">Habit Name</th>
                     <th className="pb-3 font-semibold">Biological Domain</th>
@@ -354,38 +354,38 @@ export default function AdminPortalView() {
                     <th className="pb-3 font-semibold text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#e5e1d7]/60">
+                <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#2d3c30]">
                   {masterHabitsList.map((h) => {
                     const usages = habitUsageMap[h.habitKey] || [];
                     const activeUsers = userUsageMap[h.habitKey] || 0;
                     return (
-                      <tr key={h.habitKey} className="hover:bg-[#fbf9f5]">
-                        <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                        <td className="py-3 font-semibold text-[#232f26]">{h.name}</td>
+                      <tr key={h.habitKey} className="hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#9eb0a2]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f0ede6]">{h.name}</td>
                         <td className="py-3">
-                          <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#5fa07c]">
                             {h.domain}
                           </span>
                         </td>
                         <td className="py-3">
                           {usages.length > 0 ? (
-                            <span className="rounded-md bg-[#f4efe2] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923]">
+                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#2d291f] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
                               In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
                             </span>
                           ) : (
-                            <span className="text-[#737970]">Unlinked</span>
+                            <span className="text-[#737970] dark:text-[#9eb0a2]">Unlinked</span>
                           )}
                         </td>
                         <td className="py-3">
                           {activeUsers > 0 ? (
-                            <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e]">
+                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#5fa07c]">
                               {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
                             </span>
                           ) : (
-                            <span className="text-[10px] text-[#737970]">No users</span>
+                            <span className="text-[10px] text-[#737970] dark:text-[#9eb0a2]">No users</span>
                           )}
                         </td>
-                        <td className="py-3 text-right font-medium text-[#737970]">Standard Protocol</td>
+                        <td className="py-3 text-right font-medium text-[#737970] dark:text-[#9eb0a2]">Standard Protocol</td>
                       </tr>
                     );
                   })}
@@ -396,37 +396,37 @@ export default function AdminPortalView() {
                     const isProtected = isInUse || activeUsers > 0;
 
                     return (
-                      <tr key={h.id} className="bg-[#fbf9f5]/60 hover:bg-[#fbf9f5]">
-                        <td className="py-3 font-mono text-[11px] text-[#737970]">{h.habitKey}</td>
-                        <td className="py-3 font-semibold text-[#232f26]">{h.name} (Org Custom)</td>
+                      <tr key={h.id} className="bg-[#fbf9f5]/60 dark:bg-[#222d25]/40 hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#9eb0a2]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f0ede6]">{h.name} (Org Custom)</td>
                         <td className="py-3">
-                          <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852]">
+                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#5fa07c]">
                             {h.domain}
                           </span>
                         </td>
                         <td className="py-3">
                           {isInUse ? (
-                            <span className="rounded-md bg-[#f4efe2] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923]">
+                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#2d291f] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
                               In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
                             </span>
                           ) : (
-                            <span className="text-[#737970]">Unlinked</span>
+                            <span className="text-[#737970] dark:text-[#9eb0a2]">Unlinked</span>
                           )}
                         </td>
                         <td className="py-3">
                           {activeUsers > 0 ? (
-                            <span className="rounded-md bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e]">
+                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#5fa07c]">
                               {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
                             </span>
                           ) : (
-                            <span className="text-[10px] text-[#737970]">No users</span>
+                            <span className="text-[10px] text-[#737970] dark:text-[#9eb0a2]">No users</span>
                           )}
                         </td>
                         <td className="py-3 text-right">
                           <button
                             onClick={() => handleDeleteCatalog(h.id, h.name, h.habitKey)}
                             className={`font-semibold ${
-                              isProtected ? "text-[#737970] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
+                              isProtected ? "text-[#737970] dark:text-[#9eb0a2] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
                             }`}
                           >
                             {isProtected ? "Protected" : "Delete"}
@@ -444,32 +444,32 @@ export default function AdminPortalView() {
         {/* SECTION 2: PROTOCOL TEMPLATES MANAGEMENT */}
         {activeSection === "templates" && (
           <div className="space-y-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold text-[#232f26]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f0ede6]">
                   Organization Protocols
                 </h1>
-                <p className="text-xs text-[#737970]">
+                <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
                   Full CRUD: Create, Edit metadata, Update habits, and Delete habit protocols in real-time.
                 </p>
               </div>
 
               <button
                 onClick={openCreateTemplateModal}
-                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm transition-opacity hover:opacity-90"
               >
                 + Create Protocol
               </button>
             </div>
 
             {loadingTemplates ? (
-              <p className="py-12 text-center text-sm text-[#737970]">Loading protocols…</p>
+              <p className="py-12 text-center text-sm text-[#737970] dark:text-[#9eb0a2]">Loading protocols…</p>
             ) : allTemplatesList.length === 0 ? (
-              <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
-                <h3 className="text-lg font-semibold text-[#232f26]">No Protocols Available</h3>
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-12 text-center">
+                <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">No Protocols Available</h3>
                 <button
                   onClick={openCreateTemplateModal}
-                  className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
+                  className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e]"
                 >
                   Create Protocol
                 </button>
@@ -477,30 +477,30 @@ export default function AdminPortalView() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
                 {allTemplatesList.map((t: any) => (
-                  <div key={t.key || t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-4">
+                  <div key={t.key || t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm space-y-4">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852]">
+                        <span className="rounded-full bg-[#e3ede6] dark:bg-[#1d3326] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852] dark:text-[#5fa07c]">
                           {t.category}
                         </span>
-                        <span className="text-xs text-[#737970]">{t.difficulty}</span>
+                        <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">{t.difficulty}</span>
                       </div>
 
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
+                          <h3 className="text-base font-semibold text-[#232f26] dark:text-[#f0ede6]">{t.name}</h3>
                           {!t.isCustom && (
-                            <span className="rounded-md bg-[#e5e1d7] px-2 py-0.5 text-[10px] font-semibold text-[#232f26]">
+                            <span className="rounded-md bg-[#e5e1d7] dark:bg-[#2d3c30] px-2 py-0.5 text-[10px] font-semibold text-[#232f26] dark:text-[#f0ede6]">
                               Standard Protocol
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 line-clamp-2 text-xs text-[#737970]">{t.tagline}</p>
+                        <p className="mt-1 line-clamp-2 text-xs text-[#737970] dark:text-[#9eb0a2]">{t.tagline}</p>
                       </div>
 
-                      <div className="rounded-xl bg-[#fbf9f5] p-3 text-xs">
-                        <span className="font-semibold text-[#232f26]">{t.habits.length} Included Habits:</span>
-                        <ul className="mt-1 space-y-1 text-[#737970]">
+                      <div className="rounded-xl bg-[#fbf9f5] dark:bg-[#222d25] p-3 text-xs">
+                        <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">{t.habits.length} Included Habits:</span>
+                        <ul className="mt-1 space-y-1 text-[#737970] dark:text-[#9eb0a2]">
                           {t.habits.slice(0, 3).map((h: any, i: number) => (
                             <li key={i} className="truncate">• {h.name}</li>
                           ))}
@@ -508,14 +508,14 @@ export default function AdminPortalView() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs">
-                      <span className="text-[#737970]">
+                    <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4 text-xs">
+                      <span className="text-[#737970] dark:text-[#9eb0a2]">
                         Author: {t.author?.name || "Growzok Lab"}
                       </span>
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => openEditTemplateModal(t)}
-                          className="font-semibold text-[#232f26] hover:underline"
+                          className="font-semibold text-[#232f26] dark:text-[#5fa07c] hover:underline"
                         >
                           Edit Protocol
                         </button>
@@ -539,13 +539,13 @@ export default function AdminPortalView() {
 
       {/* CREATE / EDIT TEMPLATE MODAL */}
       {showCreateTemplateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3">
-              <h3 className="text-lg font-semibold text-[#232f26]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-[#18201a] border border-[#e5e1d7] dark:border-[#2d3c30] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-3">
+              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">
                 {editingTemplate ? `Edit Protocol — ${editingTemplate.name}` : "Publish Custom Habit Protocol"}
               </h3>
-              <button onClick={() => setShowCreateTemplateModal(false)} className="text-[#737970]">✕</button>
+              <button onClick={() => setShowCreateTemplateModal(false)} className="text-[#737970] dark:text-[#9eb0a2]">✕</button>
             </div>
 
             <form onSubmit={handleSaveTemplate} className="space-y-4 text-xs">

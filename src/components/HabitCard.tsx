@@ -67,7 +67,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
   const inputWidthRem = Math.max(3.5, (draftValue || "0").length * 0.7 + 1.2);
 
   return (
-    <div className="group rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
+    <div className="group flex h-full flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         {/* Checkbox / Numeric Logger + Habit Info */}
         <div className="flex items-start gap-3 min-w-0 flex-1">

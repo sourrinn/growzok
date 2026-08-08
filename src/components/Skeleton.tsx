@@ -21,7 +21,7 @@ export function Skeleton({
 export function SkeletonHabitCard({ delayClass = "" }: { delayClass?: string }) {
   return (
     <div
-      className={`rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-4 animate-fade-in ${delayClass}`}
+      className={`flex h-full flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-4 animate-fade-in ${delayClass}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 w-full">

@@ -26,7 +26,7 @@ export default function HabitList({
 }: Props) {
   if (loading) {
     return (
-      <div className="grid gap-3.5 sm:grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
         <SkeletonHabitCard delayClass="animation-delay-75" />
         <SkeletonHabitCard delayClass="animation-delay-150" />
         <SkeletonHabitCard delayClass="animation-delay-200" />
@@ -46,7 +46,7 @@ export default function HabitList({
   }
 
   return (
-    <ul className="grid gap-3.5 sm:grid-cols-1 md:grid-cols-2">
+    <ul className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
       {habits.map((habit, idx) => {
         const delays = [
           "animation-delay-75",
@@ -58,7 +58,7 @@ export default function HabitList({
         const delayClass = delays[idx % delays.length];
 
         return (
-          <li key={habit.id} className={`animate-slide-up ${delayClass}`}>
+          <li key={habit.id} className={`h-full animate-slide-up ${delayClass}`}>
             <HabitCard
               habit={habit}
               isManaging={isManaging}

@@ -20,6 +20,7 @@ export default function HabitDashboard() {
 
   const [filter, setFilter] = useState<string>("All");
   const [todayFormatted, setTodayFormatted] = useState<string>("");
+  const [isManagingBoard, setIsManagingBoard] = useState(false);
 
   useEffect(() => {
     setTodayFormatted(
@@ -43,7 +44,7 @@ export default function HabitDashboard() {
   return (
     <div>
       {/* Top Banner Header */}
-      <header className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+      <header className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-display text-4xl font-semibold tracking-tight text-charcoal">
             Daily Habits
@@ -53,8 +54,34 @@ export default function HabitDashboard() {
           )}
         </div>
         {!loading && habits.length > 0 && (
-          <div className="text-xs text-muted">
-            <span className="font-semibold text-charcoal">{habits.length}</span> active habits tracked
+          <div className="flex items-center gap-3">
+            <span className="hidden text-xs text-muted sm:inline">
+              <span className="font-semibold text-charcoal">{habits.length}</span> active habits
+            </span>
+            <button
+              onClick={() => setIsManagingBoard((prev) => !prev)}
+              className={`flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-semibold shadow-sm transition-all ${
+                isManagingBoard
+                  ? "border-[#406852] bg-[#232f26] text-white shadow-md"
+                  : "border-[#e5e1d7] bg-white text-[#232f26] hover:bg-[#fbf9f5]"
+              }`}
+            >
+              {isManagingBoard ? (
+                <>
+                  <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+                    <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>Done Editing</span>
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5 text-[#737970]">
+                    <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>Manage Board</span>
+                </>
+              )}
+            </button>
           </div>
         )}
       </header>
@@ -92,6 +119,7 @@ export default function HabitDashboard() {
           <HabitList
             habits={filteredHabits}
             loading={loading}
+            isManaging={isManagingBoard}
             onToggle={toggleHabit}
             onLogProgress={logProgress}
             onEdit={editHabit}

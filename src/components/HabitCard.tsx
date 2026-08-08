@@ -17,13 +17,14 @@ import type { EditHabitInput } from "@/hooks/useHabits";
 
 interface Props {
   habit: Habit;
+  isManaging?: boolean;
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
   onEdit: (id: string, input: EditHabitInput) => Promise<void>;
   onDelete: (id: string) => void;
 }
 
-export default function HabitCard({ habit, onToggle, onLogProgress, onEdit, onDelete }: Props) {
+export default function HabitCard({ habit, isManaging = false, onToggle, onLogProgress, onEdit, onDelete }: Props) {
   const today = todayStr();
   const doneToday = habit.history.includes(today);
   const successRate = computeSuccessRate(habit);
@@ -193,23 +194,43 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onEdit, onDe
         </div>
 
         {/* Delete + Edit Buttons */}
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setShowEdit(true)}
-            aria-label={`Edit ${habit.name}`}
-            className="rounded-full p-1 text-sm text-muted opacity-0 transition-opacity hover:text-[#232f26] group-hover:opacity-100"
-            title="Edit habit"
-          >
-            ✎
-          </button>
-          <button
-            onClick={() => onDelete(habit.id)}
-            aria-label={`Delete ${habit.name}`}
-            className="p-1 text-base text-muted opacity-0 transition-opacity hover:text-ember group-hover:opacity-100"
-          >
-            &times;
-          </button>
-        </div>
+        {isManaging ? (
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={() => setShowEdit(true)}
+              aria-label={`Edit ${habit.name}`}
+              className="flex items-center gap-1 rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] px-2.5 py-1 text-xs font-semibold text-[#232f26] transition-colors hover:bg-[#e5e1d7]/60"
+            >
+              ✎ Edit
+            </button>
+            <button
+              onClick={() => onDelete(habit.id)}
+              aria-label={`Delete ${habit.name}`}
+              className="flex items-center gap-1 rounded-lg border border-[#be5a38]/30 bg-[#be5a38]/10 px-2.5 py-1 text-xs font-semibold text-[#be5a38] transition-colors hover:bg-[#be5a38]/20"
+            >
+              ✕ Delete
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => setShowEdit(true)}
+              aria-label={`Edit ${habit.name}`}
+              className="rounded-full p-1.5 text-sm text-[#737970] opacity-70 transition-opacity hover:text-[#232f26] md:opacity-0 md:group-hover:opacity-100"
+              title="Edit habit"
+            >
+              ✎
+            </button>
+            <button
+              onClick={() => onDelete(habit.id)}
+              aria-label={`Delete ${habit.name}`}
+              className="rounded-full p-1.5 text-base text-[#737970] opacity-70 transition-opacity hover:text-[#be5a38] md:opacity-0 md:group-hover:opacity-100"
+              title="Delete habit"
+            >
+              &times;
+            </button>
+          </div>
+        )}
       </div>
 
       {showEdit && (

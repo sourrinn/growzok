@@ -7,6 +7,7 @@ import type { EditHabitInput } from "@/hooks/useHabits";
 interface Props {
   habits: Habit[];
   loading: boolean;
+  isManaging?: boolean;
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
   onEdit: (id: string, input: EditHabitInput) => Promise<void>;
@@ -16,6 +17,7 @@ interface Props {
 export default function HabitList({
   habits,
   loading,
+  isManaging = false,
   onToggle,
   onLogProgress,
   onEdit,
@@ -39,6 +41,7 @@ export default function HabitList({
         <HabitCard
           key={habit.id}
           habit={habit}
+          isManaging={isManaging}
           onToggle={onToggle}
           onLogProgress={onLogProgress}
           onEdit={onEdit}

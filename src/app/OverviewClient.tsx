@@ -52,30 +52,30 @@ export default function OverviewClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbf9f5] dark:bg-[#0d130e] text-[#232f26] dark:text-[#f0ede6] selection:bg-[#406852]/20 dark:selection:bg-[#5fa07c]/20">
+    <div className="min-h-screen bg-[#fbf9f5] dark:bg-[#09090b] text-[#232f26] dark:text-[#f4f4f5] selection:bg-[#406852]/20 dark:selection:bg-white/20">
       {/* Top Marketing Navbar */}
-      <header className="sticky top-0 z-50 border-b border-[#e5e1d7]/80 dark:border-[#2d3c30] bg-[#fbf9f5]/90 dark:bg-[#0d130e]/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[#e5e1d7]/80 dark:border-[#27272a] bg-[#fbf9f5]/90 dark:bg-[#09090b]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]">
               G
             </span>
-            <span className="font-display text-xl font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-display text-xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
               Growzok
             </span>
           </Link>
 
           <nav className="hidden items-center gap-8 text-sm font-medium sm:flex">
-            <a href="#features" className="text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+            <a href="#features" className="text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
               Features
             </a>
-            <a href="#taxonomy" className="text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+            <a href="#taxonomy" className="text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
               Taxonomy
             </a>
-            <a href="#systems" className="text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+            <a href="#systems" className="text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
               Systems
             </a>
-            <a href="#faq" className="text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+            <a href="#faq" className="text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
               FAQ
             </a>
           </nav>
@@ -83,13 +83,13 @@ export default function OverviewClient() {
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="px-3.5 py-1.5 text-sm font-medium text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+              className="px-3.5 py-1.5 text-sm font-medium text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
             >
               Sign In
             </Link>
             <Link
               href="/register"
-              className="rounded-xl bg-[#232f26] px-4 py-2 text-sm font-semibold text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e] transition-opacity hover:opacity-90 active:scale-[0.98]"
+              className="rounded-xl bg-[#232f26] px-4 py-2 text-sm font-semibold text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-opacity hover:opacity-90 active:scale-[0.98]"
             >
               Get Started Free
             </Link>

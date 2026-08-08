@@ -48,7 +48,7 @@ export default function Heatmap({ history, color, weeks = 20 }: Props) {
                     ? "bg-transparent"
                     : isDone
                       ? ""
-                      : "bg-[#e8e6e1] dark:bg-[#222d25]"
+                      : "bg-[#e8e6e1] dark:bg-[#27272a]"
                 }`}
                 style={{
                   backgroundColor: !isFuture && isDone ? color : undefined,

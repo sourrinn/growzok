@@ -39,57 +39,57 @@ export default function ProtocolCard({ protocol }: Props) {
   return (
     <Link
       href={`/protocols/${protocol.slug}`}
-      className="group flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm transition-all dark:border-[#2d3c30] dark:bg-[#18201a] hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40 hover:shadow-md"
+      className="group flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
     >
       <div className="space-y-4">
         {/* Category Badge & Rating */}
         <div className="flex items-start justify-between gap-2">
-          <span className="rounded-full bg-[#e3ede6] dark:bg-[#1d3326] px-3 py-1 text-xs font-semibold text-[#406852] dark:text-[#5fa07c]">
+          <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-3 py-1 text-xs font-semibold text-[#406852] dark:text-[#a1a1aa]">
             {protocol.category}
           </span>
-          <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-[#737970] dark:text-[#9eb0a2]">
+          <div className="flex shrink-0 items-center gap-1 text-xs tabular-nums text-[#737970] dark:text-[#a1a1aa]">
             {protocol.reviewsCount > 0 ? (
               <>
-                <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                   Rating {protocol.rating.toFixed(1)}
                 </span>
                 <span>({protocol.reviewsCount.toLocaleString()})</span>
               </>
             ) : (
-              <span className="font-medium text-[#737970] dark:text-[#9eb0a2]">Standard Protocol</span>
+              <span className="font-medium text-[#737970] dark:text-[#a1a1aa]">Standard Protocol</span>
             )}
           </div>
         </div>
 
         {/* Name & Tagline */}
         <div>
-          <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6] group-hover:underline group-hover:underline-offset-2">
+          <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5] group-hover:underline group-hover:underline-offset-2">
             {protocol.name}
           </h3>
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#737970] dark:text-[#9eb0a2]">
+          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#737970] dark:text-[#a1a1aa]">
             {protocol.tagline}
           </p>
         </div>
 
         {/* Protocol Habits Preview List */}
-        <div className="rounded-xl border border-[#e5e1d7]/70 bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-3 text-xs">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+        <div className="rounded-xl border border-[#e5e1d7]/70 bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3 text-xs">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Includes {protocol.habits.length} Habits
           </p>
-          <ul className="mt-1.5 space-y-1 text-[#232f26] dark:text-[#f0ede6]">
+          <ul className="mt-1.5 space-y-1 text-[#232f26] dark:text-[#f4f4f5]">
             {previewHabits.map((h, i) => (
               <li key={i} className="flex items-center gap-1.5 truncate">
-                <span className="text-[#406852] dark:text-[#5fa07c] font-bold">•</span>
+                <span className="text-[#406852] dark:text-[#f4f4f5] font-bold">•</span>
                 <span className="truncate font-medium">{h.name}</span>
                 {h.target && (
-                  <span className="shrink-0 text-[10px] text-[#737970] dark:text-[#9eb0a2]">
+                  <span className="shrink-0 text-[10px] text-[#737970] dark:text-[#a1a1aa]">
                     ({h.target.goal} {h.target.unit})
                   </span>
                 )}
               </li>
             ))}
             {protocol.habits.length > 3 && (
-              <li className="pt-0.5 text-[10px] text-[#737970] dark:text-[#9eb0a2]">
+              <li className="pt-0.5 text-[10px] text-[#737970] dark:text-[#a1a1aa]">
                 +{protocol.habits.length - 3} more habit{protocol.habits.length - 3 === 1 ? "" : "s"}
               </li>
             )}
@@ -110,15 +110,15 @@ export default function ProtocolCard({ protocol }: Props) {
       </div>
 
       {/* Footer Metrics & Action CTA */}
-      <div className="mt-5 border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4">
-        <div className="flex items-center justify-between text-xs text-[#737970] dark:text-[#9eb0a2]">
+      <div className="mt-5 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+        <div className="flex items-center justify-between text-xs text-[#737970] dark:text-[#a1a1aa]">
           <div>
-            <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
               {protocol.activeUsersCount.toLocaleString()}
             </span>{" "}
             active · {protocol.estimatedDailyMinutes} min/day
           </div>
-          <span className="font-semibold text-[#232f26] dark:text-[#5fa07c] group-hover:translate-x-0.5 transition-transform">
+          <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5] group-hover:translate-x-0.5 transition-transform">
             Adopt Protocol →
           </span>
         </div>

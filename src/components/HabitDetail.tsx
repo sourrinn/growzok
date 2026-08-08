@@ -47,23 +47,23 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
 
   return (
     <div>
-      <Link href="/" className="text-sm text-[#737970] dark:text-[#9eb0a2] hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+      <Link href="/" className="text-sm text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
         ← Back
       </Link>
 
       <header className="mb-8 mt-3 flex items-start justify-between">
         <div>
-          <h1 className="font-display text-3xl font-medium tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+          <h1 className="font-display text-3xl font-medium tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             {habit.name}
           </h1>
-          <p className="mt-1 text-sm text-[#737970] dark:text-[#9eb0a2]">
+          <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">
             {habit.category} · {frequencyLabel(habit.frequency)}
             {habit.target && ` · goal ${habit.target.goal} ${habit.target.unit}`}
           </p>
         </div>
         <button
           onClick={() => setShowEdit(true)}
-          className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-3.5 py-1.5 text-xs font-semibold text-[#232f26] dark:text-[#f0ede6] shadow-sm transition-all hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]"
+          className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3.5 py-1.5 text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5] shadow-sm transition-all hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]"
         >
           ✎ Edit Habit
         </button>
@@ -111,10 +111,10 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
 
       {insights.length > 0 && (
         <div className="mb-8">
-          <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f0ede6]">Insights</p>
+          <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f4f4f5]">Insights</p>
           <ul className="space-y-1.5">
             {insights.map((text) => (
-              <li key={text} className="text-sm text-[#737970] dark:text-[#9eb0a2]">
+              <li key={text} className="text-sm text-[#737970] dark:text-[#a1a1aa]">
                 {text}
               </li>
             ))}
@@ -122,7 +122,7 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
         </div>
       )}
 
-      <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f0ede6]">History</p>
+      <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f4f4f5]">History</p>
       <Heatmap history={habit.history} color={habit.color} />
     </div>
   );

@@ -324,28 +324,28 @@ export default function AdminPortalView() {
         {/* SECTION 1: STANDALONE HABITS */}
         {activeSection === "habits" && (
           <div className="space-y-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                   Master Habit Catalog
                 </h1>
-                <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+                <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
                   Manage master catalog habits. Habits included in active protocols or tracked by users are protected from deletion.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowCreateCatalogModal(true)}
-                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm transition-opacity hover:opacity-90"
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
               >
                 + Add Catalog Habit
               </button>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm overflow-x-auto">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#e5e1d7] dark:border-[#2d3c30] text-[#737970] dark:text-[#9eb0a2]">
+                  <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
                     <th className="pb-3 font-semibold">Habit Key</th>
                     <th className="pb-3 font-semibold">Habit Name</th>
                     <th className="pb-3 font-semibold">Biological Domain</th>
@@ -354,38 +354,38 @@ export default function AdminPortalView() {
                     <th className="pb-3 font-semibold text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#2d3c30]">
+                <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
                   {masterHabitsList.map((h) => {
                     const usages = habitUsageMap[h.habitKey] || [];
                     const activeUsers = userUsageMap[h.habitKey] || 0;
                     return (
-                      <tr key={h.habitKey} className="hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]">
-                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#9eb0a2]">{h.habitKey}</td>
-                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f0ede6]">{h.name}</td>
+                      <tr key={h.habitKey} className="hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#a1a1aa]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">{h.name}</td>
                         <td className="py-3">
-                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#5fa07c]">
+                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                             {h.domain}
                           </span>
                         </td>
                         <td className="py-3">
                           {usages.length > 0 ? (
-                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#2d291f] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
+                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
                               In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
                             </span>
                           ) : (
-                            <span className="text-[#737970] dark:text-[#9eb0a2]">Unlinked</span>
+                            <span className="text-[#737970] dark:text-[#a1a1aa]">Unlinked</span>
                           )}
                         </td>
                         <td className="py-3">
                           {activeUsers > 0 ? (
-                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#5fa07c]">
+                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#a1a1aa]">
                               {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
                             </span>
                           ) : (
-                            <span className="text-[10px] text-[#737970] dark:text-[#9eb0a2]">No users</span>
+                            <span className="text-[10px] text-[#737970] dark:text-[#a1a1aa]">No users</span>
                           )}
                         </td>
-                        <td className="py-3 text-right font-medium text-[#737970] dark:text-[#9eb0a2]">Standard Protocol</td>
+                        <td className="py-3 text-right font-medium text-[#737970] dark:text-[#a1a1aa]">Standard Protocol</td>
                       </tr>
                     );
                   })}
@@ -396,37 +396,37 @@ export default function AdminPortalView() {
                     const isProtected = isInUse || activeUsers > 0;
 
                     return (
-                      <tr key={h.id} className="bg-[#fbf9f5]/60 dark:bg-[#222d25]/40 hover:bg-[#fbf9f5] dark:hover:bg-[#222d25]">
-                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#9eb0a2]">{h.habitKey}</td>
-                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f0ede6]">{h.name} (Org Custom)</td>
+                      <tr key={h.id} className="bg-[#fbf9f5]/60 dark:bg-[#27272a]/40 hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
+                        <td className="py-3 font-mono text-[11px] text-[#737970] dark:text-[#a1a1aa]">{h.habitKey}</td>
+                        <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">{h.name} (Org Custom)</td>
                         <td className="py-3">
-                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#5fa07c]">
+                          <span className="rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                             {h.domain}
                           </span>
                         </td>
                         <td className="py-3">
                           {isInUse ? (
-                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#2d291f] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
+                            <span className="rounded-md bg-[#f4efe2] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
                               In Use by {usages.length} Template{usages.length === 1 ? "" : "s"}
                             </span>
                           ) : (
-                            <span className="text-[#737970] dark:text-[#9eb0a2]">Unlinked</span>
+                            <span className="text-[#737970] dark:text-[#a1a1aa]">Unlinked</span>
                           )}
                         </td>
                         <td className="py-3">
                           {activeUsers > 0 ? (
-                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#5fa07c]">
+                            <span className="rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#a1a1aa]">
                               {activeUsers} User{activeUsers === 1 ? "" : "s"} Active
                             </span>
                           ) : (
-                            <span className="text-[10px] text-[#737970] dark:text-[#9eb0a2]">No users</span>
+                            <span className="text-[10px] text-[#737970] dark:text-[#a1a1aa]">No users</span>
                           )}
                         </td>
                         <td className="py-3 text-right">
                           <button
                             onClick={() => handleDeleteCatalog(h.id, h.name, h.habitKey)}
                             className={`font-semibold ${
-                              isProtected ? "text-[#737970] dark:text-[#9eb0a2] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
+                              isProtected ? "text-[#737970] dark:text-[#a1a1aa] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
                             }`}
                           >
                             {isProtected ? "Protected" : "Delete"}
@@ -444,32 +444,32 @@ export default function AdminPortalView() {
         {/* SECTION 2: PROTOCOL TEMPLATES MANAGEMENT */}
         {activeSection === "templates" && (
           <div className="space-y-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                   Organization Protocols
                 </h1>
-                <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+                <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
                   Full CRUD: Create, Edit metadata, Update habits, and Delete habit protocols in real-time.
                 </p>
               </div>
 
               <button
                 onClick={openCreateTemplateModal}
-                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm transition-opacity hover:opacity-90"
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
               >
                 + Create Protocol
               </button>
             </div>
 
             {loadingTemplates ? (
-              <p className="py-12 text-center text-sm text-[#737970] dark:text-[#9eb0a2]">Loading protocols…</p>
+              <p className="py-12 text-center text-sm text-[#737970] dark:text-[#a1a1aa]">Loading protocols…</p>
             ) : allTemplatesList.length === 0 ? (
-              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-12 text-center">
-                <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">No Protocols Available</h3>
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-12 text-center">
+                <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">No Protocols Available</h3>
                 <button
                   onClick={openCreateTemplateModal}
-                  className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e]"
+                  className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]"
                 >
                   Create Protocol
                 </button>
@@ -477,30 +477,30 @@ export default function AdminPortalView() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
                 {allTemplatesList.map((t: any) => (
-                  <div key={t.key || t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm space-y-4">
+                  <div key={t.key || t.id} className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="rounded-full bg-[#e3ede6] dark:bg-[#1d3326] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852] dark:text-[#5fa07c]">
+                        <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                           {t.category}
                         </span>
-                        <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">{t.difficulty}</span>
+                        <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">{t.difficulty}</span>
                       </div>
 
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-base font-semibold text-[#232f26] dark:text-[#f0ede6]">{t.name}</h3>
+                          <h3 className="text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">{t.name}</h3>
                           {!t.isCustom && (
-                            <span className="rounded-md bg-[#e5e1d7] dark:bg-[#2d3c30] px-2 py-0.5 text-[10px] font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                            <span className="rounded-md bg-[#e5e1d7] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                               Standard Protocol
                             </span>
                           )}
                         </div>
-                        <p className="mt-1 line-clamp-2 text-xs text-[#737970] dark:text-[#9eb0a2]">{t.tagline}</p>
+                        <p className="mt-1 line-clamp-2 text-xs text-[#737970] dark:text-[#a1a1aa]">{t.tagline}</p>
                       </div>
 
-                      <div className="rounded-xl bg-[#fbf9f5] dark:bg-[#222d25] p-3 text-xs">
-                        <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">{t.habits.length} Included Habits:</span>
-                        <ul className="mt-1 space-y-1 text-[#737970] dark:text-[#9eb0a2]">
+                      <div className="rounded-xl bg-[#fbf9f5] dark:bg-[#27272a] p-3 text-xs">
+                        <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{t.habits.length} Included Habits:</span>
+                        <ul className="mt-1 space-y-1 text-[#737970] dark:text-[#a1a1aa]">
                           {t.habits.slice(0, 3).map((h: any, i: number) => (
                             <li key={i} className="truncate">• {h.name}</li>
                           ))}
@@ -508,14 +508,14 @@ export default function AdminPortalView() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4 text-xs">
-                      <span className="text-[#737970] dark:text-[#9eb0a2]">
+                    <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#27272a] pt-4 text-xs">
+                      <span className="text-[#737970] dark:text-[#a1a1aa]">
                         Author: {t.author?.name || "Growzok Lab"}
                       </span>
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => openEditTemplateModal(t)}
-                          className="font-semibold text-[#232f26] dark:text-[#5fa07c] hover:underline"
+                          className="font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:underline"
                         >
                           Edit Protocol
                         </button>
@@ -540,30 +540,30 @@ export default function AdminPortalView() {
       {/* CREATE / EDIT TEMPLATE MODAL */}
       {showCreateTemplateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-          <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-[#18201a] border border-[#e5e1d7] dark:border-[#2d3c30] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-3">
-              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">
+          <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
+              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                 {editingTemplate ? `Edit Protocol — ${editingTemplate.name}` : "Publish Custom Habit Protocol"}
               </h3>
-              <button onClick={() => setShowCreateTemplateModal(false)} className="text-[#737970] dark:text-[#9eb0a2]">✕</button>
+              <button onClick={() => setShowCreateTemplateModal(false)} className="text-[#737970] dark:text-[#a1a1aa]">✕</button>
             </div>
 
             <form onSubmit={handleSaveTemplate} className="space-y-4 text-xs">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="font-semibold text-[#232f26]">Protocol Name *</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Protocol Name *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Executive Performance Protocol"
                     value={tName}
                     onChange={(e) => setTName(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none focus:border-[#232f26]"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-[#232f26] block mb-1">Category *</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5] block mb-1">Category *</label>
                   <CustomSelect
                     options={CATEGORIES.map((c) => ({ value: c, label: c }))}
                     value={tCategory}
@@ -574,31 +574,31 @@ export default function AdminPortalView() {
               </div>
 
               <div>
-                <label className="font-semibold text-[#232f26]">Tagline / Subtitle *</label>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Tagline / Subtitle *</label>
                 <input
                   type="text"
                   required
                   placeholder="One-line value proposition for marketplace preview"
                   value={tTagline}
                   onChange={(e) => setTTagline(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none focus:border-[#232f26]"
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
                 />
               </div>
 
               <div>
-                <label className="font-semibold text-[#232f26]">Overview / Scientific Methodology</label>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Overview / Scientific Methodology</label>
                 <textarea
                   rows={3}
                   placeholder="Explain why this protocol works..."
                   value={tOverview}
                   onChange={(e) => setTOverview(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none focus:border-[#232f26]"
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
                 />
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="font-semibold text-[#232f26] block mb-1">Difficulty</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5] block mb-1">Difficulty</label>
                   <CustomSelect
                     options={DIFFICULTIES.map((d) => ({ value: d, label: d }))}
                     value={tDifficulty}
@@ -608,34 +608,34 @@ export default function AdminPortalView() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-[#232f26]">Est. Daily Minutes</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Est. Daily Minutes</label>
                   <input
                     type="number"
                     value={tMinutes}
                     onChange={(e) => setTMinutes(Number(e.target.value))}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="font-semibold text-[#232f26]">Tags (Comma-separated)</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Tags (Comma-separated)</label>
                   <input
                     type="text"
                     value={tTags}
                     onChange={(e) => setTTags(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                   />
                 </div>
               </div>
 
               {/* Select Included Habits */}
-              <div className="space-y-2 border-t border-[#e5e1d7] pt-3">
-                <label className="font-semibold text-[#232f26]">Select Included Catalog Habits</label>
+              <div className="space-y-2 border-t border-[#e5e1d7] dark:border-[#27272a] pt-3">
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Select Included Catalog Habits</label>
                 <div className="grid gap-2 max-h-40 overflow-y-auto sm:grid-cols-2 p-1">
                   {allHabitItems.map((h) => {
                     const key = h.habitKey || h.id || h.name;
                     return (
-                      <label key={key} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] p-2 cursor-pointer hover:bg-[#fbf9f5]">
+                      <label key={key} className="flex items-center gap-2 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] p-2 cursor-pointer hover:bg-[#fbf9f5] dark:hover:bg-[#3f3f46]">
                         <input
                           type="checkbox"
                           checked={tSelectedHabits.includes(key)}
@@ -643,18 +643,18 @@ export default function AdminPortalView() {
                             if (e.target.checked) setTSelectedHabits([...tSelectedHabits, key]);
                             else setTSelectedHabits(tSelectedHabits.filter((k) => k !== key));
                           }}
-                          className="accent-[#232f26]"
+                          className="accent-[#232f26] dark:accent-[#f4f4f5]"
                         />
-                        <span className="font-semibold text-[#232f26] truncate">{h.name}</span>
+                        <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5] truncate">{h.name}</span>
                       </label>
                     );
                   })}
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] pt-4">
-                <button type="button" onClick={() => setShowCreateTemplateModal(false)} className="rounded-xl border border-[#e5e1d7] px-4 py-2 font-semibold">Cancel</button>
-                <button type="submit" disabled={submittingTemplate} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white">
+              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+                <button type="button" onClick={() => setShowCreateTemplateModal(false)} className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] px-4 py-2 font-semibold">Cancel</button>
+                <button type="submit" disabled={submittingTemplate} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]">
                   {submittingTemplate ? "Saving…" : editingTemplate ? "Save Changes →" : "Publish Protocol →"}
                 </button>
               </div>
@@ -665,29 +665,29 @@ export default function AdminPortalView() {
 
       {/* CREATE MASTER HABIT CATALOG MODAL */}
       {showCreateCatalogModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3">
-              <h3 className="text-lg font-semibold text-[#232f26]">Add Standalone Master Habit</h3>
-              <button onClick={() => setShowCreateCatalogModal(false)} className="text-[#737970]">✕</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
+              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">Add Standalone Master Habit</h3>
+              <button onClick={() => setShowCreateCatalogModal(false)} className="text-[#737970] dark:text-[#a1a1aa]">✕</button>
             </div>
 
             <form onSubmit={handleCreateCatalog} className="space-y-3 text-xs">
               <div>
-                <label className="font-semibold text-[#232f26]">Habit Name *</label>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Habit Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Zone 2 Cardio Run"
                   value={cName}
                   onChange={(e) => setCName(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none focus:border-[#232f26]"
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
                 />
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="font-semibold text-[#232f26] block mb-1">Biological Domain *</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5] block mb-1">Biological Domain *</label>
                   <CustomSelect
                     options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
                     value={cDomain}
@@ -697,39 +697,39 @@ export default function AdminPortalView() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-[#232f26]">Suggested Label</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Suggested Label</label>
                   <input
                     type="text"
                     value={cLabel}
                     onChange={(e) => setCLabel(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="font-semibold text-[#232f26]">Target Goal</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Target Goal</label>
                   <input
                     type="number"
                     placeholder="e.g. 30"
                     value={cGoal}
                     onChange={(e) => setCGoal(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-[#232f26]">Unit</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Unit</label>
                   <input
                     type="text"
                     placeholder="e.g. mins"
                     value={cUnit}
                     onChange={(e) => setCUnit(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-[#232f26] block mb-1">Target Type</label>
+                  <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5] block mb-1">Target Type</label>
                   <CustomSelect
                     options={[
                       { value: "time", label: "Time" },
@@ -745,19 +745,19 @@ export default function AdminPortalView() {
               </div>
 
               <div>
-                <label className="font-semibold text-[#232f26]">Description</label>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Description</label>
                 <textarea
                   rows={2}
                   placeholder="Habit execution guidance..."
                   value={cDescription}
                   onChange={(e) => setCDescription(e.target.value)}
-                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] pt-4">
-                <button type="button" onClick={() => setShowCreateCatalogModal(false)} className="rounded-xl border border-[#e5e1d7] px-4 py-2 font-semibold">Cancel</button>
-                <button type="submit" disabled={creatingCatalog} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white">
+              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+                <button type="button" onClick={() => setShowCreateCatalogModal(false)} className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] px-4 py-2 font-semibold">Cancel</button>
+                <button type="submit" disabled={creatingCatalog} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]">
                   {creatingCatalog ? "Adding…" : "Add Standalone Habit →"}
                 </button>
               </div>

@@ -30,7 +30,7 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
   };
 
   return (
-    <div className="min-h-screen bg-[#fbf9f5]/50 dark:bg-[#0d130e]">
+    <div className="min-h-screen bg-[#fbf9f5]/50 dark:bg-[#09090b]">
       {/* Primary Fixed Left Sidebar */}
       <div
         className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col z-30 transition-all duration-300 ${
@@ -56,19 +56,19 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
       )}
 
       {/* Mobile Top Navigation Bar */}
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-[#e5e1d7] bg-[#fbf9f5]/90 dark:border-[#2d3c30] dark:bg-[#0d130e]/90 px-4 py-3 backdrop-blur-md md:hidden">
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-[#e5e1d7] bg-[#fbf9f5]/90 dark:border-[#27272a] dark:bg-[#09090b]/90 px-4 py-3 backdrop-blur-md md:hidden">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#232f26] font-display text-sm font-bold text-white dark:bg-[#5fa07c] dark:text-[#0d130e]">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#232f26] font-display text-sm font-bold text-white dark:bg-[#27272a] dark:text-[#f4f4f5]">
             G
           </span>
-          <span className="font-display text-base font-semibold text-[#232f26] dark:text-[#f0ede6]">
+          <span className="font-display text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">
             Growzok
           </span>
         </Link>
 
         <button
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="rounded-lg border border-[#e5e1d7] dark:border-[#2d3c30] px-2.5 py-1 text-xs font-semibold text-[#232f26] dark:text-[#f0ede6]"
+          className="rounded-lg border border-[#e5e1d7] dark:border-[#27272a] px-2.5 py-1 text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5]"
         >
           {mobileMenuOpen ? "✕ Close" : "☰ Menu"}
         </button>
@@ -76,11 +76,11 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
 
       {/* Mobile Menu Slide-Over Drawer */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#fbf9f5] dark:bg-[#121a14] p-4 md:hidden">
+        <div className="fixed inset-0 z-50 flex flex-col bg-[#fbf9f5] dark:bg-[#18181b] p-4 md:hidden">
           <div className="flex justify-end pb-3">
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-semibold text-[#737970] dark:text-[#9eb0a2]"
+              className="text-sm font-semibold text-[#737970] dark:text-[#a1a1aa]"
             >
               ✕ Close
             </button>
@@ -88,7 +88,7 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
           <div className="flex-1 overflow-y-auto space-y-4">
             <AppSidebar userLabel={userLabel} isCollapsed={false} />
             {secondarySidebar && (
-              <div className="border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4">
+              <div className="border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
                 {secondarySidebar}
               </div>
             )}

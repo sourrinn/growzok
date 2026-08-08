@@ -102,10 +102,10 @@ export default function ProtocolsView() {
     <div className="space-y-8">
       {/* Hero Header */}
       <div>
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+        <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
           Protocol Hub
         </h1>
-        <p className="mt-1.5 text-sm text-[#737970] dark:text-[#9eb0a2]">
+        <p className="mt-1.5 text-sm text-[#737970] dark:text-[#a1a1aa]">
           Science-backed & organization habit protocols. Preview routines and adopt them into your personal dashboard in one tap.
         </p>
       </div>
@@ -117,10 +117,10 @@ export default function ProtocolsView() {
           placeholder="Search protocols by goal, name, or tags…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-4 py-3 text-sm text-[#232f26] dark:text-[#f0ede6] outline-none transition-colors placeholder:text-[#737970] dark:placeholder:text-[#9eb0a2] focus:border-[#232f26]/40 dark:focus:border-[#5fa07c] sm:max-w-md"
+          className="w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-4 py-3 text-sm text-[#232f26] dark:text-[#f4f4f5] outline-none transition-colors placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] focus:border-[#232f26]/40 dark:focus:border-[#3f3f46] sm:max-w-md"
         />
 
-        <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#9eb0a2]">
+        <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
           <CustomSelect
             prefixLabel="Sort by: "
             options={SORT_OPTIONS}
@@ -139,8 +139,8 @@ export default function ProtocolsView() {
               onClick={() => setCategoryFilter(cat)}
               className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
                 categoryFilter === cat
-                  ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm"
-                  : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#9eb0a2] hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40 hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+                  ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
+                  : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
               }`}
             >
               {cat}
@@ -149,7 +149,7 @@ export default function ProtocolsView() {
         </div>
 
         {/* Biological Domain Dropdown & Counter Row (Row 2) */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e5e1d7]/60 dark:border-[#2d3c30] pt-3 text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e5e1d7]/60 dark:border-[#27272a] pt-3 text-xs">
           <div className="flex items-center gap-2">
             <CustomSelect
               prefixLabel="Domain: "
@@ -163,8 +163,8 @@ export default function ProtocolsView() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-[#737970] dark:text-[#9eb0a2]">
-              Showing <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">{filteredAndSorted.length}</span> protocol
+            <span className="text-[#737970] dark:text-[#a1a1aa]">
+              Showing <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{filteredAndSorted.length}</span> protocol
               {filteredAndSorted.length === 1 ? "" : "s"}
             </span>
 

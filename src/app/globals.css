@@ -17,12 +17,12 @@
 }
 
 html.dark {
-  --color-ink: #0d130e;
-  --color-charcoal: #f0ede6;
+  --color-ink: #09090b;
+  --color-charcoal: #f4f4f5;
   --color-sage: #5fa07c;
-  --color-sage-soft: #1d3326;
-  --color-mist: #2d3c30;
-  --color-muted: #9eb0a2;
+  --color-sage-soft: #27272a;
+  --color-mist: #27272a;
+  --color-muted: #a1a1aa;
 }
 
 html,

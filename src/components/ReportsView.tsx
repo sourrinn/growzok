@@ -62,21 +62,21 @@ export default function ReportsView() {
       {/* Header & Time Period Selector */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             Reports & Analytics
           </h1>
-          <p className="mt-1 text-sm text-[#737970] dark:text-[#9eb0a2]">{report.label}</p>
+          <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">{report.label}</p>
         </div>
 
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-1 shadow-sm">
+        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm">
           {PERIODS.map((p) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
               className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
                 period === p.value
-                  ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm"
-                  : "text-[#737970] dark:text-[#9eb0a2] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+                  ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
+                  : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
               }`}
             >
               {p.label}
@@ -88,33 +88,33 @@ export default function ReportsView() {
       {/* Top Metric KPI Cards (4 Tiles) */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Completed */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Total Completed
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.completed}
             </span>
-            <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">of {report.trackable} trackable</span>
+            <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">of {report.trackable} trackable</span>
           </div>
         </div>
 
         {/* Success Rate */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Overall Success Rate
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {Math.round(report.rate * 100)}%
             </span>
             <span
               className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
                 report.rate >= 0.8
-                  ? "bg-[#e3ede6] text-[#406852] dark:bg-[#1d3326] dark:text-[#5fa07c]"
+                  ? "bg-[#e3ede6] text-[#406852] dark:bg-[#27272a] dark:text-[#a1a1aa]"
                   : report.rate >= 0.5
-                    ? "bg-[#f4efe2] text-[#6b4923] dark:bg-[#2d291f] dark:text-[#d4cca9]"
+                    ? "bg-[#f4efe2] text-[#6b4923] dark:bg-[#27272a] dark:text-[#d4cca9]"
                     : "bg-[#be5a38]/10 text-[#be5a38]"
               }`}
             >
@@ -124,42 +124,42 @@ export default function ReportsView() {
         </div>
 
         {/* Active Streaks */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Active Momentum
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.activeStreaksCount}
             </span>
-            <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">habits in streak</span>
+            <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">habits in streak</span>
           </div>
         </div>
 
         {/* Missed Days */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Missed Days
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26]">
+            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.missed}
             </span>
-            <span className="text-xs text-[#737970]">days unfulfilled</span>
+            <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">days unfulfilled</span>
           </div>
         </div>
       </div>
 
       {/* Habit Performance Matrix Table */}
-      <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970]">
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
           Habit Performance Matrix
         </h2>
 
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-[#e5e1d7] text-[#737970]">
+              <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
                 <th className="pb-3 font-semibold">Habit Name</th>
                 <th className="pb-3 font-semibold">Domain</th>
                 <th className="pb-3 font-semibold">Schedule</th>
@@ -168,10 +168,10 @@ export default function ReportsView() {
                 <th className="pb-3 font-semibold text-right">Success Rate</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#e5e1d7]/60">
+            <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
               {report.rows.map(({ habit, completed, trackable, rate, streak }) => (
-                <tr key={habit.id} className="group hover:bg-[#fbf9f5]">
-                  <td className="py-3 font-semibold text-[#232f26]">{habit.name}</td>
+                <tr key={habit.id} className="group hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
+                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">{habit.name}</td>
                   <td className="py-3">
                     <span
                       className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${domainColor(
@@ -181,22 +181,22 @@ export default function ReportsView() {
                       {habit.domain}
                     </span>
                   </td>
-                  <td className="py-3 text-[#737970]">{frequencyLabel(habit.frequency)}</td>
-                  <td className="py-3 font-semibold text-[#232f26]">
+                  <td className="py-3 text-[#737970] dark:text-[#a1a1aa]">{frequencyLabel(habit.frequency)}</td>
+                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                     {streak > 0 ? `${streak}d streak` : "—"}
                   </td>
-                  <td className="py-3 text-center text-[#737970]">
-                    <span className="font-semibold text-[#232f26]">{completed}</span> / {trackable} days
+                  <td className="py-3 text-center text-[#737970] dark:text-[#a1a1aa]">
+                    <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{completed}</span> / {trackable} days
                   </td>
                   <td className="py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[#e5e1d7]">
+                      <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#27272a]">
                         <div
-                          className="h-full bg-[#232f26] transition-all"
+                          className="h-full bg-[#232f26] dark:bg-[#f4f4f5] transition-all"
                           style={{ width: `${Math.round(rate * 100)}%` }}
                         />
                       </div>
-                      <span className="w-9 font-semibold tabular-nums text-[#232f26]">
+                      <span className="w-9 font-semibold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
                         {Math.round(rate * 100)}%
                       </span>
                     </div>
@@ -211,11 +211,11 @@ export default function ReportsView() {
       {/* Biological Domain Breakdown & Spotlights Grid */}
       <div className="grid gap-6 lg:grid-cols-12">
         {/* Domain Distribution Progress Bars (8 cols) */}
-        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm lg:col-span-8">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970]">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm lg:col-span-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Biological Domain Performance
           </h2>
-          <p className="mt-1 text-xs text-[#737970]">
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
             Completion breakdown across Growzok's 16 biological & behavioral domains.
           </p>
 
@@ -231,17 +231,17 @@ export default function ReportsView() {
                     >
                       {domain}
                     </span>
-                    <span className="text-[#737970]">
+                    <span className="text-[#737970] dark:text-[#a1a1aa]">
                       ({completed} of {trackable} completed)
                     </span>
                   </div>
-                  <span className="font-semibold tabular-nums text-[#232f26]">
+                  <span className="font-semibold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
                     {Math.round(rate * 100)}%
                   </span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-[#e5e1d7]/60">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a]">
                   <div
-                    className="h-full bg-[#406852] transition-all duration-500"
+                    className="h-full bg-[#406852] dark:bg-[#f4f4f5] transition-all duration-500"
                     style={{ width: `${Math.round(rate * 100)}%` }}
                   />
                 </div>
@@ -254,19 +254,19 @@ export default function ReportsView() {
         <div className="space-y-6 lg:col-span-4">
           {/* Top Performer */}
           {report.topHabit && (
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
-              <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852]">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+              <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                 Top Performer
               </span>
-              <h3 className="mt-3 text-base font-semibold text-[#232f26]">
+              <h3 className="mt-3 text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                 {report.topHabit.habit.name}
               </h3>
-              <p className="mt-1 text-xs text-[#737970]">
-                Domain: <span className="font-medium text-[#232f26]">{report.topHabit.habit.domain}</span>
+              <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                Domain: <span className="font-medium text-[#232f26] dark:text-[#f4f4f5]">{report.topHabit.habit.domain}</span>
               </p>
-              <div className="mt-4 flex items-center justify-between border-t border-[#e5e1d7] pt-3 text-xs">
-                <span className="text-[#737970]">Success Rate</span>
-                <span className="font-bold text-[#406852]">
+              <div className="mt-4 flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#27272a] pt-3 text-xs">
+                <span className="text-[#737970] dark:text-[#a1a1aa]">Success Rate</span>
+                <span className="font-bold text-[#406852] dark:text-[#f4f4f5]">
                   {Math.round(report.topHabit.rate * 100)}%
                 </span>
               </div>
@@ -275,18 +275,18 @@ export default function ReportsView() {
 
           {/* Needs Momentum */}
           {report.weakestHabit && (
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
               <span className="rounded-full bg-[#be5a38]/10 px-2.5 py-0.5 text-[10px] font-semibold text-[#be5a38]">
                 Needs Attention
               </span>
-              <h3 className="mt-3 text-base font-semibold text-[#232f26]">
+              <h3 className="mt-3 text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                 {report.weakestHabit.habit.name}
               </h3>
-              <p className="mt-1 text-xs text-[#737970]">
-                Domain: <span className="font-medium text-[#232f26]">{report.weakestHabit.habit.domain}</span>
+              <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                Domain: <span className="font-medium text-[#232f26] dark:text-[#f4f4f5]">{report.weakestHabit.habit.domain}</span>
               </p>
-              <div className="mt-4 flex items-center justify-between border-t border-[#e5e1d7] pt-3 text-xs">
-                <span className="text-[#737970]">Success Rate</span>
+              <div className="mt-4 flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#27272a] pt-3 text-xs">
+                <span className="text-[#737970] dark:text-[#a1a1aa]">Success Rate</span>
                 <span className="font-bold text-[#be5a38]">
                   {Math.round(report.weakestHabit.rate * 100)}%
                 </span>

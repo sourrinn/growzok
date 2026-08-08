@@ -65,28 +65,28 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
   };
 
   return (
-    <div className="mb-10 rounded-2xl border border-[#e5e1d7] bg-gradient-to-b from-[#fbf9f5] to-white dark:border-[#2d3c30] dark:from-[#18201a] dark:to-[#0d130e] p-5 sm:p-6">
+    <div className="mb-10 rounded-2xl border border-[#e5e1d7] bg-gradient-to-b from-[#fbf9f5] to-white dark:border-[#27272a] dark:from-[#18181b] dark:to-[#09090b] p-5 sm:p-6">
       {/* Header */}
       <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-base font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+          <h2 className="text-base font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             ✨ Choose a preset protocol
           </h2>
-          <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+          <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
             Tap a protocol to adopt it instantly, or preview to customize habits.
           </p>
         </div>
 
         <Link
           href="/protocols"
-          className="inline-flex items-center gap-1 text-xs font-medium text-[#232f26] dark:text-[#5fa07c] transition-colors hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-medium text-[#232f26] dark:text-[#f4f4f5] transition-colors hover:underline"
         >
           Explore Protocol Hub →
         </Link>
       </div>
 
       {/* Goal Filter Tabs */}
-      <div className="mb-5 flex flex-wrap gap-1.5 border-b border-[#e5e1d7]/60 dark:border-[#2d3c30] pb-3">
+      <div className="mb-5 flex flex-wrap gap-1.5 border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3">
         {(
           [
             "All",
@@ -101,8 +101,8 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
             onClick={() => setGoalFilter(tab)}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
               goalFilter === tab
-                ? "bg-[#232f26] text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm font-semibold"
-                : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#9eb0a2] hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40 hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+                ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm font-semibold"
+                : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
             }`}
           >
             {tab}
@@ -118,15 +118,15 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
           return (
             <div
               key={protocol.key}
-              className="group flex flex-col justify-between rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-4 shadow-sm transition-all hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40 hover:shadow-md"
+              className="group flex flex-col justify-between rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 shadow-sm transition-all hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
             >
               <div>
                 {/* Meta row */}
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="rounded-full bg-[#e5e1d7]/60 dark:bg-[#2d3c30] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f0ede6]">
+                  <span className="rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
                     {protocol.category}
                   </span>
-                  <div className="flex items-center gap-1.5 text-xs text-[#737970] dark:text-[#9eb0a2]">
+                  <div className="flex items-center gap-1.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
                     <span className="tabular-nums">★ {protocol.rating.toFixed(1)}</span>
                     <span>·</span>
                     <span>~{protocol.estimatedDailyMinutes}m/day</span>
@@ -134,10 +134,10 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
                 </div>
 
                 {/* Title & description */}
-                <h3 className="text-sm font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                <h3 className="text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                   {protocol.name}
                 </h3>
-                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-[#737970] dark:text-[#9eb0a2]">
+                <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-[#737970] dark:text-[#a1a1aa]">
                   {protocol.tagline}
                 </p>
 
@@ -154,7 +154,7 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
                     </span>
                   ))}
                   {protocol.habits.length > 3 && (
-                    <span className="rounded-md border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] px-1.5 py-0.5 text-[10px] text-[#737970] dark:text-[#9eb0a2]">
+                    <span className="rounded-md border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] text-[#737970] dark:text-[#a1a1aa]">
                       +{protocol.habits.length - 3} more
                     </span>
                   )}
@@ -162,17 +162,17 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-4 flex items-center gap-2 border-t border-[#e5e1d7]/50 dark:border-[#2d3c30] pt-3">
+              <div className="mt-4 flex items-center gap-2 border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
                 <button
                   onClick={() => handleQuickAdopt(protocol)}
                   disabled={isAdopting}
-                  className="flex-1 rounded-lg bg-[#232f26] py-1.5 text-xs font-medium text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-all hover:bg-black dark:hover:bg-[#4d8667] active:scale-[0.98] disabled:opacity-50"
+                  className="flex-1 rounded-lg bg-[#232f26] py-1.5 text-xs font-medium text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
                 >
                   {isAdopting ? "Adding..." : "+ One-Tap Add"}
                 </button>
                 <button
                   onClick={() => setPreviewProtocol(protocol)}
-                  className="rounded-lg border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-3 py-1.5 text-xs font-medium text-[#737970] dark:text-[#9eb0a2] transition-colors hover:border-[#232f26]/40 hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+                  className="rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3 py-1.5 text-xs font-medium text-[#737970] dark:text-[#a1a1aa] transition-colors hover:border-[#232f26]/40 hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
                 >
                   Preview
                 </button>

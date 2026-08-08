@@ -52,7 +52,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: setInitialThemeScript }} />
       </head>
-      <body className="font-sans antialiased bg-[#fbf9f5] text-[#232f26] dark:bg-[#0d130e] dark:text-[#f0ede6] transition-colors duration-200" suppressHydrationWarning>
+      <body className="font-sans antialiased bg-[#fbf9f5] text-[#232f26] dark:bg-[#09090b] dark:text-[#f4f4f5] transition-colors duration-200" suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -14,21 +14,21 @@ export default function OrgSidebar({
   templatesCount,
 }: Props) {
   return (
-    <aside className="flex h-full w-60 flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] dark:border-[#2d3c30] dark:bg-[#121a14] dark:text-[#f0ede6]">
+    <aside className="flex h-full w-60 flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] dark:border-[#27272a] dark:bg-[#121215] dark:text-[#f4f4f5]">
       <div className="space-y-5">
         {/* Header Badge */}
         <div className="px-1 py-1">
-          <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852] dark:bg-[#1d3326] dark:text-[#5fa07c]">
+          <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-[10px] font-semibold text-[#406852] dark:bg-[#27272a] dark:text-[#a1a1aa]">
             Org Management
           </span>
-          <h2 className="mt-2 font-display text-base font-semibold text-[#232f26] dark:text-[#f0ede6]">
+          <h2 className="mt-2 font-display text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">
             Organization Admin
           </h2>
         </div>
 
         {/* Navigation Section */}
         <div className="space-y-1">
-          <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+          <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Organization Control
           </p>
 
@@ -38,8 +38,8 @@ export default function OrgSidebar({
               onClick={() => onSelectSection("habits")}
               className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs font-medium transition-all ${
                 activeSection === "habits"
-                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm font-semibold"
-                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]"
+                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
+                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]"
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -48,7 +48,7 @@ export default function OrgSidebar({
                 </svg>
                 <span>Habit Catalog</span>
               </div>
-              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "habits" ? "bg-white/20 text-white dark:bg-black/20 dark:text-[#0d130e]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#2d3c30] dark:text-[#f0ede6]"}`}>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "habits" ? "bg-white/20 text-white dark:bg-white/10 dark:text-[#f4f4f5]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#27272a] dark:text-[#a1a1aa]"}`}>
                 {habitsCount}
               </span>
             </button>
@@ -58,8 +58,8 @@ export default function OrgSidebar({
               onClick={() => onSelectSection("templates")}
               className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs font-medium transition-all ${
                 activeSection === "templates"
-                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm font-semibold"
-                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#9eb0a2] dark:hover:bg-[#222d25] dark:hover:text-[#f0ede6]"
+                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
+                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]"
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -69,7 +69,7 @@ export default function OrgSidebar({
                 </svg>
                 <span>Protocols</span>
               </div>
-              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "templates" ? "bg-white/20 text-white dark:bg-black/20 dark:text-[#0d130e]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#2d3c30] dark:text-[#f0ede6]"}`}>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "templates" ? "bg-white/20 text-white dark:bg-white/10 dark:text-[#f4f4f5]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#27272a] dark:text-[#a1a1aa]"}`}>
                 {templatesCount}
               </span>
             </button>
@@ -77,7 +77,7 @@ export default function OrgSidebar({
         </div>
       </div>
 
-      <div className="border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-3 text-[10px] text-[#737970] dark:text-[#9eb0a2] text-center">
+      <div className="border-t border-[#e5e1d7] dark:border-[#27272a] pt-3 text-[10px] text-[#737970] dark:text-[#a1a1aa] text-center">
         Syncs in real-time with database
       </div>
     </aside>

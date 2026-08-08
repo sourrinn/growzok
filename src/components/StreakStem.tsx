@@ -20,7 +20,7 @@ export default function StreakStem({
           <span
             key={d}
             className={`h-1.25 w-1.25 rounded-[1px_6px_1px_6px] transition-colors ${
-              isDone ? "" : "bg-[#e8e6e1] dark:bg-[#2d3c30]"
+              isDone ? "" : "bg-[#e8e6e1] dark:bg-[#27272a]"
             }`}
             style={{ backgroundColor: isDone ? color : undefined }}
           />

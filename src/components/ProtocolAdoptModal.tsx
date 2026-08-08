@@ -129,17 +129,17 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
       }}
     >
       {/* Drawer / Modal */}
-      <div className="w-full max-w-lg rounded-t-2xl bg-white dark:bg-[#18201a] border border-[#e5e1d7] dark:border-[#2d3c30] p-6 shadow-2xl sm:rounded-2xl space-y-4">
+      <div className="w-full max-w-lg rounded-t-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl sm:rounded-2xl space-y-4">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-4">
+        <div className="flex items-start justify-between gap-3 border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#232f26] dark:text-[#f0ede6]">{protocol.name}</h2>
-            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#9eb0a2]">{protocol.tagline}</p>
+            <h2 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">{protocol.name}</h2>
+            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#a1a1aa]">{protocol.tagline}</p>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded-full p-1 text-[#737970] dark:text-[#9eb0a2] transition-colors hover:bg-[#e5e1d7]/50 dark:hover:bg-[#2d3c30] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+            className="rounded-full p-1 text-[#737970] dark:text-[#a1a1aa] transition-colors hover:bg-[#e5e1d7]/50 dark:hover:bg-[#27272a] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
           >
             ✕
           </button>
@@ -147,8 +147,8 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
 
         {/* Duplicate Info Banner */}
         {duplicateIndices.size > 0 && (
-          <div className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-3 text-xs text-[#737970] dark:text-[#9eb0a2]">
-            <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
+          <div className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
               {duplicateIndices.size} habit{duplicateIndices.size === 1 ? "" : "s"} already active
             </span>{" "}
             in your account will be preserved to prevent duplicate clutter.
@@ -166,10 +166,10 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
                 key={idx}
                 className={`flex flex-col gap-2 rounded-xl border p-3 text-xs transition-all ${
                   isDup
-                    ? "border-[#e5e1d7]/50 bg-[#fbf9f5]/50 dark:border-[#2d3c30]/50 dark:bg-[#222d25]/50 opacity-60 cursor-not-allowed"
+                    ? "border-[#e5e1d7]/50 bg-[#fbf9f5]/50 dark:border-[#27272a]/50 dark:bg-[#27272a]/50 opacity-60 cursor-not-allowed"
                     : isChecked
-                      ? "border-[#406852]/40 bg-[#e3ede6]/30 dark:border-[#5fa07c]/40 dark:bg-[#1d3326]/40"
-                      : "border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a]"
+                      ? "border-[#406852]/40 bg-[#e3ede6]/30 dark:border-[#3f3f46] dark:bg-[#27272a]"
+                      : "border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b]"
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -178,20 +178,20 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
                     disabled={isDup}
                     checked={isChecked}
                     onChange={() => toggleHabit(idx)}
-                    className="mt-0.5 rounded accent-[#232f26] dark:accent-[#5fa07c]"
+                    className="mt-0.5 rounded accent-[#232f26] dark:accent-[#f4f4f5]"
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-[#232f26] dark:text-[#f0ede6] truncate">
+                      <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5] truncate">
                         {habit.name}
                       </span>
                       {isDup && (
-                        <span className="shrink-0 rounded bg-[#e5e1d7] dark:bg-[#2d3c30] px-1.5 py-0.5 text-[10px] font-medium text-[#737970] dark:text-[#9eb0a2]">
+                        <span className="shrink-0 rounded bg-[#e5e1d7] dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] font-medium text-[#737970] dark:text-[#a1a1aa]">
                           Already added
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 text-[11px] text-[#737970] dark:text-[#9eb0a2]">
+                    <p className="mt-0.5 text-[11px] text-[#737970] dark:text-[#a1a1aa]">
                       {habit.domain} · {frequencyLabel(habit.frequency)}
                     </p>
                   </div>
@@ -199,7 +199,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
 
                 {/* Editable Goal row */}
                 {habit.target && isChecked && !isDup && (
-                  <div className="mt-1 flex items-center gap-2 pl-7 text-[11px] text-[#737970] dark:text-[#9eb0a2]">
+                  <div className="mt-1 flex items-center gap-2 pl-7 text-[11px] text-[#737970] dark:text-[#a1a1aa]">
                     <span>Goal:</span>
                     <input
                       type="number"
@@ -211,7 +211,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
                           [idx]: Number(e.target.value),
                         }))
                       }
-                      className="w-16 rounded-md border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#222d25] px-2 py-0.5 text-center font-semibold text-[#232f26] dark:text-[#f0ede6] outline-none"
+                      className="w-16 rounded-md border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-2 py-0.5 text-center font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none"
                     />
                     <span>{habit.target.unit}</span>
                   </div>
@@ -222,21 +222,21 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
         </ul>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#2d3c30] pt-4">
-          <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+        <div className="flex items-center justify-between border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+          <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">
             {selected.size} of {protocol.habits.length} selected
           </span>
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] px-4 py-2 text-xs font-semibold text-[#737970] dark:text-[#9eb0a2] transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+              className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-4 py-2 text-xs font-semibold text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
             >
               Cancel
             </button>
             <button
               onClick={handleAdopt}
               disabled={submitting || selected.size === 0}
-              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] transition-opacity hover:opacity-90 disabled:opacity-40"
+              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
               {submitting ? "Adopting…" : `Adopt ${selected.size} Habits →`}
             </button>

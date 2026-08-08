@@ -101,27 +101,27 @@ export default async function ProtocolDetailPage({ params }: Props) {
       <div className="w-full space-y-8">
         {/* Top Breadcrumb & Hero */}
         <div>
-          <nav className="mb-4 flex items-center gap-2 text-xs text-[#737970] dark:text-[#9eb0a2]">
-            <Link href="/protocols" className="transition-colors hover:text-[#232f26] dark:hover:text-[#f0ede6]">
+          <nav className="mb-4 flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            <Link href="/protocols" className="transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]">
               Protocol Hub
             </Link>
             <span>/</span>
-            <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">{protocol.name}</span>
+            <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{protocol.name}</span>
           </nav>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-[#e3ede6] dark:bg-[#1d3326] px-3 py-1 text-xs font-semibold text-[#406852] dark:text-[#5fa07c]">
+            <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-3 py-1 text-xs font-semibold text-[#406852] dark:text-[#a1a1aa]">
               {protocol.category}
             </span>
-            <span className="rounded-full bg-[#e5e1d7] dark:bg-[#2d3c30] px-3 py-1 text-xs font-semibold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="rounded-full bg-[#e5e1d7] dark:bg-[#27272a] px-3 py-1 text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5]">
               {protocol.difficulty} Protocol
             </span>
           </div>
 
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f0ede6]">
+          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             {protocol.name}
           </h1>
-          <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#737970] dark:text-[#9eb0a2]">
+          <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#737970] dark:text-[#a1a1aa]">
             {protocol.tagline}
           </p>
         </div>
@@ -132,23 +132,23 @@ export default async function ProtocolDetailPage({ params }: Props) {
           <div className="space-y-8 lg:col-span-8">
             {/* Overview / About This System */}
             {formattedOverview && (
-              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
                   Protocol Overview & Methodology
                 </h2>
-                <div className="mt-3 text-sm leading-relaxed text-[#232f26] dark:text-[#f0ede6] whitespace-pre-line">
+                <div className="mt-3 text-sm leading-relaxed text-[#232f26] dark:text-[#f4f4f5] whitespace-pre-line">
                   {formattedOverview}
                 </div>
               </div>
             )}
 
             {/* Included Habits List */}
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#2d3c30] pb-3">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">
+              <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
                   Included Habits ({protocol.habits.length})
                 </h2>
-                <span className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+                <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">
                   ~{protocol.estimatedDailyMinutes} mins daily commitment
                 </span>
               </div>
@@ -157,11 +157,11 @@ export default async function ProtocolDetailPage({ params }: Props) {
                 {protocol.habits.map((habit, idx) => (
                   <li
                     key={idx}
-                    className="flex flex-col gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#2d3c30] dark:bg-[#222d25] p-4 transition-all hover:border-[#232f26]/30 dark:hover:border-[#5fa07c]/40"
+                    className="flex flex-col gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-4 transition-all hover:border-[#232f26]/30 dark:hover:border-[#3f3f46]"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="text-base font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                        <span className="text-base font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                           {habit.name}
                         </span>
                         <span
@@ -173,23 +173,23 @@ export default async function ProtocolDetailPage({ params }: Props) {
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#9eb0a2]">
-                        <span className="rounded-full bg-[#e5e1d7] dark:bg-[#2d3c30] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f0ede6]">
+                      <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                        <span className="rounded-full bg-[#e5e1d7] dark:bg-[#18181b] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
                           {habit.suggestedLabel}
                         </span>
                         {habit.timeOfDay && habit.timeOfDay !== "Anytime" && (
-                          <span className="font-medium text-[#737970] dark:text-[#9eb0a2]">{habit.timeOfDay}</span>
+                          <span className="font-medium text-[#737970] dark:text-[#a1a1aa]">{habit.timeOfDay}</span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs text-[#737970] dark:text-[#9eb0a2]">
-                      <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
+                    <div className="flex items-center gap-3 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                      <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                         {frequencyLabel(habit.frequency)}
                       </span>
                       {habit.target && (
                         <span>
-                          Target: <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">{habit.target.goal} {habit.target.unit}</span>
+                          Target: <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{habit.target.goal} {habit.target.unit}</span>
                         </span>
                       )}
                       {habit.missAllowance ? (
@@ -198,7 +198,7 @@ export default async function ProtocolDetailPage({ params }: Props) {
                     </div>
 
                     {habit.description && (
-                      <p className="mt-1 text-xs leading-relaxed text-[#737970] dark:text-[#9eb0a2]">
+                      <p className="mt-1 text-xs leading-relaxed text-[#737970] dark:text-[#a1a1aa]">
                         {habit.description}
                       </p>
                     )}
@@ -211,11 +211,11 @@ export default async function ProtocolDetailPage({ params }: Props) {
           {/* Right Action Sidebar (4 cols) */}
           <div className="space-y-6 lg:col-span-4">
             {/* Adopt Action Card */}
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#2d3c30] dark:bg-[#18201a] p-6 shadow-sm space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#9eb0a2]">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
                 Adopt Protocol
               </h3>
-              <p className="text-xs text-[#737970] dark:text-[#9eb0a2]">
+              <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
                 Instantly import these habit routines into your personal Growzok dashboard. You can customize targets before saving.
               </p>
 
@@ -223,34 +223,34 @@ export default async function ProtocolDetailPage({ params }: Props) {
             </div>
 
             {/* Author Profile */}
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
                 Protocol Author
               </h3>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#232f26] font-display text-sm font-bold text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#232f26] dark:bg-[#27272a] font-display text-sm font-bold text-white dark:text-[#f4f4f5]">
                   {protocol.author.name[0]}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-[#232f26]">
+                  <p className="text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">
                     {protocol.author.name}
                   </p>
-                  <p className="text-xs text-[#737970]">{protocol.author.role}</p>
+                  <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">{protocol.author.role}</p>
                 </div>
               </div>
             </div>
 
             {/* Tags Cloud */}
             {protocol.tags.length > 0 && (
-              <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm space-y-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
                   Protocol Tags
                 </h3>
                 <div className="flex flex-wrap gap-1.5">
                   {protocol.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] px-2.5 py-1 text-xs text-[#737970]"
+                      className="rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] px-2.5 py-1 text-xs text-[#737970] dark:text-[#a1a1aa]"
                     >
                       {tag}
                     </span>

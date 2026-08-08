@@ -67,7 +67,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
   const inputWidthRem = Math.max(3.5, (draftValue || "0").length * 0.7 + 1.2);
 
   return (
-    <div className="group rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#2d3c30] dark:bg-[#18201a] hover:shadow-md">
+    <div className="group rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         {/* Checkbox / Numeric Logger + Habit Info */}
         <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -87,7 +87,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
                 className={`h-8 shrink-0 rounded-lg border px-2 text-center text-sm font-semibold outline-none transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${
                   doneToday
                     ? "border-transparent text-white font-bold shadow-sm"
-                    : "border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#2d3c30] dark:bg-[#222d25] dark:text-[#f0ede6] focus:border-[#232f26] dark:focus:border-[#5fa07c]"
+                    : "border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] focus:border-[#232f26] dark:focus:border-[#3f3f46]"
                 }`}
                 style={{
                   width: `${inputWidthRem}rem`,
@@ -102,7 +102,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
                     onClick={handleSaveProgress}
                     disabled={isSaving}
                     title="Save progress (Enter)"
-                    className="flex h-8 items-center gap-1 rounded-lg bg-[#232f26] px-2.5 text-xs font-semibold text-white dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm transition-all hover:bg-black dark:hover:bg-[#4d8667] active:scale-95 disabled:opacity-50"
+                    className="flex h-8 items-center gap-1 rounded-lg bg-[#232f26] px-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-95 disabled:opacity-50"
                   >
                     {isSaving ? (
                       "…"
@@ -118,13 +118,13 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
                   <button
                     onClick={handleDiscard}
                     title="Discard changes (Esc)"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e5e1d7] dark:border-[#2d3c30] text-xs font-semibold text-[#737970] dark:text-[#9eb0a2] transition-colors hover:bg-[#e5e1d7]/40 dark:hover:bg-[#222d25] hover:text-[#232f26] dark:hover:text-[#f0ede6]"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e5e1d7] dark:border-[#27272a] text-xs font-semibold text-[#737970] dark:text-[#a1a1aa] transition-colors hover:bg-[#e5e1d7]/40 dark:hover:bg-[#27272a] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
                   >
                     ✕
                   </button>
                 </div>
               ) : justSaved ? (
-                <span className="inline-flex items-center gap-1 rounded-md bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-1 text-[11px] font-semibold text-[#406852] dark:text-[#5fa07c]">
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-1 text-[11px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                   <svg viewBox="0 0 16 16" fill="none" className="h-3 w-3">
                     <path d="M3 8.5L6.5 12L13 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -167,12 +167,12 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
           <div className="min-w-0">
             <Link
               href={`/habit/${habit.id}`}
-              className="block truncate text-base font-semibold text-[#232f26] dark:text-[#f0ede6] hover:underline"
+              className="block truncate text-base font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:underline"
             >
               {habit.name}
             </Link>
-            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-[#737970] dark:text-[#9eb0a2]">
-              <span className="rounded-md bg-[#e5e1d7]/70 dark:bg-[#2d3c30] px-1.5 py-0.5 text-[10px] font-medium text-[#232f26] dark:text-[#f0ede6]">
+            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+              <span className="rounded-md bg-[#e5e1d7]/70 dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
                 {habit.domain}
               </span>
               <span>{habit.userLabel}</span>
@@ -187,11 +187,11 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
             {/* Provenance badge — subtle but informative */}
             <div className="mt-1">
               {habit.isPersonal ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#f4efe2] dark:bg-[#2d291f] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#f4efe2] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
                   ✦ Personal
                 </span>
               ) : habit.templateKey ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#e3ede6] dark:bg-[#1d3326] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#5fa07c]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#a1a1aa]">
                   ◈ Protocol
                 </span>
               ) : null}
@@ -207,8 +207,8 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
             title="Edit habit"
             className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
               isManaging
-                ? "border-[#232f26] bg-[#232f26] text-white dark:border-[#5fa07c] dark:bg-[#5fa07c] dark:text-[#0d130e] shadow-sm"
-                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#9eb0a2] hover:border-[#232f26]/40 dark:hover:border-[#5fa07c]/40 hover:text-[#232f26] dark:hover:text-[#f0ede6] opacity-70 md:opacity-0 md:group-hover:opacity-100"
+                ? "border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm"
+                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/40 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5] opacity-70 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
@@ -222,7 +222,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
             className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
               isManaging
                 ? "border-[#be5a38] bg-[#be5a38] text-white shadow-sm"
-                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#2d3c30] dark:bg-[#18201a] dark:text-[#9eb0a2] hover:border-[#be5a38]/40 hover:text-[#be5a38] opacity-70 md:opacity-0 md:group-hover:opacity-100"
+                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#be5a38]/40 hover:text-[#be5a38] opacity-70 md:opacity-0 md:group-hover:opacity-100"
             }`}
           >
             <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
@@ -241,19 +241,19 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
       )}
 
       {/* Footer: Stem Chart & Stats */}
-      <div className="mt-4 flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#2d3c30] pt-3">
+      <div className="mt-4 flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
         <StreakStem history={habit.history} color={habit.color} />
 
-        <div className="whitespace-nowrap text-right text-xs tabular-nums text-[#737970] dark:text-[#9eb0a2]">
+        <div className="whitespace-nowrap text-right text-xs tabular-nums text-[#737970] dark:text-[#a1a1aa]">
           <div>
-            <span className="font-semibold text-[#232f26] dark:text-[#f0ede6]">
+            <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
               {Math.round(successRate.rate * 100)}%
             </span>{" "}
             success
           </div>
           <div>
             {onTrack ? (
-              <span className={onTrack.onTrack ? "text-[#406852] dark:text-[#5fa07c] font-medium" : "text-[#be5a38] font-medium"}>
+              <span className={onTrack.onTrack ? "text-[#406852] dark:text-[#f4f4f5] font-medium" : "text-[#be5a38] font-medium"}>
                 {onTrack.onTrack
                   ? "On track"
                   : `${onTrack.misses - onTrack.allowance} over`}

@@ -199,37 +199,31 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
           </div>
         </div>
 
-        {/* Delete + Edit Icon Buttons */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            onClick={() => setShowEdit(true)}
-            aria-label={`Edit ${habit.name}`}
-            title="Edit habit"
-            className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
-              isManaging
-                ? "border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm"
-                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/40 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5] opacity-70 md:opacity-0 md:group-hover:opacity-100"
-            }`}
-          >
-            <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
-              <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button
-            onClick={() => onDelete(habit.id)}
-            aria-label={`Delete ${habit.name}`}
-            title="Delete habit"
-            className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
-              isManaging
-                ? "border-[#be5a38] bg-[#be5a38] text-white shadow-sm"
-                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#be5a38]/40 hover:text-[#be5a38] opacity-70 md:opacity-0 md:group-hover:opacity-100"
-            }`}
-          >
-            <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
-              <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
+        {/* Delete + Edit Icon Buttons (Only visible in Manage Board mode) */}
+        {isManaging && (
+          <div className="flex items-center gap-1.5 shrink-0 animate-scale-in">
+            <button
+              onClick={() => setShowEdit(true)}
+              aria-label={`Edit ${habit.name}`}
+              title="Edit habit"
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-95"
+            >
+              <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+                <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              onClick={() => onDelete(habit.id)}
+              aria-label={`Delete ${habit.name}`}
+              title="Delete habit"
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#be5a38] bg-[#be5a38] text-white shadow-sm transition-all hover:opacity-90 active:scale-95"
+            >
+              <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+                <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {showEdit && (

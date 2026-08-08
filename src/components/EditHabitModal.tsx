@@ -108,10 +108,10 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-fade-in"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 sm:p-7 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto overflow-x-hidden animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
           <div>
@@ -218,7 +218,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
             </label>
 
             {hasTarget && (
-              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-2.5">
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3">
                 <CustomSelect
                   options={TARGET_TYPES}
                   value={targetType}
@@ -229,15 +229,15 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
                   min={1}
                   value={goal}
                   onChange={(e) => setGoal(Number(e.target.value))}
-                  className="w-20 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-2 py-1.5 text-center font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none focus:border-[#232f26]/40 dark:focus:border-[#3f3f46]"
+                  className="w-24 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3 py-2 text-center font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none focus:border-[#232f26]/40 dark:focus:border-[#3f3f46]"
                 />
                 <input
                   type="text"
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
-                  placeholder="unit (e.g. steps)"
+                  placeholder="unit (e.g. mins, pages)"
                   maxLength={20}
-                  className="flex-1 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-2 py-1.5 text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] focus:border-[#232f26]/40 dark:focus:border-[#3f3f46]"
+                  className="flex-1 min-w-[140px] rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3 py-2 text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] focus:border-[#232f26]/40 dark:focus:border-[#3f3f46]"
                 />
               </div>
             )}

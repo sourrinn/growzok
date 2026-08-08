@@ -12,15 +12,18 @@ import {
 } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import StreakStem from "@/components/StreakStem";
+import EditHabitModal from "@/components/EditHabitModal";
+import type { EditHabitInput } from "@/hooks/useHabits";
 
 interface Props {
   habit: Habit;
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
+  onEdit: (id: string, input: EditHabitInput) => Promise<void>;
   onDelete: (id: string) => void;
 }
 
-export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: Props) {
+export default function HabitCard({ habit, onToggle, onLogProgress, onEdit, onDelete }: Props) {
   const today = todayStr();
   const doneToday = habit.history.includes(today);
   const successRate = computeSuccessRate(habit);
@@ -31,6 +34,7 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
   const [draftValue, setDraftValue] = useState(
     habit.progress[today] !== undefined ? String(habit.progress[today]) : ""
   );
+  const [showEdit, setShowEdit] = useState(false);
 
   const commitValue = () => {
     const value = Number(draftValue);
@@ -133,15 +137,33 @@ export default function HabitCard({ habit, onToggle, onLogProgress, onDelete }: 
           </div>
         </div>
 
-        {/* Delete Button */}
-        <button
-          onClick={() => onDelete(habit.id)}
-          aria-label={`Delete ${habit.name}`}
-          className="p-1 text-base text-muted opacity-0 transition-opacity hover:text-ember group-hover:opacity-100"
-        >
-          &times;
-        </button>
+        {/* Delete + Edit Buttons */}
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowEdit(true)}
+            aria-label={`Edit ${habit.name}`}
+            className="rounded-full p-1 text-sm text-muted opacity-0 transition-opacity hover:text-[#232f26] group-hover:opacity-100"
+            title="Edit habit"
+          >
+            ✎
+          </button>
+          <button
+            onClick={() => onDelete(habit.id)}
+            aria-label={`Delete ${habit.name}`}
+            className="p-1 text-base text-muted opacity-0 transition-opacity hover:text-ember group-hover:opacity-100"
+          >
+            &times;
+          </button>
+        </div>
       </div>
+
+      {showEdit && (
+        <EditHabitModal
+          habit={habit}
+          onSave={onEdit}
+          onClose={() => setShowEdit(false)}
+        />
+      )}
 
       {/* Footer: Stem Chart & Stats */}
       <div className="mt-4 flex items-end justify-between border-t border-mist/50 pt-3">

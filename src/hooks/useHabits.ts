@@ -21,11 +21,21 @@ export interface NewHabitInput {
   missAllowance?: number;
 }
 
+export interface EditHabitInput {
+  name?: string;
+  userLabel?: string;
+  domain?: HabitDomain;
+  frequency?: HabitFrequency;
+  target?: HabitTarget | null;
+  missAllowance?: number;
+}
+
 interface UseHabits {
   habits: Habit[];
   loading: boolean;
   error: string | null;
   addHabit: (input: NewHabitInput) => Promise<void>;
+  editHabit: (id: string, input: EditHabitInput) => Promise<void>;
   addFromTemplate: (items: TemplateHabitOverride[], templateKey?: string) => Promise<void>;
   toggleHabit: (id: string) => Promise<void>;
   logProgress: (id: string, value: number) => Promise<void>;
@@ -119,6 +129,44 @@ export function useHabits(): UseHabits {
     }
   }, []);
 
+  const editHabit = useCallback(async (id: string, input: EditHabitInput) => {
+    const snapshot = habits;
+    // Optimistic update
+    setHabits((prev) =>
+      prev.map((h) =>
+        h.id === id
+          ? {
+              ...h,
+              ...(input.name !== undefined ? { name: input.name } : {}),
+              ...(input.userLabel !== undefined ? { userLabel: input.userLabel } : {}),
+              ...(input.domain !== undefined ? { domain: input.domain } : {}),
+              ...(input.frequency !== undefined ? { frequency: input.frequency } : {}),
+              ...(input.target !== undefined ? { target: input.target } : {}),
+              ...(input.missAllowance !== undefined ? { missAllowance: input.missAllowance } : {}),
+            }
+          : h
+      )
+    );
+    try {
+      const res = await fetch(`/api/habits/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
+      if (res.status === 401) {
+        setHabits([]);
+        return redirectToLogin();
+      }
+      if (!res.ok) throw new Error("edit");
+      const data = await res.json();
+      setHabits((prev) => prev.map((h) => (h.id === id ? (data.habit as Habit) : h)));
+      setError(null);
+    } catch {
+      setError("Couldn't save that change.");
+      setHabits(snapshot);
+    }
+  }, [habits]);
+
   const toggleHabit = useCallback(
     async (id: string) => {
       const date = todayStr();
@@ -206,6 +254,7 @@ export function useHabits(): UseHabits {
     loading,
     error,
     addHabit,
+    editHabit,
     addFromTemplate,
     toggleHabit,
     logProgress,

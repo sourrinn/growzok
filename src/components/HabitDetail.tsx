@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useHabits } from "@/hooks/useHabits";
 import {
@@ -14,9 +15,11 @@ import { frequencyLabel } from "@/lib/frequency";
 import { generateInsights } from "@/lib/insights";
 import Heatmap from "@/components/Heatmap";
 import StatTile from "@/components/StatTile";
+import EditHabitModal from "@/components/EditHabitModal";
 
 export default function HabitDetail({ habitId }: { habitId: string }) {
-  const { habits, loading } = useHabits();
+  const { habits, loading, editHabit } = useHabits();
+  const [showEdit, setShowEdit] = useState(false);
 
   if (loading) {
     return <p className="py-16 text-center text-sm text-muted">Loading…</p>;
@@ -48,15 +51,31 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
         ← Back
       </Link>
 
-      <header className="mb-8 mt-3">
-        <h1 className="font-display text-3xl font-medium tracking-tight text-charcoal">
-          {habit.name}
-        </h1>
-        <p className="mt-1 text-sm text-muted">
-          {habit.category} · {frequencyLabel(habit.frequency)}
-          {habit.target && ` · goal ${habit.target.goal} ${habit.target.unit}`}
-        </p>
+      <header className="mb-8 mt-3 flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-medium tracking-tight text-charcoal">
+            {habit.name}
+          </h1>
+          <p className="mt-1 text-sm text-muted">
+            {habit.category} · {frequencyLabel(habit.frequency)}
+            {habit.target && ` · goal ${habit.target.goal} ${habit.target.unit}`}
+          </p>
+        </div>
+        <button
+          onClick={() => setShowEdit(true)}
+          className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#232f26] shadow-sm transition-all hover:bg-[#fbf9f5]"
+        >
+          ✎ Edit Habit
+        </button>
       </header>
+
+      {showEdit && (
+        <EditHabitModal
+          habit={habit}
+          onSave={editHabit}
+          onClose={() => setShowEdit(false)}
+        />
+      )}
 
       <div className="mb-8 grid grid-cols-3 gap-4">
         <StatTile label="Success rate" value={`${Math.round(successRate.rate * 100)}%`} />

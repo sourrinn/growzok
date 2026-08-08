@@ -73,6 +73,22 @@ export async function deleteHabit(userId: string, id: string): Promise<boolean> 
   return result.deletedCount === 1;
 }
 
+export async function updateHabit(
+  userId: string,
+  id: string,
+  patch: Record<string, unknown>
+): Promise<Habit | null> {
+  if (!ObjectId.isValid(id)) return null;
+  const col = await collection();
+  const updated = await col.findOneAndUpdate(
+    { _id: new ObjectId(id), userId },
+    { $set: patch },
+    { returnDocument: "after" }
+  );
+  return updated ? serializeHabit(updated) : null;
+}
+
+
 export async function toggleHabit(
   userId: string,
   id: string,

@@ -2,12 +2,14 @@
 
 import type { Habit } from "@/types/habit";
 import HabitCard from "@/components/HabitCard";
+import type { EditHabitInput } from "@/hooks/useHabits";
 
 interface Props {
   habits: Habit[];
   loading: boolean;
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
+  onEdit: (id: string, input: EditHabitInput) => Promise<void>;
   onDelete: (id: string) => void;
 }
 
@@ -16,6 +18,7 @@ export default function HabitList({
   loading,
   onToggle,
   onLogProgress,
+  onEdit,
   onDelete,
 }: Props) {
   if (loading) {
@@ -38,6 +41,7 @@ export default function HabitList({
           habit={habit}
           onToggle={onToggle}
           onLogProgress={onLogProgress}
+          onEdit={onEdit}
           onDelete={onDelete}
         />
       ))}

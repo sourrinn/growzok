@@ -12,6 +12,7 @@ export default function HabitDashboard() {
     loading,
     error,
     addHabit,
+    editHabit,
     toggleHabit,
     logProgress,
     deleteHabit,
@@ -93,6 +94,7 @@ export default function HabitDashboard() {
             loading={loading}
             onToggle={toggleHabit}
             onLogProgress={logProgress}
+            onEdit={editHabit}
             onDelete={deleteHabit}
           />
         </div>

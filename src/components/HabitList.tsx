@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import type { Habit } from "@/types/habit";
 import HabitCard from "@/components/HabitCard";
 import type { EditHabitInput } from "@/hooks/useHabits";
 import { SkeletonHabitCard } from "@/components/Skeleton";
+import EditHabitModal from "@/components/EditHabitModal";
 
 interface Props {
   habits: Habit[];
@@ -24,6 +26,8 @@ export default function HabitList({
   onEdit,
   onDelete,
 }: Props) {
+  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+
   if (loading) {
     return (
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -46,30 +50,40 @@ export default function HabitList({
   }
 
   return (
-    <ul className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
-      {habits.map((habit, idx) => {
-        const delays = [
-          "animation-delay-75",
-          "animation-delay-100",
-          "animation-delay-150",
-          "animation-delay-200",
-          "animation-delay-300",
-        ];
-        const delayClass = delays[idx % delays.length];
+    <>
+      <ul className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+        {habits.map((habit, idx) => {
+          const delays = [
+            "animation-delay-75",
+            "animation-delay-100",
+            "animation-delay-150",
+            "animation-delay-200",
+            "animation-delay-300",
+          ];
+          const delayClass = delays[idx % delays.length];
 
-        return (
-          <li key={habit.id} className={`h-full animate-slide-up ${delayClass}`}>
-            <HabitCard
-              habit={habit}
-              isManaging={isManaging}
-              onToggle={onToggle}
-              onLogProgress={onLogProgress}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          </li>
-        );
-      })}
-    </ul>
+          return (
+            <li key={habit.id} className={`h-full animate-slide-up ${delayClass}`}>
+              <HabitCard
+                habit={habit}
+                isManaging={isManaging}
+                onToggle={onToggle}
+                onLogProgress={onLogProgress}
+                onEditClick={() => setEditingHabit(habit)}
+                onDelete={onDelete}
+              />
+            </li>
+          );
+        })}
+      </ul>
+
+      {editingHabit && (
+        <EditHabitModal
+          habit={editingHabit}
+          onSave={onEdit}
+          onClose={() => setEditingHabit(null)}
+        />
+      )}
+    </>
   );
 }

@@ -12,19 +12,16 @@ import {
 } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import StreakStem from "@/components/StreakStem";
-import EditHabitModal from "@/components/EditHabitModal";
-import type { EditHabitInput } from "@/hooks/useHabits";
-
 interface Props {
   habit: Habit;
   isManaging?: boolean;
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
-  onEdit: (id: string, input: EditHabitInput) => Promise<void>;
+  onEditClick: () => void;
   onDelete: (id: string) => void;
 }
 
-export default function HabitCard({ habit, isManaging = false, onToggle, onLogProgress, onEdit, onDelete }: Props) {
+export default function HabitCard({ habit, isManaging = false, onToggle, onLogProgress, onEditClick, onDelete }: Props) {
   const today = todayStr();
   const doneToday = habit.history.includes(today);
   const successRate = computeSuccessRate(habit);
@@ -36,7 +33,6 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
   const [draftValue, setDraftValue] = useState(savedValue);
   const [isSaving, setIsSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
 
   // Sync draft value if saved progress changes externally
   const isDirty = draftValue !== savedValue;
@@ -203,7 +199,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
         {isManaging && (
           <div className="flex items-center gap-1.5 shrink-0 animate-scale-in">
             <button
-              onClick={() => setShowEdit(true)}
+              onClick={onEditClick}
               aria-label={`Edit ${habit.name}`}
               title="Edit habit"
               className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-95"
@@ -225,14 +221,6 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
           </div>
         )}
       </div>
-
-      {showEdit && (
-        <EditHabitModal
-          habit={habit}
-          onSave={onEdit}
-          onClose={() => setShowEdit(false)}
-        />
-      )}
 
       {/* Footer: Stem Chart & Stats */}
       <div className="mt-4 flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">

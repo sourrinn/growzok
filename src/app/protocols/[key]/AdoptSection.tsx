@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import type { HabitTemplate } from "@/types/template";
-import TemplateCustomizerModal from "@/components/TemplateCustomizerModal";
+import type { Protocol } from "@/types/protocol";
+import ProtocolAdoptModal from "@/components/ProtocolAdoptModal";
 
 interface Props {
-  template: HabitTemplate;
+  protocol: Protocol;
 }
 
-export default function AdoptSection({ template }: Props) {
+export default function AdoptSection({ protocol }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -17,11 +17,11 @@ export default function AdoptSection({ template }: Props) {
         onClick={() => setOpen(true)}
         className="w-full rounded-xl bg-[#232f26] py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-black active:scale-[0.98]"
       >
-        Adopt Habit System →
+        Adopt Protocol →
       </button>
 
       {open && (
-        <TemplateCustomizerModal protocol={template} onClose={() => setOpen(false)} />
+        <ProtocolAdoptModal protocol={protocol} onClose={() => setOpen(false)} />
       )}
     </>
   );

@@ -127,7 +127,7 @@ export default function OverviewClient() {
                   Get Started Free →
                 </Link>
                 <Link
-                  href="/templates"
+                  href="/protocols"
                   className="rounded-xl border border-[#e5e1d7] bg-white px-6 py-3.5 text-sm font-semibold text-[#232f26] transition-colors hover:border-[#232f26]/30"
                 >
                   Browse Habit Systems
@@ -289,7 +289,7 @@ export default function OverviewClient() {
               </p>
               <div className="mt-6">
                 <Link
-                  href="/templates"
+                  href="/protocols"
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#232f26] underline underline-offset-4 hover:text-[#406852]"
                 >
                   Explore All Protocols in Marketplace →
@@ -326,7 +326,7 @@ export default function OverviewClient() {
               </p>
             </div>
             <Link
-              href="/templates"
+              href="/protocols"
               className="text-xs font-semibold text-[#232f26] underline underline-offset-4 hover:text-[#406852]"
             >
               Browse Marketplace →
@@ -349,7 +349,7 @@ export default function OverviewClient() {
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
                 <span>Rating 4.9 (1,420 reviews)</span>
                 <Link
-                  href="/templates/huberman-morning"
+                  href="/protocols/huberman-morning"
                   className="font-semibold text-[#232f26] hover:underline"
                 >
                   View System →
@@ -372,7 +372,7 @@ export default function OverviewClient() {
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
                 <span>Rating 4.95 (890 reviews)</span>
                 <Link
-                  href="/templates/deep-work-focus"
+                  href="/protocols/deep-work-focus"
                   className="font-semibold text-[#232f26] hover:underline"
                 >
                   View System →
@@ -395,7 +395,7 @@ export default function OverviewClient() {
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
                 <span>Rating 4.94 (1,120 reviews)</span>
                 <Link
-                  href="/templates/stoic-evening"
+                  href="/protocols/stoic-evening"
                   className="font-semibold text-[#232f26] hover:underline"
                 >
                   View System →
@@ -488,7 +488,7 @@ export default function OverviewClient() {
           </div>
           <p>© {new Date().getFullYear()} Growzok. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="/templates" className="hover:text-[#232f26]">
+            <Link href="/protocols" className="hover:text-[#232f26]">
               Templates Marketplace
             </Link>
             <Link href="/login" className="hover:text-[#232f26]">

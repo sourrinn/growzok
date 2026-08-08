@@ -326,10 +326,10 @@ export default function AdminPortalView() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
               <div>
                 <h1 className="font-display text-3xl font-semibold text-[#232f26]">
-                  Standalone Habits (Master Catalog)
+                  Master Habit Catalog
                 </h1>
                 <p className="text-xs text-[#737970]">
-                  Manage master catalog habits. Habits included in active template protocols are protected from deletion.
+                  Manage master catalog habits. Habits included in active protocols or tracked by users are protected from deletion.
                 </p>
               </div>
 
@@ -337,7 +337,7 @@ export default function AdminPortalView() {
                 onClick={() => setShowCreateCatalogModal(true)}
                 className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
               >
-                + Add Standalone Habit
+                + Add Catalog Habit
               </button>
             </div>
 
@@ -384,7 +384,7 @@ export default function AdminPortalView() {
                             <span className="text-[10px] text-[#737970]">No users</span>
                           )}
                         </td>
-                        <td className="py-3 text-right font-medium text-[#737970]">Core Protocol Standard</td>
+                        <td className="py-3 text-right font-medium text-[#737970]">Standard Protocol</td>
                       </tr>
                     );
                   })}
@@ -446,7 +446,7 @@ export default function AdminPortalView() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] pb-4">
               <div>
                 <h1 className="font-display text-3xl font-semibold text-[#232f26]">
-                  Organization Habit Systems & Templates
+                  Organization Protocols
                 </h1>
                 <p className="text-xs text-[#737970]">
                   Full CRUD: Create, Edit metadata, Update habits, and Delete habit protocols in real-time.
@@ -457,15 +457,15 @@ export default function AdminPortalView() {
                 onClick={openCreateTemplateModal}
                 className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
               >
-                + Create Protocol System
+                + Create Protocol
               </button>
             </div>
 
             {loadingTemplates ? (
-              <p className="py-12 text-center text-sm text-[#737970]">Loading templates…</p>
+              <p className="py-12 text-center text-sm text-[#737970]">Loading protocols…</p>
             ) : allTemplatesList.length === 0 ? (
               <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
-                <h3 className="text-lg font-semibold text-[#232f26]">No Protocol Templates Available</h3>
+                <h3 className="text-lg font-semibold text-[#232f26]">No Protocols Available</h3>
                 <button
                   onClick={openCreateTemplateModal}
                   className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white"
@@ -490,7 +490,7 @@ export default function AdminPortalView() {
                           <h3 className="text-base font-semibold text-[#232f26]">{t.name}</h3>
                           {!t.isCustom && (
                             <span className="rounded-md bg-[#e5e1d7] px-2 py-0.5 text-[10px] font-semibold text-[#232f26]">
-                              Curated Standard
+                              Standard Protocol
                             </span>
                           )}
                         </div>

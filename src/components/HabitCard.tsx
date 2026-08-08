@@ -193,44 +193,37 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
           </div>
         </div>
 
-        {/* Delete + Edit Buttons */}
-        {isManaging ? (
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              onClick={() => setShowEdit(true)}
-              aria-label={`Edit ${habit.name}`}
-              className="flex items-center gap-1 rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] px-2.5 py-1 text-xs font-semibold text-[#232f26] transition-colors hover:bg-[#e5e1d7]/60"
-            >
-              ✎ Edit
-            </button>
-            <button
-              onClick={() => onDelete(habit.id)}
-              aria-label={`Delete ${habit.name}`}
-              className="flex items-center gap-1 rounded-lg border border-[#be5a38]/30 bg-[#be5a38]/10 px-2.5 py-1 text-xs font-semibold text-[#be5a38] transition-colors hover:bg-[#be5a38]/20"
-            >
-              ✕ Delete
-            </button>
-          </div>
-        ) : (
-          <div className="flex items-center gap-1 shrink-0">
-            <button
-              onClick={() => setShowEdit(true)}
-              aria-label={`Edit ${habit.name}`}
-              className="rounded-full p-1.5 text-sm text-[#737970] opacity-70 transition-opacity hover:text-[#232f26] md:opacity-0 md:group-hover:opacity-100"
-              title="Edit habit"
-            >
-              ✎
-            </button>
-            <button
-              onClick={() => onDelete(habit.id)}
-              aria-label={`Delete ${habit.name}`}
-              className="rounded-full p-1.5 text-base text-[#737970] opacity-70 transition-opacity hover:text-[#be5a38] md:opacity-0 md:group-hover:opacity-100"
-              title="Delete habit"
-            >
-              &times;
-            </button>
-          </div>
-        )}
+        {/* Delete + Edit Icon Buttons (Compact, non-overflowing) */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            onClick={() => setShowEdit(true)}
+            aria-label={`Edit ${habit.name}`}
+            title="Edit habit"
+            className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
+              isManaging
+                ? "border-[#232f26] bg-[#232f26] text-white shadow-sm"
+                : "border-[#e5e1d7] bg-white text-[#737970] hover:border-[#232f26]/40 hover:text-[#232f26] opacity-70 md:opacity-0 md:group-hover:opacity-100"
+            }`}
+          >
+            <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+              <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            onClick={() => onDelete(habit.id)}
+            aria-label={`Delete ${habit.name}`}
+            title="Delete habit"
+            className={`flex h-7 w-7 items-center justify-center rounded-lg border transition-all ${
+              isManaging
+                ? "border-[#be5a38] bg-[#be5a38] text-white shadow-sm"
+                : "border-[#e5e1d7] bg-white text-[#737970] hover:border-[#be5a38]/40 hover:text-[#be5a38] opacity-70 md:opacity-0 md:group-hover:opacity-100"
+            }`}
+          >
+            <svg viewBox="0 0 16 16" fill="none" className="h-3.5 w-3.5">
+              <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {showEdit && (

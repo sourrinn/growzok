@@ -12,6 +12,8 @@ import {
 } from "@/types/habit";
 import type { NewHabitInput } from "@/hooks/useHabits";
 
+import CustomSelect from "@/components/CustomSelect";
+
 type FrequencyKind = "daily" | "weekdays" | "weekends" | "timesPerWeek" | "custom";
 
 const WEEKDAY_SHORT = ["S", "M", "T", "W", "T", "F", "S"];
@@ -20,6 +22,14 @@ const TARGET_TYPES: { value: HabitTargetType; label: string }[] = [
   { value: "time", label: "Time" },
   { value: "distance", label: "Distance" },
   { value: "currency", label: "Currency" },
+];
+
+const FREQ_OPTIONS = [
+  { value: "daily", label: "Daily" },
+  { value: "weekdays", label: "Weekdays" },
+  { value: "weekends", label: "Weekends" },
+  { value: "timesPerWeek", label: "Times per week" },
+  { value: "custom", label: "Custom days" },
 ];
 
 export default function AddHabit({
@@ -114,53 +124,31 @@ export default function AddHabit({
           />
         </div>
 
-        {/* Biological Domain Pill Dropdown */}
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 font-medium text-[#232f26]">
-          <span className="text-[10px] text-[#737970]">Domain:</span>
-          <select
-            value={domain}
-            onChange={(e) => setDomain(e.target.value as HabitDomain)}
-            className="bg-transparent text-xs font-semibold text-[#232f26] outline-none cursor-pointer"
-            aria-label="Domain"
-          >
-            {HABIT_DOMAINS.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Biological Domain Dropdown */}
+        <CustomSelect
+          prefixLabel="Domain: "
+          options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
+          value={domain}
+          onChange={(val) => setDomain(val as HabitDomain)}
+        />
 
-        {/* Schedule / Frequency Pill Dropdown */}
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 font-medium text-[#232f26]">
-          <span className="text-[10px] text-[#737970]">Schedule:</span>
-          <select
-            value={freqKind}
-            onChange={(e) => setFreqKind(e.target.value as FrequencyKind)}
-            className="bg-transparent text-xs font-semibold text-[#232f26] outline-none cursor-pointer"
-            aria-label="Frequency"
-          >
-            <option value="daily">Daily</option>
-            <option value="weekdays">Weekdays</option>
-            <option value="weekends">Weekends</option>
-            <option value="timesPerWeek">Times per week</option>
-            <option value="custom">Custom days</option>
-          </select>
-        </div>
+        {/* Schedule / Frequency Dropdown */}
+        <CustomSelect
+          prefixLabel="Schedule: "
+          options={FREQ_OPTIONS}
+          value={freqKind}
+          onChange={(val) => setFreqKind(val as FrequencyKind)}
+        />
 
         {freqKind === "timesPerWeek" && (
-          <select
-            value={times}
-            onChange={(e) => setTimes(Number(e.target.value))}
-            className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 text-xs font-semibold text-[#232f26] outline-none cursor-pointer"
-            aria-label="Times per week"
-          >
-            {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-              <option key={n} value={n}>
-                {n}x / week
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({
+              value: String(n),
+              label: `${n}x / week`,
+            }))}
+            value={String(times)}
+            onChange={(val) => setTimes(Number(val))}
+          />
         )}
 
         {freqKind === "custom" && (
@@ -214,18 +202,11 @@ export default function AddHabit({
 
             {hasTarget && (
               <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-1.5">
-                <select
+                <CustomSelect
+                  options={TARGET_TYPES}
                   value={targetType}
-                  onChange={(e) => setTargetType(e.target.value as HabitTargetType)}
-                  className="bg-transparent font-semibold text-[#232f26] outline-none cursor-pointer"
-                  aria-label="Target type"
-                >
-                  {TARGET_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setTargetType(val as HabitTargetType)}
+                />
                 <input
                   type="number"
                   min={1}
@@ -248,20 +229,17 @@ export default function AddHabit({
 
           {/* Miss Allowance Picker */}
           {freqKind !== "timesPerWeek" && (
-            <label className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <span>Allowed misses / week:</span>
-              <select
-                value={missAllowance}
-                onChange={(e) => setMissAllowance(Number(e.target.value))}
-                className="rounded-lg border border-[#e5e1d7] bg-white px-2.5 py-1 font-semibold text-[#232f26] outline-none cursor-pointer"
-              >
-                {[0, 1, 2, 3, 4, 5, 6, 7].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <CustomSelect
+                options={[0, 1, 2, 3, 4, 5, 6, 7].map((n) => ({
+                  value: String(n),
+                  label: String(n),
+                }))}
+                value={String(missAllowance)}
+                onChange={(val) => setMissAllowance(Number(val))}
+              />
+            </div>
           )}
         </div>
       )}

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import AppShell from "@/components/AppShell";
 import OrgSidebar from "@/components/OrgSidebar";
+import CustomSelect from "@/components/CustomSelect";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
@@ -562,16 +563,13 @@ export default function AdminPortalView() {
                 </div>
 
                 <div>
-                  <label className="font-semibold text-[#232f26]">Category *</label>
-                  <select
+                  <label className="font-semibold text-[#232f26] block mb-1">Category *</label>
+                  <CustomSelect
+                    options={CATEGORIES.map((c) => ({ value: c, label: c }))}
                     value={tCategory}
-                    onChange={(e) => setTCategory(e.target.value as TemplateCategory)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
-                  >
-                    {CATEGORIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                    onChange={(val) => setTCategory(val as TemplateCategory)}
+                    className="w-full"
+                  />
                 </div>
               </div>
 
@@ -600,16 +598,13 @@ export default function AdminPortalView() {
 
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="font-semibold text-[#232f26]">Difficulty</label>
-                  <select
+                  <label className="font-semibold text-[#232f26] block mb-1">Difficulty</label>
+                  <CustomSelect
+                    options={DIFFICULTIES.map((d) => ({ value: d, label: d }))}
                     value={tDifficulty}
-                    onChange={(e) => setTDifficulty(e.target.value as TemplateDifficulty)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
-                  >
-                    {DIFFICULTIES.map((d) => (
-                      <option key={d} value={d}>{d}</option>
-                    ))}
-                  </select>
+                    onChange={(val) => setTDifficulty(val as TemplateDifficulty)}
+                    className="w-full"
+                  />
                 </div>
 
                 <div>
@@ -692,16 +687,13 @@ export default function AdminPortalView() {
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="font-semibold text-[#232f26]">Biological Domain *</label>
-                  <select
+                  <label className="font-semibold text-[#232f26] block mb-1">Biological Domain *</label>
+                  <CustomSelect
+                    options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
                     value={cDomain}
-                    onChange={(e) => CDomain(e.target.value as HabitDomain)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
-                  >
-                    {HABIT_DOMAINS.map((d) => (
-                      <option key={d} value={d}>{d}</option>
-                    ))}
-                  </select>
+                    onChange={(val) => CDomain(val as HabitDomain)}
+                    className="w-full"
+                  />
                 </div>
 
                 <div>
@@ -737,17 +729,18 @@ export default function AdminPortalView() {
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-[#232f26]">Target Type</label>
-                  <select
+                  <label className="font-semibold text-[#232f26] block mb-1">Target Type</label>
+                  <CustomSelect
+                    options={[
+                      { value: "time", label: "Time" },
+                      { value: "count", label: "Count" },
+                      { value: "distance", label: "Distance" },
+                      { value: "currency", label: "Currency" },
+                    ]}
                     value={cType}
-                    onChange={(e) => setCType(e.target.value)}
-                    className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 text-xs outline-none"
-                  >
-                    <option value="time">time</option>
-                    <option value="count">count</option>
-                    <option value="distance">distance</option>
-                    <option value="currency">currency</option>
-                  </select>
+                    onChange={(val) => setCType(val)}
+                    className="w-full"
+                  />
                 </div>
               </div>
 

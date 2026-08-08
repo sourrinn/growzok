@@ -17,6 +17,8 @@ interface Props {
   onClose: () => void;
 }
 
+import CustomSelect from "@/components/CustomSelect";
+
 type FrequencyKind = "daily" | "weekdays" | "weekends" | "timesPerWeek" | "custom";
 const WEEKDAY_SHORT = ["S", "M", "T", "W", "T", "F", "S"];
 const TARGET_TYPES: { value: HabitTargetType; label: string }[] = [
@@ -24,6 +26,14 @@ const TARGET_TYPES: { value: HabitTargetType; label: string }[] = [
   { value: "time", label: "Time" },
   { value: "distance", label: "Distance" },
   { value: "currency", label: "Currency" },
+];
+
+const FREQ_OPTIONS = [
+  { value: "daily", label: "Daily" },
+  { value: "weekdays", label: "Weekdays" },
+  { value: "weekends", label: "Weekends" },
+  { value: "timesPerWeek", label: "Times per week" },
+  { value: "custom", label: "Custom days" },
 ];
 
 function freqKindFromFrequency(f: HabitFrequency): FrequencyKind {
@@ -143,16 +153,13 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
               />
             </div>
             <div>
-              <label className="font-semibold text-[#232f26]">Biological Domain</label>
-              <select
+              <label className="font-semibold text-[#232f26] block mb-1">Biological Domain</label>
+              <CustomSelect
+                options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
                 value={domain}
-                onChange={(e) => setDomain(e.target.value as HabitDomain)}
-                className="mt-1 w-full rounded-xl border border-[#e5e1d7] p-2.5 outline-none"
-              >
-                {HABIT_DOMAINS.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-              </select>
+                onChange={(val) => setDomain(val as HabitDomain)}
+                className="w-full"
+              />
             </div>
           </div>
 
@@ -160,28 +167,21 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
           <div>
             <label className="font-semibold text-[#232f26]">Schedule</label>
             <div className="mt-1 flex flex-wrap items-center gap-2">
-              <select
+              <CustomSelect
+                options={FREQ_OPTIONS}
                 value={freqKind}
-                onChange={(e) => setFreqKind(e.target.value as FrequencyKind)}
-                className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 text-xs font-semibold text-[#232f26] outline-none"
-              >
-                <option value="daily">Daily</option>
-                <option value="weekdays">Weekdays</option>
-                <option value="weekends">Weekends</option>
-                <option value="timesPerWeek">Times per week</option>
-                <option value="custom">Custom days</option>
-              </select>
+                onChange={(val) => setFreqKind(val as FrequencyKind)}
+              />
 
               {freqKind === "timesPerWeek" && (
-                <select
-                  value={times}
-                  onChange={(e) => setTimes(Number(e.target.value))}
-                  className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 text-xs font-semibold text-[#232f26] outline-none"
-                >
-                  {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                    <option key={n} value={n}>{n}× / week</option>
-                  ))}
-                </select>
+                <CustomSelect
+                  options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({
+                    value: String(n),
+                    label: `${n}× / week`,
+                  }))}
+                  value={String(times)}
+                  onChange={(val) => setTimes(Number(val))}
+                />
               )}
 
               {freqKind === "custom" && (
@@ -219,15 +219,11 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
 
             {hasTarget && (
               <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-2.5">
-                <select
+                <CustomSelect
+                  options={TARGET_TYPES}
                   value={targetType}
-                  onChange={(e) => setTargetType(e.target.value as HabitTargetType)}
-                  className="bg-transparent font-semibold text-[#232f26] outline-none"
-                >
-                  {TARGET_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setTargetType(val as HabitTargetType)}
+                />
                 <input
                   type="number"
                   min={1}
@@ -251,15 +247,14 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
           {freqKind !== "timesPerWeek" && (
             <div className="flex items-center gap-3">
               <label className="font-semibold text-[#232f26]">Allowed misses / week:</label>
-              <select
-                value={missAllowance}
-                onChange={(e) => setMissAllowance(Number(e.target.value))}
-                className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 font-semibold text-[#232f26] outline-none"
-              >
-                {[0, 1, 2, 3, 4, 5, 6, 7].map((n) => (
-                  <option key={n} value={n}>{n}</option>
-                ))}
-              </select>
+              <CustomSelect
+                options={[0, 1, 2, 3, 4, 5, 6, 7].map((n) => ({
+                  value: String(n),
+                  label: String(n),
+                }))}
+                value={String(missAllowance)}
+                onChange={(val) => setMissAllowance(Number(val))}
+              />
             </div>
           )}
 

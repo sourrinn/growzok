@@ -2,11 +2,18 @@
 
 import { useEffect, useMemo, useState } from "react";
 import ProtocolCard from "@/components/ProtocolCard";
+import CustomSelect from "@/components/CustomSelect";
 import { STANDARD_PROTOCOLS, getAvailableCategories } from "@/lib/protocols";
 import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { Protocol, ProtocolCategory } from "@/types/protocol";
 
 type SortMode = "popularity" | "rating" | "time";
+
+const SORT_OPTIONS = [
+  { value: "popularity", label: "Popularity (Active Users)" },
+  { value: "rating", label: "Highest Rating" },
+  { value: "time", label: "Fastest Routine (Min/day)" },
+];
 
 export default function ProtocolsView() {
   const [categoryFilter, setCategoryFilter] = useState<ProtocolCategory | "All">("All");
@@ -114,16 +121,12 @@ export default function ProtocolsView() {
         />
 
         <div className="flex items-center gap-2 text-xs text-[#737970]">
-          <span className="font-semibold text-[#232f26]">Sort by:</span>
-          <select
+          <CustomSelect
+            prefixLabel="Sort by: "
+            options={SORT_OPTIONS}
             value={sortMode}
-            onChange={(e) => setSortMode(e.target.value as SortMode)}
-            className="rounded-xl border border-[#e5e1d7] bg-white px-3 py-2.5 font-semibold text-[#232f26] outline-none cursor-pointer"
-          >
-            <option value="popularity">Popularity (Active Users)</option>
-            <option value="rating">Highest Rating</option>
-            <option value="time">Fastest Routine (Min/day)</option>
-          </select>
+            onChange={(val) => setSortMode(val as SortMode)}
+          />
         </div>
       </div>
 
@@ -148,19 +151,15 @@ export default function ProtocolsView() {
         {/* Biological Domain Dropdown & Counter Row (Row 2) */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e5e1d7]/60 pt-3 text-xs">
           <div className="flex items-center gap-2">
-            <span className="text-[#737970]">Filter Domain:</span>
-            <select
+            <CustomSelect
+              prefixLabel="Domain: "
+              options={[
+                { value: "All", label: "All Biological Domains" },
+                ...HABIT_DOMAINS.map((dom) => ({ value: dom, label: dom })),
+              ]}
               value={domainFilter}
-              onChange={(e) => setDomainFilter(e.target.value as HabitDomain | "All")}
-              className="rounded-xl border border-[#e5e1d7] bg-white px-3 py-1.5 font-semibold text-[#232f26] outline-none cursor-pointer"
-            >
-              <option value="All">All Biological Domains</option>
-              {HABIT_DOMAINS.map((dom) => (
-                <option key={dom} value={dom}>
-                  {dom}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setDomainFilter(val as HabitDomain | "All")}
+            />
           </div>
 
           <div className="flex items-center gap-3">

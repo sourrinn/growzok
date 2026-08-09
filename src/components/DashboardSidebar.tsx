@@ -68,7 +68,7 @@ export default function DashboardSidebar({
 
         {/* Show Pending Activities Button */}
         {onTogglePendingOnly && (
-          <div className="pt-2 border-t border-[#e5e1d7]/60 dark:border-[#27272a]">
+          <div className="pt-1">
             <button
               type="button"
               onClick={onTogglePendingOnly}

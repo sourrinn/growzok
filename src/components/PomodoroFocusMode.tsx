@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { playFocusFinishChime } from "@/lib/soundChimes";
 
 type Soundscape = "none" | "whitenoise" | "pinknoise" | "rain" | "forest";
 
@@ -48,6 +49,7 @@ export default function PomodoroFocusMode({
       setTimeLeft((prev) => {
         if (prev <= 1) {
           setRunning(false);
+          playFocusFinishChime();
           return 0;
         }
         return prev - 1;

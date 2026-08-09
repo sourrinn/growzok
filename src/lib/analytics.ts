@@ -371,3 +371,41 @@ export function computeWeekOverWeek(habits: Habit[]): WoWHabitStat[] {
     })
     .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
 }
+
+// ─── Day-of-Week Execution Breakdown ──────────────────────────────────────
+
+export interface DayOfWeekStat {
+  dayLabel: string; // "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+  dayIndex: number; // 0=Mon, 6=Sun
+  count: number;
+  pct: number;
+}
+
+/**
+ * Aggregates all habit completion dates by day of week (Monday through Sunday).
+ */
+export function computeDayOfWeekStats(habits: Habit[]): DayOfWeekStat[] {
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const counts = [0, 0, 0, 0, 0, 0, 0];
+  let total = 0;
+
+  for (const habit of habits) {
+    for (const dateStr of habit.history) {
+      const d = new Date(`${dateStr}T00:00:00`);
+      if (isNaN(d.getTime())) continue;
+      // Convert JavaScript Date.getDay() (0=Sun, 1=Mon...6=Sat) to Mon=0..Sun=6
+      const monIndex = (d.getDay() + 6) % 7;
+      counts[monIndex]++;
+      total++;
+    }
+  }
+
+  const maxCount = Math.max(1, ...counts);
+
+  return dayNames.map((dayLabel, dayIndex) => ({
+    dayLabel,
+    dayIndex,
+    count: counts[dayIndex],
+    pct: Math.round((counts[dayIndex] / maxCount) * 100),
+  }));
+}

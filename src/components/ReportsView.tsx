@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
-import { buildReport, computeWeekOverWeek, type ReportPeriod } from "@/lib/analytics";
+import { buildReport, computeDayOfWeekStats, computeWeekOverWeek, type ReportPeriod } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import { todayStr } from "@/lib/dates";
 import { Skeleton, SkeletonStatTile } from "@/components/Skeleton";
 import ConsistencyHeatmap from "@/components/ConsistencyHeatmap";
+import DayOfWeekHistogram from "@/components/DayOfWeekHistogram";
 import { computeUserGamification } from "@/lib/gamification";
 import { generateBehavioralInsights } from "@/lib/heuristicCoach";
 import { computeHabitSynergies } from "@/lib/synergy";
@@ -51,6 +52,7 @@ export default function ReportsView() {
 
   const report = useMemo(() => buildReport(habits, period), [habits, period]);
   const wowStats = useMemo(() => computeWeekOverWeek(habits), [habits]);
+  const dowStats = useMemo(() => computeDayOfWeekStats(habits), [habits]);
   const gamification = useMemo(() => computeUserGamification(habits), [habits]);
   const coachInsights = useMemo(() => generateBehavioralInsights(habits), [habits]);
   const synergies = useMemo(() => computeHabitSynergies(habits), [habits]);
@@ -661,6 +663,9 @@ export default function ReportsView() {
           </p>
         </div>
       )}
+
+      {/* Day-of-Week Execution Histogram */}
+      <DayOfWeekHistogram stats={dowStats} />
 
       {/* 365-Day Consistency Heatmap Grid */}
       <ConsistencyHeatmap habits={habits} />

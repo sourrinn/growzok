@@ -10,6 +10,7 @@ import type {
 } from "@/types/habit";
 import { todayStr } from "@/lib/dates";
 import type { TemplateHabitOverride } from "@/types/template";
+import { playCompletionChime } from "@/lib/soundChimes";
 
 export interface NewHabitInput {
   name: string;
@@ -171,18 +172,27 @@ export function useHabits(): UseHabits {
   const toggleHabit = useCallback(
     async (id: string) => {
       const date = todayStr();
+      let nowCompleted = false;
+
       setHabits((prev) =>
-        prev.map((h) =>
-          h.id === id
-            ? {
-                ...h,
-                history: h.history.includes(date)
-                  ? h.history.filter((d) => d !== date)
-                  : [...h.history, date],
-              }
-            : h
-        )
+        prev.map((h) => {
+          if (h.id === id) {
+            const isDone = h.history.includes(date);
+            nowCompleted = !isDone;
+            return {
+              ...h,
+              history: isDone
+                ? h.history.filter((d) => d !== date)
+                : [...h.history, date],
+            };
+          }
+          return h;
+        })
       );
+
+      if (nowCompleted) {
+        playCompletionChime();
+      }
       try {
         const res = await fetch(`/api/habits/${id}/toggle`, {
           method: "POST",

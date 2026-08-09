@@ -76,6 +76,21 @@ export function generateBehavioralInsights(habits: Habit[]): BehavioralInsight[]
         habitName: habit.name,
       });
     }
+
+    // 4. Target Level-Up Alert: Target goal met 14 days straight!
+    if (habit.target && rate30.trackable >= 14 && rate30.rate >= 0.95) {
+      const suggestedGoal = Math.round(habit.target.goal * 1.2);
+      insights.push({
+        id: `target_levelup_${habit.id}`,
+        type: "momentum_surge",
+        title: `🚀 Goal Level-Up Ready: ${habit.name}`,
+        message: `You've achieved 100% target consistency for 14 straight days! (${habit.target.goal} ${habit.target.unit})`,
+        recommendation: `Consider upgrading your daily target to ${suggestedGoal} ${habit.target.unit} (+20%) to continue your physiological progress!`,
+        severity: "success",
+        habitId: habit.id,
+        habitName: habit.name,
+      });
+    }
   }
 
   // 4. Default baseline insight if no warnings/surges active

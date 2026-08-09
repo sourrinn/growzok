@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system" | "amoled";
+type Theme = "light" | "dark" | "system" | "amoled" | "auto";
 
 interface ThemeContextType {
   theme: Theme;
@@ -20,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("growzok-theme") as Theme | null;
-    if (stored === "light" || stored === "dark" || stored === "system" || stored === "amoled") {
+    if (stored === "light" || stored === "dark" || stored === "system" || stored === "amoled" || stored === "auto") {
       setThemeState(stored);
     } else {
       setThemeState("system");
@@ -35,6 +35,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     if (theme === "system") {
       dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    } else if (theme === "auto") {
+      // Sunrise/sunset schedule: light 06:00–20:00, dark otherwise
+      const hour = new Date().getHours();
+      dark = hour < 6 || hour >= 20;
     } else {
       dark = theme === "dark" || theme === "amoled";
     }
@@ -74,6 +78,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [theme, mounted]);
+
+  // Auto sunrise/sunset scheduling — re-evaluates every minute when theme === 'auto'
+  useEffect(() => {
+    if (!mounted || theme !== "auto") return;
+
+    const evaluate = () => {
+      const hour = new Date().getHours();
+      const dark = hour < 6 || hour >= 20;
+      setIsDark(dark);
+      if (dark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    };
+
+    evaluate();
+    const timer = setInterval(evaluate, 60_000); // check every minute
+    return () => clearInterval(timer);
   }, [theme, mounted]);
 
   const setTheme = (newTheme: Theme) => {

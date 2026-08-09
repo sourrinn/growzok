@@ -15,6 +15,7 @@ const THEME_OPTIONS = [
   { value: "dark", label: "🌙 Dark Mode" },
   { value: "system", label: "💻 System Default" },
   { value: "amoled", label: "🖤 AMOLED Pitch Black (OLED)" },
+  { value: "auto", label: "🌅 Auto (Light 6am – 8pm / Dark otherwise)" },
 ];
 
 export default function AccountView({ userName, userEmail, habitsCount }: Props) {
@@ -77,7 +78,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
           <CustomSelect
             options={THEME_OPTIONS}
             value={theme}
-            onChange={(val) => setTheme(val as "light" | "dark" | "system" | "amoled")}
+            onChange={(val) => setTheme(val as "light" | "dark" | "system" | "amoled" | "auto")}
             className="w-full"
           />
         </div>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useHabits } from "@/hooks/useHabits";
-import { buildReport, type ReportPeriod } from "@/lib/analytics";
+import { buildReport, computeWeekOverWeek, type ReportPeriod } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import { todayStr } from "@/lib/dates";
 import { Skeleton, SkeletonStatTile } from "@/components/Skeleton";
@@ -44,6 +44,7 @@ export default function ReportsView() {
   const [period, setPeriod] = useState<ReportPeriod>("month");
 
   const report = useMemo(() => buildReport(habits, period), [habits, period]);
+  const wowStats = useMemo(() => computeWeekOverWeek(habits), [habits]);
 
   const today = todayStr();
 
@@ -102,20 +103,37 @@ export default function ReportsView() {
           <p className="mt-1 text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa]">{report.label}</p>
         </div>
 
-        <div className="inline-flex w-fit max-w-full self-end sm:self-auto items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm overflow-x-auto no-scrollbar shrink-0">
-          {PERIODS.map((p) => (
-            <button
-              key={p.value}
-              onClick={() => setPeriod(p.value)}
-              className={`rounded-lg px-3 sm:px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
-                period === p.value
-                  ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
-                  : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
+        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap justify-end">
+          <div className="inline-flex w-fit max-w-full items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm overflow-x-auto no-scrollbar" data-print-hidden>
+            {PERIODS.map((p) => (
+              <button
+                key={p.value}
+                onClick={() => setPeriod(p.value)}
+                className={`rounded-lg px-3 sm:px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
+                  period === p.value
+                    ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
+                    : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Print / Export PDF — browser native, zero server cost */}
+          <button
+            type="button"
+            onClick={() => window.print()}
+            data-print-hidden
+            className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3.5 py-2 text-xs font-semibold text-[#737970] dark:text-[#a1a1aa] shadow-sm hover:text-[#232f26] dark:hover:text-[#f4f4f5] transition-all"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            Print / PDF
+          </button>
         </div>
       </div>
 
@@ -437,6 +455,72 @@ export default function ReportsView() {
           )}
         </div>
       </div>
+
+      {/* Week-Over-Week Momentum Comparison */}
+      {wowStats.length > 0 && (
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-4 print-break-inside-avoid">
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+              Week-Over-Week Momentum
+            </h2>
+            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+              Biggest completion rate changes: this 7 days vs the prior 7 days.
+            </p>
+          </div>
+
+          <div className="divide-y divide-[#e5e1d7] dark:divide-[#27272a]">
+            {wowStats.slice(0, 6).map(({ habit, thisWeekRate, lastWeekRate, delta }) => {
+              const improved = delta >= 0;
+              return (
+                <div key={habit.id} className="flex items-center gap-3 py-3">
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: habit.color }}
+                  />
+                  <span className="flex-1 truncate text-xs font-medium text-[#232f26] dark:text-[#f4f4f5]">
+                    {habit.name}
+                  </span>
+
+                  {/* Mini sparkline comparison bars */}
+                  <div className="flex items-center gap-1 shrink-0 w-28">
+                    <div className="flex-1 h-1.5 rounded-full bg-[#e5e1d7] dark:bg-[#27272a] overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[#a1a1aa] transition-all"
+                        style={{ width: `${Math.round(lastWeekRate * 100)}%` }}
+                      />
+                    </div>
+                    <div className="flex-1 h-1.5 rounded-full bg-[#e5e1d7] dark:bg-[#27272a] overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          improved ? "bg-[#406852]" : "bg-[#be5a38]"
+                        }`}
+                        style={{ width: `${Math.round(thisWeekRate * 100)}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  <span
+                    className={`text-[11px] font-bold tabular-nums w-14 text-right shrink-0 ${
+                      delta === 0
+                        ? "text-[#737970] dark:text-[#a1a1aa]"
+                        : improved
+                        ? "text-[#406852] dark:text-[#a3b899]"
+                        : "text-[#be5a38]"
+                    }`}
+                  >
+                    {delta === 0 ? "—" : `${improved ? "+" : ""}${Math.round(delta * 100)}%`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="text-[10px] text-[#737970] dark:text-[#a1a1aa]">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#a1a1aa] mr-1" /> Last 7 days &nbsp;
+            <span className="inline-block h-2 w-2 rounded-full bg-[#406852] mr-1" /> This 7 days
+          </p>
+        </div>
+      )}
 
       {/* 365-Day Consistency Heatmap Grid */}
       <ConsistencyHeatmap habits={habits} />

@@ -331,3 +331,43 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
     rows,
   };
 }
+
+// ─── Week-Over-Week Momentum Comparison ──────────────────────────────────────
+
+export interface WoWHabitStat {
+  habit: Habit;
+  thisWeekRate: number;
+  lastWeekRate: number;
+  /** positive = improved, negative = regressed */
+  delta: number;
+}
+
+/**
+ * Computes week-over-week completion rate delta for all habits.
+ * "This week" = Mon to today. "Last week" = prior 7 calendar days.
+ * Results sorted by absolute delta descending (biggest movers first).
+ */
+export function computeWeekOverWeek(habits: Habit[]): WoWHabitStat[] {
+  // This week: last 7 days ending today
+  const thisEnd = dateStrOffset(0);
+  const thisStart = dateStrOffset(-6);
+
+  // Last week: 7 days before that
+  const lastEnd = dateStrOffset(-7);
+  const lastStart = dateStrOffset(-13);
+
+  return habits
+    .map((habit) => {
+      const thisWeek = successRateForRange(habit, thisStart, thisEnd);
+      const lastWeek = successRateForRange(habit, lastStart, lastEnd);
+      const thisWeekRate = thisWeek.trackable ? thisWeek.rate : 0;
+      const lastWeekRate = lastWeek.trackable ? lastWeek.rate : 0;
+      return {
+        habit,
+        thisWeekRate,
+        lastWeekRate,
+        delta: thisWeekRate - lastWeekRate,
+      };
+    })
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+}

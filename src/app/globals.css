@@ -58,6 +58,77 @@ body {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+
+  /* Zero out all Growzok custom animation classes */
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-scale-in,
+  .animate-pulse-subtle,
+  .animate-shimmer::after {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ─── Print / PDF Report Export ─────────────────────────────────────────────
+   Activated via window.print() — zero server cost. Hides nav chrome and
+   renders a clean, black-on-white analytics report layout.
+────────────────────────────────────────────────────────────────────────────── */
+@media print {
+  /* Hide all navigation, sidebars, buttons, and interactive chrome */
+  nav,
+  aside,
+  header,
+  footer,
+  [data-print-hidden],
+  button,
+  a[href] {
+    display: none !important;
+  }
+
+  /* Reset backgrounds and shadows to paper white */
+  body,
+  html,
+  main,
+  [class*="bg-["],
+  [class*="dark:bg-"] {
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+
+  /* Ensure full width content on paper */
+  main,
+  .print-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Keep borders visible on print */
+  [class*="border"] {
+    border-color: #d1d5db !important;
+  }
+
+  /* Page break control */
+  .print-break-before { page-break-before: always; }
+  .print-break-inside-avoid { page-break-inside: avoid; }
+
+  /* Print-specific heading styles */
+  h1 { font-size: 22pt !important; }
+  h2 { font-size: 14pt !important; }
+  p, li, span { font-size: 10pt !important; }
+
+  /* Ensure progress bars print */
+  [class*="bg-gradient"],
+  [class*="bg-[#406852]"],
+  [class*="bg-[#232f26]"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
 

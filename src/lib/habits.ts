@@ -19,11 +19,20 @@ async function collection() {
   return db.collection<HabitDoc>(COLLECTION);
 }
 
-export async function listHabits(userId: string): Promise<Habit[]> {
+export async function listHabits(
+  userId: string,
+  { includeArchived = false }: { includeArchived?: boolean } = {}
+): Promise<Habit[]> {
   const col = await collection();
-  const docs = await col.find({ userId }).sort({ createdAt: 1 }).toArray();
+  // By default exclude archived habits from active dashboard; reports pass includeArchived=true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filter: any = includeArchived
+    ? { userId }
+    : { userId, $or: [{ status: "active" }, { status: { $exists: false } }] };
+  const docs = await col.find(filter).sort({ createdAt: 1 }).toArray();
   return docs.map(serializeHabit);
 }
+
 
 export async function createHabit(
   userId: string,

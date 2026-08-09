@@ -9,6 +9,7 @@ import {
   parseTarget,
   parseUserLabel,
 } from "@/lib/habitInput";
+import { checkRateLimit, getClientIp } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,14 @@ export async function POST(request: Request) {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Rate limit: 30 habit mutations per user per minute
+    if (!checkRateLimit(`habits:${session.user.id}`, { limit: 30, windowMs: 60_000 })) {
+      return NextResponse.json(
+        { error: "Too many requests. Please slow down." },
+        { status: 429 }
+      );
     }
 
     const body = await request.json().catch(() => ({}));

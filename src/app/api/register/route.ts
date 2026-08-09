@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createUser, getUserByEmail } from "@/lib/users";
 import { hashPassword, MAX_PASSWORD_LENGTH } from "@/lib/password";
 import { EmailTakenError } from "@/types/user";
+import { checkRateLimit, getClientIp } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,15 @@ const MIN_PASSWORD = 8;
 
 export async function POST(request: Request) {
   try {
+    // Rate limit: 5 registration attempts per IP per minute
+    const ip = getClientIp(request);
+    if (!checkRateLimit(`register:${ip}`, { limit: 5, windowMs: 60_000 })) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please wait a moment and try again." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json().catch(() => ({}));
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email =

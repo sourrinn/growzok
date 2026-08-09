@@ -42,6 +42,7 @@ function makeHabit(overrides: Partial<Habit>): Habit {
     createdAt: dateStrOffset(-30) + "T00:00:00.000Z",
     history: [],
     completions: [],
+    status: "active",
     ...overrides,
   };
 }

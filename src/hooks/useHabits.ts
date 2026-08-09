@@ -40,6 +40,7 @@ interface UseHabits {
   toggleHabit: (id: string) => Promise<void>;
   logProgress: (id: string, value: number) => Promise<void>;
   deleteHabit: (id: string) => Promise<void>;
+  archiveHabit: (id: string, archive: boolean) => Promise<void>;
 }
 
 /** Session expired or missing → send the user to the login page. */
@@ -254,6 +255,26 @@ export function useHabits(): UseHabits {
     [habits]
   );
 
+  const archiveHabit = useCallback(
+    async (id: string, archive: boolean) => {
+      const res = await fetch(`/api/habits/${id}/archive`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: archive ? "archived" : "active" }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error ?? "Could not update habit status.");
+      }
+      setHabits((prev) =>
+        prev.map((h) =>
+          h.id === id ? { ...h, status: archive ? "archived" : "active" } : h
+        )
+      );
+    },
+    []
+  );
+
   return {
     habits,
     loading,
@@ -264,5 +285,6 @@ export function useHabits(): UseHabits {
     toggleHabit,
     logProgress,
     deleteHabit,
+    archiveHabit,
   };
 }

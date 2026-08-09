@@ -129,6 +129,8 @@ export interface HabitDoc {
   /** Completed days as 'YYYY-MM-DD' strings. */
   history: string[];
   completions: { date: string; completedAt: Date }[];
+  /** 'active' (default) | 'archived' — soft delete preserving history for analytics */
+  status?: "active" | "archived";
 }
 
 /** Shape sent to the client (JSON-safe). Deliberately omits `userId`. */
@@ -150,6 +152,8 @@ export interface Habit {
   createdAt: string;
   history: string[];
   completions: Completion[];
+  /** 'active' (default) | 'archived' — soft delete preserving history for analytics */
+  status: "active" | "archived";
 }
 
 export function serializeHabit(doc: HabitDoc): Habit {
@@ -181,5 +185,6 @@ export function serializeHabit(doc: HabitDoc): Habit {
       date: c.date,
       completedAt: c.completedAt.toISOString(),
     })),
+    status: doc.status ?? "active",
   };
 }

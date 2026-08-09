@@ -19,8 +19,6 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { data: session } = useSession();
 
-  const userInitial = session?.user?.name?.[0] || session?.user?.email?.[0] || "U";
-
   useEffect(() => {
     const saved = localStorage.getItem("growzok_sidebar_collapsed");
     if (saved !== null) {
@@ -86,13 +84,16 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
           </span>
         </Link>
 
-        {/* Right: Profile Account Tab */}
+        {/* Right: Profile Account Tab (Light theme, Profile SVG symbol, No text) */}
         <Link
           href="/account"
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] font-bold text-xs shadow-xs border border-[#e5e1d7] dark:border-[#3f3f46] active:scale-95 transition-all uppercase shrink-0"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs active:scale-95 transition-all shrink-0"
           aria-label="Profile Account Settings"
         >
-          {userInitial}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </Link>
       </div>
 

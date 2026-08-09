@@ -133,7 +133,7 @@ export default function AddHabit({
           {/* Label Pill */}
           <div className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] px-3 py-2 font-medium text-[#232f26] dark:text-[#f4f4f5] justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0">
-              Label -
+              Label
             </span>
             <input
               type="text"
@@ -147,7 +147,7 @@ export default function AddHabit({
 
           {/* Biological Domain Dropdown */}
           <CustomSelect
-            prefixLabel="Domain - "
+            prefixLabel="Domain "
             options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
             value={domain}
             onChange={(val) => setDomain(val as HabitDomain)}
@@ -156,7 +156,7 @@ export default function AddHabit({
 
           {/* Schedule Dropdown */}
           <CustomSelect
-            prefixLabel="Schedule - "
+            prefixLabel="Schedule "
             options={FREQ_OPTIONS}
             value={freqKind}
             onChange={(val) => setFreqKind(val as FrequencyKind)}

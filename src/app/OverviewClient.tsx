@@ -40,6 +40,10 @@ const FAQS = [
     q: "Is Growzok private and secure?",
     a: "Every account operates under strict user-level data isolation. Passwords are derived using Node's scrypt algorithm, and session data is handled with secure JWT tokens.",
   },
+  {
+    q: "Can I export my habit data?",
+    a: "Absolutely. Growzok supports 1-click JSON backup exports, CSV table exports, and iCal (.ics) calendar feed subscriptions for Google Calendar and Apple Calendar with zero paid lockouts.",
+  },
 ];
 
 export default function OverviewClient() {
@@ -56,7 +60,7 @@ export default function OverviewClient() {
   return (
     // Locked strictly to Light Mode palette for crisp marketing presentation
     <div className="min-h-screen bg-[#fbf9f5] text-[#232f26] selection:bg-[#406852]/20">
-      {/* Top Marketing Navbar */}
+      {/* 1. Top Marketing Navbar */}
       <header className="sticky top-0 z-50 border-b border-[#e5e1d7]/80 bg-[#fbf9f5]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2.5">
@@ -68,7 +72,7 @@ export default function OverviewClient() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm font-medium sm:flex">
+          <nav className="hidden items-center gap-7 text-sm font-semibold sm:flex">
             <a href="#features" className="text-[#737970] transition-colors hover:text-[#232f26]">
               Why Growzok
             </a>
@@ -80,6 +84,9 @@ export default function OverviewClient() {
             </a>
             <a href="#systems" className="text-[#737970] transition-colors hover:text-[#232f26]">
               Protocols
+            </a>
+            <a href="#mastery" className="text-[#737970] transition-colors hover:text-[#232f26]">
+              Mastery
             </a>
             <a href="#faq" className="text-[#737970] transition-colors hover:text-[#232f26]">
               FAQ
@@ -97,15 +104,14 @@ export default function OverviewClient() {
               href="/register"
               className="rounded-xl bg-[#232f26] px-4.5 py-2 text-sm font-semibold text-[#fbf9f5] transition-all hover:bg-black active:scale-[0.98] shadow-xs"
             >
-              Get Started Free
+              Get Started Free →
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* 2. Hero Section & Interactive Demo Widget */}
       <section className="relative overflow-hidden py-16 sm:py-24">
-        {/* Soft background glow */}
         <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-[#406852]/10 blur-3xl" />
         <div className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-[#d4cca9]/20 blur-3xl" />
 
@@ -118,7 +124,7 @@ export default function OverviewClient() {
               </span>
 
               <h1 className="font-display text-4xl font-bold tracking-tight text-[#232f26] sm:text-5xl lg:text-6xl leading-[1.1]">
-                Master Your Daily Rhythm with Science-Backed Habit Systems.
+                Master Your Daily Rhythm with Biological Precision.
               </h1>
 
               <p className="max-w-xl text-base text-[#737970] sm:text-lg leading-relaxed">
@@ -136,13 +142,13 @@ export default function OverviewClient() {
                   href="/protocols"
                   className="rounded-xl border border-[#e5e1d7] bg-white px-6 py-3.5 text-sm font-semibold text-[#232f26] transition-all hover:border-[#232f26]/40 hover:bg-gray-50 shadow-xs"
                 >
-                  Browse Habit Systems
+                  Explore Protocols ➔
                 </Link>
               </div>
 
               <div className="flex flex-wrap items-center gap-6 pt-4 text-xs text-[#737970]">
                 <div className="flex items-center gap-1.5 font-medium">
-                  <span className="text-[#be5a38] font-bold">•</span> 100% Free Core Tracking
+                  <span className="text-[#be5a38] font-bold">•</span> 100% Free Core Engine
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <span className="text-[#be5a38] font-bold">•</span> No Credit Card Required
@@ -235,8 +241,32 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Why Traditional Habit Apps Fail You (Targeting Insecurities) */}
-      <section id="features" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white/70">
+      {/* 3. Stats & Trust Banner Bar */}
+      <section className="border-y border-[#e5e1d7] bg-white/80 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+            <div className="space-y-1">
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#232f26]">16 Domains</p>
+              <p className="text-xs font-medium text-[#737970]">Fixed Biological Categories</p>
+            </div>
+            <div className="space-y-1">
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#406852]">100% Privacy</p>
+              <p className="text-xs font-medium text-[#737970]">0 Tracking & 1-Click JSON/iCal</p>
+            </div>
+            <div className="space-y-1">
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#232f26]">0kB Audio</p>
+              <p className="text-xs font-medium text-[#737970]">GPU Web Audio Ambient Engine</p>
+            </div>
+            <div className="space-y-1">
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#be5a38]">Streak Freeze</p>
+              <p className="text-xs font-medium text-[#737970]">1 Monthly Travel Grace Pass</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Why Traditional Habit Apps Fail You (Targeting Insecurities) */}
+      <section id="features" className="py-16 sm:py-24 bg-[#fbf9f5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center">
             <span className="inline-block rounded-full bg-[#be5a38]/10 px-3.5 py-1 text-xs font-bold text-[#be5a38] uppercase tracking-wider mb-4">
@@ -245,7 +275,7 @@ export default function OverviewClient() {
             <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
               Why Traditional To-Do & Habit Apps Keep Failing You.
             </h2>
-            <p className="mx-auto max-w-2xl text-sm text-[#737970] sm:text-base">
+            <p className="mx-auto max-w-2xl text-sm text-[#737970] sm:text-base mt-2">
               Generic list apps treat humans like cold machinery. When life happens, rigid streaks reset to 0, guilt sets in, and you relapse. Growzok is built on behavioral biology.
             </p>
           </div>
@@ -306,8 +336,8 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Interactive Soundscape Sampler Section */}
-      <section id="focus" className="border-t border-[#e5e1d7] py-16 sm:py-24">
+      {/* 5. Interactive Focus Engine & Ambient Soundscape Sampler */}
+      <section id="focus" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-12">
             <div className="space-y-4 lg:col-span-6">
@@ -331,7 +361,7 @@ export default function OverviewClient() {
             </div>
 
             <div className="lg:col-span-6">
-              <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-xl space-y-4">
+              <div className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-xl space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#737970]">
                   Interactive Soundscape Sampler
                 </h3>
@@ -348,7 +378,7 @@ export default function OverviewClient() {
                       className={`flex flex-col text-left p-3.5 rounded-xl border text-xs transition-all ${
                         activeSound === snd.id
                           ? "border-[#406852] bg-[#406852]/10 text-[#406852]"
-                          : "border-[#e5e1d7] bg-[#fbf9f5] text-[#232f26]"
+                          : "border-[#e5e1d7] bg-white text-[#232f26]"
                       }`}
                     >
                       <span className="font-bold">{snd.label}</span>
@@ -365,8 +395,8 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Biological Domains Showcase */}
-      <section id="taxonomy" className="border-t border-[#e5e1d7] bg-white py-16 sm:py-24">
+      {/* 6. Biological Domains Showcase */}
+      <section id="taxonomy" className="border-t border-[#e5e1d7] bg-[#fbf9f5] py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5 space-y-4">
@@ -390,11 +420,11 @@ export default function OverviewClient() {
             </div>
 
             <div className="lg:col-span-7">
-              <div className="flex flex-wrap gap-2.5 rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-inner">
+              <div className="flex flex-wrap gap-2.5 rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-inner">
                 {DOMAIN_BADGES.map((domain) => (
                   <span
                     key={domain}
-                    className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs font-semibold text-[#232f26] shadow-xs"
+                    className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3.5 py-2 text-xs font-semibold text-[#232f26] shadow-xs hover:border-[#406852] transition-colors"
                   >
                     {domain}
                   </span>
@@ -405,13 +435,13 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Preset Systems Spotlight */}
-      <section id="systems" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-[#fbf9f5]">
+      {/* 7. Preset Systems Spotlight */}
+      <section id="systems" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26]">
-                Featured Habit Systems
+                Featured Science Protocols
               </h2>
               <p className="mt-1 text-sm text-[#737970]">
                 Pre-configured bundles designed by human performance experts.
@@ -426,7 +456,7 @@ export default function OverviewClient() {
           </div>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
+            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Morning Routine
@@ -449,7 +479,7 @@ export default function OverviewClient() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
+            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Productivity & Focus
@@ -472,7 +502,7 @@ export default function OverviewClient() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
+            <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Evening Wind-Down
@@ -498,7 +528,56 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* FAQ Accordion Section */}
+      {/* 8. System Mastery & Gamification Preview */}
+      <section id="mastery" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-[#fbf9f5]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-2">
+            <span className="inline-block rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] uppercase tracking-wider mb-2">
+              Identity & Long-Term Mastery
+            </span>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
+              Turn Daily Habits into Unshakeable System XP.
+            </h2>
+            <p className="mx-auto max-w-xl text-sm text-[#737970]">
+              Level up your character, unlock milestone trophies, and visualize a 365-day SVG consistency density grid.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-xl space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#e5e1d7] pb-4">
+              <div className="flex items-center gap-3">
+                <span className="rounded-full bg-[#406852] px-3 py-1 text-xs font-bold text-white uppercase">
+                  Level 14
+                </span>
+                <div>
+                  <h3 className="font-bold text-base text-[#232f26]">Habit Architect</h3>
+                  <p className="text-xs text-[#737970]">1,450 System XP • 5 Unlocked Trophies</p>
+                </div>
+              </div>
+              <span className="text-xs font-bold text-[#406852]">72% to Level 15</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { icon: "🌱", name: "First Step", desc: "First completion logged" },
+                { icon: "⚡", name: "Habit Apprentice", desc: "25 habit completions" },
+                { icon: "🔥", name: "Week Warrior", desc: "7-day unbroken streak" },
+                { icon: "🧘", name: "Zen Master", desc: "20+ Breathing logs" },
+              ].map((b, i) => (
+                <div key={i} className="flex items-center gap-2.5 rounded-xl border border-[#406852]/30 bg-[#e3ede6]/40 p-3 text-xs">
+                  <span className="text-xl">{b.icon}</span>
+                  <div>
+                    <p className="font-bold text-[#232f26]">{b.name}</p>
+                    <p className="text-[10px] text-[#737970]">{b.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. FAQ Accordion Section */}
       <section id="faq" className="border-t border-[#e5e1d7] bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="text-center space-y-2">
@@ -549,7 +628,7 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Bottom CTA Banner */}
+      {/* 10. Bottom CTA Banner */}
       <section className="border-t border-[#e5e1d7] bg-[#232f26] py-16 text-center text-[#fbf9f5]">
         <div className="mx-auto max-w-3xl px-4 space-y-4">
           <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
@@ -569,7 +648,7 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* 11. Footer */}
       <footer className="border-t border-[#e5e1d7] bg-[#fbf9f5] py-8 text-xs text-[#737970]">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">

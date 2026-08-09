@@ -73,9 +73,9 @@ export default function ReportsView() {
 
   if (habits.length === 0) {
     return (
-      <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center">
-        <h2 className="font-display text-2xl font-semibold text-[#232f26]">No Habit Data Yet</h2>
-        <p className="mt-2 text-sm text-[#737970]">
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
+        <h2 className="font-display text-2xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">No Habit Data Yet</h2>
+        <p className="mt-2 text-sm text-[#737970] dark:text-[#a1a1aa]">
           Plant your first habit on the dashboard to unlock comprehensive analytics and report insights.
         </p>
       </div>

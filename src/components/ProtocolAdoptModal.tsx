@@ -136,7 +136,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
   return (
     /* Backdrop */
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 backdrop-blur-xs sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 backdrop-blur-md sm:items-center"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

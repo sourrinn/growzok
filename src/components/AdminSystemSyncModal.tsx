@@ -43,7 +43,7 @@ export default function AdminSystemSyncModal({ onClose, onSyncComplete }: Props)
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
       <div className="w-full max-w-lg rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-2xl space-y-5 dark:border-[#27272a] dark:bg-[#18181b] animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-3 dark:border-[#27272a]">

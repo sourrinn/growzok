@@ -108,7 +108,7 @@ export default function EditHabitModal({ habit, onSave, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-fade-in"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 sm:p-7 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto overflow-x-hidden animate-scale-in">

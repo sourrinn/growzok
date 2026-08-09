@@ -45,11 +45,11 @@ export default function DashboardSidebar({ habits }: Props) {
         <div className="mt-3 flex items-center gap-3">
           <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#27272a]">
             <div
-              className="h-full bg-[#232f26] dark:bg-[#f4f4f5] transition-all duration-500"
+              className="h-full bg-gradient-to-r from-[#232f26] to-[#406852] dark:from-[#3f3f46] dark:to-[#f4f4f5] transition-all duration-500 rounded-full"
               style={{ width: `${completionPct}%` }}
             />
           </div>
-          <span className="text-sm font-semibold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
+          <span className="text-sm font-bold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
             {completionPct}%
           </span>
         </div>
@@ -70,7 +70,7 @@ export default function DashboardSidebar({ habits }: Props) {
           <ul className="space-y-2.5">
             {habitsWithStreaks.map(({ habit, streak }) => (
               <li key={habit.id} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2 truncate">
+                <div className="flex items-center gap-2 truncate pr-2">
                   <span
                     className="h-2.5 w-2.5 shrink-0 rounded-full"
                     style={{ backgroundColor: habit.color }}
@@ -79,8 +79,9 @@ export default function DashboardSidebar({ habits }: Props) {
                     {habit.name}
                   </span>
                 </div>
-                <span className="shrink-0 rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a] px-2.5 py-0.5 text-xs font-medium tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
-                  {streak}d streak
+                <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a] px-2.5 py-0.5 text-xs font-semibold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
+                  <span>🔥</span>
+                  <span>{streak}d</span>
                 </span>
               </li>
             ))}

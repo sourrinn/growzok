@@ -75,7 +75,7 @@ export default function AdminDependencyWarningModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md animate-fade-in"
       onClick={(e) => {
         if (e.target === e.currentTarget && !deleting) onClose();
       }}

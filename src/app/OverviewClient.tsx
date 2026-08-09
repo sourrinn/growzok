@@ -1,7 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
+import { useTheme } from "@/components/ThemeProvider";
+import { playFocusFinishChime } from "@/lib/soundChimes";
 
 const DOMAIN_BADGES = [
   "Sleep",
@@ -42,14 +42,17 @@ const FAQS = [
 ];
 
 export default function OverviewClient() {
+  const { theme, setTheme } = useTheme();
   const [demoDone, setDemoDone] = useState(false);
   const [demoCount, setDemoCount] = useState(4);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeSound, setActiveSound] = useState<string | null>(null);
 
   const toggleDemo = () => {
     setDemoDone((prev) => !prev);
     setDemoCount((prev) => (demoDone ? prev - 1 : prev + 1));
   };
+
 
   return (
     <div className="min-h-screen bg-[#fbf9f5] dark:bg-[#09090b] text-[#232f26] dark:text-[#f4f4f5] selection:bg-[#406852]/20 dark:selection:bg-white/20">
@@ -81,9 +84,23 @@ export default function OverviewClient() {
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Header Theme Switcher Selector */}
+            <select
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as any)}
+              className="rounded-xl border border-[#e5e1d7] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] focus:outline-none cursor-pointer"
+              aria-label="Color Mode Preference"
+            >
+              <option value="light">☀️ Light</option>
+              <option value="dark">🌙 Dark</option>
+              <option value="amoled">🖤 OLED Pitch Black</option>
+              <option value="auto">🌅 Auto (6am–8pm)</option>
+              <option value="system">💻 System</option>
+            </select>
+
             <Link
               href="/login"
-              className="px-3.5 py-1.5 text-sm font-medium text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
+              className="px-3 py-1.5 text-sm font-medium text-[#737970] dark:text-[#a1a1aa] transition-colors hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
             >
               Sign In
             </Link>
@@ -229,45 +246,131 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* Feature Pillars Section */}
-      <section id="features" className="border-t border-[#e5e1d7] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-[#232f26] sm:text-4xl">
-              Built for Consistency, Not Pressure.
+      {/* Why Traditional Habit Apps Fail You (Targeting Insecurities) */}
+      <section className="border-t border-[#e5e1d7] dark:border-[#27272a] py-16 sm:py-24 bg-white/50 dark:bg-[#121215]/50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center space-y-3">
+            <span className="rounded-full bg-[#be5a38]/10 px-3.5 py-1 text-xs font-bold text-[#be5a38] uppercase tracking-wider">
+              The Behavioral Reality Check
+            </span>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5] sm:text-4xl">
+              Why Traditional To-Do & Habit Apps Keep Failing You.
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-[#737970] sm:text-base">
-              Growzok removes guilt-inducing penalties and focuses on long-term behavioral momentum.
+            <p className="mx-auto max-w-2xl text-sm text-[#737970] dark:text-[#a1a1aa] sm:text-base">
+              Generic list apps treat humans like cold machinery. When life happens, rigid streaks reset to 0, guilt sets in, and you relapse. Growzok is built on behavioral biology.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <h3 className="mt-2 text-base font-semibold text-[#232f26]">3-Tier Biological Taxonomy</h3>
-              <p className="mt-2 text-xs leading-relaxed text-[#737970]">
-                Every habit is anchored to 16 biological & behavioral domains (Sleep, Hydration, Recovery) for scientific tracking.
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl border border-[#be5a38]/20 bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-xs space-y-3">
+              <span className="text-2xl">⚡</span>
+              <h3 className="font-bold text-sm text-[#be5a38]">The Thursday Burnout Relapse</h3>
+              <p className="text-xs text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+                <strong className="text-[#232f26] dark:text-[#f4f4f5]">Insecurity:</strong> "I start strong on Monday, get overwhelmed by Thursday, and give up."
               </p>
+              <div className="pt-2 border-t border-[#e5e1d7] dark:border-[#27272a]">
+                <p className="text-xs font-semibold text-[#406852] dark:text-[#a3b899]">
+                  ✓ Growzok Fix: Non-penalizing weekday schedules & Heuristic AI Coach scaling targets before you crash.
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <h3 className="mt-2 text-base font-semibold text-[#232f26]">Frequency-Aware Streaks</h3>
-              <p className="mt-2 text-xs leading-relaxed text-[#737970]">
-                Weekday habits aren't penalized on weekends. Times-per-week goals measure target completion without daily stress.
+            <div className="rounded-2xl border border-[#be5a38]/20 bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-xs space-y-3">
+              <span className="text-2xl">📱</span>
+              <h3 className="font-bold text-sm text-[#be5a38]">Phone Distraction Trap</h3>
+              <p className="text-xs text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+                <strong className="text-[#232f26] dark:text-[#f4f4f5]">Insecurity:</strong> "Opening my phone to check off a habit leads to 45 mins of doomscrolling."
               </p>
+              <div className="pt-2 border-t border-[#e5e1d7] dark:border-[#27272a]">
+                <p className="text-xs font-semibold text-[#406852] dark:text-[#a3b899]">
+                  ✓ Growzok Fix: Full-Screen Distraction-Free Focus Mode with 0kB browser-native ambient soundscapes.
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <h3 className="mt-2 text-base font-semibold text-[#232f26]">Numeric Target Tracking</h3>
-              <p className="mt-2 text-xs leading-relaxed text-[#737970]">
-                Track glasses, minutes, kilometers, or currency. Log values seamlessly while streaks update underneath.
+            <div className="rounded-2xl border border-[#be5a38]/20 bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-xs space-y-3">
+              <span className="text-2xl">❓</span>
+              <h3 className="font-bold text-sm text-[#be5a38]">Decision Paralysis</h3>
+              <p className="text-xs text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+                <strong className="text-[#232f26] dark:text-[#f4f4f5]">Insecurity:</strong> "I don't know what routines actually optimize my energy, sleep, and focus."
               </p>
+              <div className="pt-2 border-t border-[#e5e1d7] dark:border-[#27272a]">
+                <p className="text-xs font-semibold text-[#406852] dark:text-[#a3b899]">
+                  ✓ Growzok Fix: 16 Biological Domains & 1-Click Science-Backed Protocols (Neuroscience, Circadian).
+                </p>
+              </div>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
-              <h3 className="mt-2 text-base font-semibold text-[#232f26]">1-Tap Preset Systems</h3>
-              <p className="mt-2 text-xs leading-relaxed text-[#737970]">
-                Adopt morning neuro-resets, deep work focus setups, and financial hygiene bundles in a single click.
+            <div className="rounded-2xl border border-[#be5a38]/20 bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-xs space-y-3">
+              <span className="text-2xl">💸</span>
+              <h3 className="font-bold text-sm text-[#be5a38]">Subscription Paywalls</h3>
+              <p className="text-xs text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+                <strong className="text-[#232f26] dark:text-[#f4f4f5]">Insecurity:</strong> "I'm tired of $10/mo habit apps that lock my history behind paywalls."
               </p>
+              <div className="pt-2 border-t border-[#e5e1d7] dark:border-[#27272a]">
+                <p className="text-xs font-semibold text-[#406852] dark:text-[#a3b899]">
+                  ✓ Growzok Fix: 100% Free Core Platform with 0 Paid Lockouts & 1-Click iCal/JSON/CSV Data Ownership.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Soundscape Sampler Section */}
+      <section className="border-t border-[#e5e1d7] dark:border-[#27272a] py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-12">
+            <div className="space-y-4 lg:col-span-6">
+              <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+                0kB Web Audio Synthesizer
+              </span>
+              <h2 className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5] sm:text-4xl">
+                Lock Into Deep Focus. Zero Distractions.
+              </h2>
+              <p className="text-sm text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+                Our in-browser Web Audio engine generates ambient soundscapes directly inside your GPU without streaming heavy MP3 files or relying on Spotify ads.
+              </p>
+              <div className="pt-2">
+                <button
+                  onClick={() => playFocusFinishChime()}
+                  className="rounded-xl bg-[#406852] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#232f26] transition-all shadow-xs"
+                >
+                  🔔 Test Web Audio Completion Chime
+                </button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6">
+              <div className="rounded-2xl border border-[#e5e1d7] bg-white p-6 dark:border-[#27272a] dark:bg-[#18181b] shadow-xl space-y-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+                  Interactive Soundscape Sampler
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { id: "rain", label: "🌧️ Rain Soundscape", desc: "Low-pass pink noise" },
+                    { id: "forest", label: "🌲 Forest Ambient", desc: "Filtered organic noise" },
+                    { id: "pinknoise", label: "🌸 Pink Noise", desc: "-3dB/octave spectrum" },
+                    { id: "whitenoise", label: "🌫️ White Noise", desc: "Pure uniform focus" },
+                  ].map((snd) => (
+                    <button
+                      key={snd.id}
+                      onClick={() => setActiveSound(activeSound === snd.id ? null : snd.id)}
+                      className={`flex flex-col text-left p-3.5 rounded-xl border text-xs transition-all ${
+                        activeSound === snd.id
+                          ? "border-[#406852] bg-[#406852]/10 text-[#406852] dark:border-[#a3b899] dark:text-[#a3b899]"
+                          : "border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] text-[#232f26] dark:text-[#f4f4f5]"
+                      }`}
+                    >
+                      <span className="font-bold">{snd.label}</span>
+                      <span className="text-[10px] text-[#737970] dark:text-[#a1a1aa] mt-0.5">{snd.desc}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] text-center">
+                  {activeSound ? `▶ Playing ${activeSound} sample in-browser...` : "Click any soundscape above to test live"}
+                </p>
+              </div>
             </div>
           </div>
         </div>

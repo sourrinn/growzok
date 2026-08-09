@@ -26,6 +26,7 @@ export default function HabitDashboard() {
   } = useHabits();
 
   const [filter, setFilter] = useState<string>("All");
+  const [domainFilter, setDomainFilter] = useState<string>("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyPending, setOnlyPending] = useState<boolean>(false);
@@ -74,8 +75,9 @@ export default function HabitDashboard() {
   // Multi-tier filtering for high-density 20+ habits
   const filteredHabits = useMemo(() => {
     return habits.filter((h) => {
-      // 1. Label Filter
+      // 1. Label Filter & Domain Filter
       if (filter !== "All" && h.userLabel !== filter) return false;
+      if (domainFilter !== "All" && h.domain !== domainFilter) return false;
 
       // 2. Search Query Filter
       if (searchQuery.trim()) {
@@ -95,7 +97,8 @@ export default function HabitDashboard() {
 
       return true;
     });
-  }, [habits, filter, searchQuery, statusFilter, onlyPending, today]);
+  }, [habits, filter, domainFilter, searchQuery, statusFilter, onlyPending, today]);
+
 
   return (
     <div className="space-y-8">
@@ -177,6 +180,26 @@ export default function HabitDashboard() {
           {/* Smart Priority Digest Card */}
           {!loading && habits.length > 0 && (
             <SmartPriorityCard habits={habits} onToggle={toggleHabit} />
+          )}
+
+          {/* Biological Domain Quick Filter Chips */}
+          {!loading && habits.length > 0 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              {["All", "Sleep", "Hydration", "Cardio", "Strength", "Breathing", "Productivity", "Digital Minimalism"].map((dom) => (
+                <button
+                  key={dom}
+                  type="button"
+                  onClick={() => setDomainFilter(dom)}
+                  className={`rounded-xl px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
+                    domainFilter === dom
+                      ? "bg-[#406852] text-white dark:bg-[#a3b899] dark:text-[#18181b] shadow-xs"
+                      : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
+                  }`}
+                >
+                  {dom}
+                </button>
+              ))}
+            </div>
           )}
 
           <AddHabit onAdd={addHabit} />

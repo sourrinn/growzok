@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import AppShell from "@/components/AppShell";
-import { getProtocolByKey } from "@/lib/protocols";
+import { getProtocolByKey, getSimilarProtocols } from "@/lib/protocols";
 import { frequencyLabel } from "@/lib/frequency";
 import AdoptSection from "./AdoptSection";
 import { getDb } from "@/lib/mongodb";
@@ -258,6 +258,49 @@ export default async function ProtocolDetailPage({ params }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Similar Protocols Recommendation Rail */}
+            {(() => {
+              const similar = getSimilarProtocols(protocol.key);
+              if (similar.length === 0) return null;
+              return (
+                <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">
+                  <div>
+                    <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+                      Recommended Biological Synergies
+                    </h2>
+                    <p className="text-sm font-bold text-[#232f26] dark:text-[#f4f4f5] mt-0.5">
+                      Similar Science-Backed Protocols You May Like
+                    </p>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {similar.map((p) => (
+                      <Link
+                        key={p.key}
+                        href={`/protocols/${p.key}`}
+                        className="group flex flex-col justify-between rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 dark:border-[#27272a] dark:bg-[#121215] hover:border-[#406852] transition-all"
+                      >
+                        <div>
+                          <span className="rounded-full bg-[#406852]/10 px-2 py-0.5 text-[9px] font-bold text-[#406852] dark:text-[#a3b899]">
+                            {p.category}
+                          </span>
+                          <h3 className="font-display font-bold text-sm text-[#232f26] dark:text-[#f4f4f5] mt-2 group-hover:text-[#406852] transition-colors">
+                            {p.name}
+                          </h3>
+                          <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] line-clamp-2 mt-1">
+                            {p.tagline}
+                          </p>
+                        </div>
+                        <span className="text-xs font-semibold text-[#406852] dark:text-[#a3b899] mt-3 group-hover:underline">
+                          View Protocol →
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       </div>

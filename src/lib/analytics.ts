@@ -90,13 +90,24 @@ export function computeCurrentStreak(habit: Habit): number {
   if (isTrackableDate(habit.frequency, today) && !set.has(today)) offset = -1;
 
   let streak = 0;
+  let freezePassesUsed = 0;
+  const maxMonthlyFreezePasses = 1; // 1 free streak freeze per month
+
   for (let i = 0; i < 3650; i++) {
     const dateStr = dateStrOffset(offset);
     if (!isTrackableDate(habit.frequency, dateStr)) {
       offset--;
       continue;
     }
-    if (!set.has(dateStr)) break;
+    if (!set.has(dateStr)) {
+      // Check if 1 monthly Streak Freeze pass can protect this single missing day
+      if (freezePassesUsed < maxMonthlyFreezePasses && streak > 0) {
+        freezePassesUsed++;
+        offset--;
+        continue;
+      }
+      break;
+    }
     streak++;
     offset--;
   }

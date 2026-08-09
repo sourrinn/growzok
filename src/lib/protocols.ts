@@ -391,3 +391,32 @@ export const getTemplatesByCategory = getProtocolsByCategory;
 export function getAvailableCategories(): ProtocolCategory[] {
   return Array.from(new Set(STANDARD_PROTOCOLS.map((p) => p.category)));
 }
+
+/**
+ * Recommends 3 similar protocols based on shared biological domains and tags.
+ * Runs 100% algorithmically with zero external API calls.
+ */
+export function getSimilarProtocols(protocolKey: string): Protocol[] {
+  const current = STANDARD_PROTOCOLS.find((p) => p.key === protocolKey);
+  if (!current) return STANDARD_PROTOCOLS.slice(0, 3);
+
+  const currentDomains = new Set(current.habits.map((h) => h.domain));
+  const currentTags = new Set(current.tags);
+
+  return STANDARD_PROTOCOLS
+    .filter((p) => p.key !== protocolKey)
+    .map((p) => {
+      let score = 0;
+      if (p.category === current.category) score += 3;
+      p.habits.forEach((h) => {
+        if (currentDomains.has(h.domain)) score += 2;
+      });
+      p.tags.forEach((t) => {
+        if (currentTags.has(t)) score += 1;
+      });
+      return { protocol: p, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((item) => item.protocol);
+}

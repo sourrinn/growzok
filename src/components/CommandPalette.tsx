@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useHabits } from "@/hooks/useHabits";
 import { STANDARD_PROTOCOLS } from "@/lib/protocols";
+import { fuzzyMatch } from "@/lib/fuzzySearch";
 
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
@@ -28,12 +29,12 @@ export default function CommandPalette() {
 
   if (!open) return null;
 
-  const filteredHabits = habits.filter((h) =>
-    h.name.toLowerCase().includes(query.toLowerCase())
+  const filteredHabits = habits.filter(
+    (h) => fuzzyMatch(h.name, query) || fuzzyMatch(h.domain, query) || fuzzyMatch(h.userLabel, query)
   );
 
-  const filteredProtocols = STANDARD_PROTOCOLS.filter((p) =>
-    p.name.toLowerCase().includes(query.toLowerCase())
+  const filteredProtocols = STANDARD_PROTOCOLS.filter(
+    (p) => fuzzyMatch(p.name, query) || fuzzyMatch(p.description, query) || p.tags.some((t) => fuzzyMatch(t, query))
   );
 
   const pages = [
@@ -42,7 +43,7 @@ export default function CommandPalette() {
     { name: "Protocols Hub", href: "/protocols", icon: "◈" },
     { name: "Account Settings", href: "/account", icon: "👤" },
     { name: "Admin Portal", href: "/admin", icon: "⚙️" },
-  ].filter((p) => p.name.toLowerCase().includes(query.toLowerCase()));
+  ].filter((p) => fuzzyMatch(p.name, query));
 
   const handleNavigate = (href: string) => {
     router.push(href);

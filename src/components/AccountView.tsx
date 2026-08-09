@@ -3,6 +3,8 @@
 import { signOut } from "next-auth/react";
 import { useTheme } from "@/components/ThemeProvider";
 import CustomSelect from "@/components/CustomSelect";
+import { useHabits } from "@/hooks/useHabits";
+import { downloadCSVFile } from "@/lib/csvExporter";
 
 interface Props {
   userName: string;
@@ -20,6 +22,7 @@ const THEME_OPTIONS = [
 
 export default function AccountView({ userName, userEmail, habitsCount }: Props) {
   const { theme, setTheme } = useTheme();
+  const { habits } = useHabits();
 
   return (
     <div className="mx-auto max-w-3xl space-y-8">
@@ -105,7 +108,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -117,6 +120,15 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
             >
               📋 Copy Feed Link
             </button>
+
+            <button
+              type="button"
+              onClick={() => downloadCSVFile(habits)}
+              className="rounded-xl border border-[#406852] bg-[#406852]/10 px-3.5 py-2 text-xs font-bold text-[#406852] dark:border-[#a3b899] dark:text-[#a3b899] shadow-xs hover:bg-[#406852]/20"
+            >
+              📊 Export CSV Dataset
+            </button>
+
             <a
               href="/api/user/export"
               download

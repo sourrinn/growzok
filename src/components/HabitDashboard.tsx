@@ -6,6 +6,7 @@ import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import SmartPriorityCard from "@/components/SmartPriorityCard";
+import WelcomeBackBanner from "@/components/WelcomeBackBanner";
 import OnboardingWizardModal from "@/components/OnboardingWizardModal";
 import { todayStr } from "@/lib/dates";
 import type { HabitDomain } from "@/types/habit";
@@ -177,6 +178,11 @@ export default function HabitDashboard() {
       <div className="grid gap-8 lg:grid-cols-12">
         {/* Left / Center Main Content (8 cols on desktop) */}
         <div className="space-y-6 lg:col-span-8">
+          {/* Welcome Back Momentum Reset Banner */}
+          {!loading && habits.length > 0 && (
+            <WelcomeBackBanner habits={habits} />
+          )}
+
           {/* Smart Priority Digest Card */}
           {!loading && habits.length > 0 && (
             <SmartPriorityCard habits={habits} onToggle={toggleHabit} />

@@ -42,7 +42,12 @@ export default function ProtocolsView() {
   }, []);
 
   const allProtocols = useMemo(() => {
-    return [...STANDARD_PROTOCOLS, ...customProtocols];
+    const map = new Map<string, Protocol>();
+    // Standard catalog presets first
+    STANDARD_PROTOCOLS.forEach((p) => map.set(p.key, p));
+    // Org custom protocols merged without duplicating keys
+    customProtocols.forEach((p) => map.set(p.key, p));
+    return Array.from(map.values());
   }, [customProtocols]);
 
   const availableCategories = useMemo(() => {
@@ -205,7 +210,7 @@ export default function ProtocolsView() {
             ];
             const delayClass = delays[idx % delays.length];
             return (
-              <div key={p.key} className={`animate-slide-up ${delayClass}`}>
+              <div key={`${p.key}-${idx}`} className={`animate-slide-up ${delayClass}`}>
                 <ProtocolCard protocol={p} />
               </div>
             );

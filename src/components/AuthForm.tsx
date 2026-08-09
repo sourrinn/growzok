@@ -8,7 +8,7 @@ import { signIn } from "next-auth/react";
 type Mode = "login" | "register";
 
 const inputClass =
-  "w-full border-b border-mist bg-transparent px-0.5 py-2 text-base text-charcoal outline-none transition-colors placeholder:text-muted focus:border-sage";
+  "w-full border-b border-[#e5e1d7] dark:border-[#27272a] bg-transparent px-0.5 py-2 text-base text-[#232f26] dark:text-[#f4f4f5] outline-none transition-colors placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] focus:border-[#232f26] dark:focus:border-[#3f3f46]";
 
 export default function AuthForm({ mode }: { mode: Mode }) {
   const router = useRouter();
@@ -47,8 +47,6 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         redirect: false,
       });
 
-      // next-auth's signIn() can resolve to undefined (not an {error} object) in
-      // some internal fallback paths, which would otherwise read as success here.
       if (!result || result.error) {
         setError(
           isRegister
@@ -70,10 +68,10 @@ export default function AuthForm({ mode }: { mode: Mode }) {
   return (
     <div className="w-full">
       <header className="mb-8">
-        <h1 className="font-display text-3xl font-medium tracking-tight text-charcoal">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
           {isRegister ? "Create your account" : "Welcome back"}
         </h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">
           {isRegister
             ? "Start keeping your streaks."
             : "Sign in to keep your streaks."}
@@ -83,7 +81,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       <form onSubmit={submit} className="space-y-5" noValidate>
         {isRegister && (
           <label className="block">
-            <span className="mb-1.5 block text-sm font-medium text-charcoal">
+            <span className="mb-1.5 block text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">
               Name
             </span>
             <input
@@ -100,7 +98,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         )}
 
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-charcoal">
+          <span className="mb-1.5 block text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">
             Email
           </span>
           <input
@@ -115,7 +113,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-sm font-medium text-charcoal">
+          <span className="mb-1.5 block text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">
             Password
           </span>
           <input
@@ -124,7 +122,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete={isRegister ? "new-password" : "current-password"}
             minLength={isRegister ? 8 : undefined}
-            maxLength={200} // mirrors MAX_PASSWORD_LENGTH in src/lib/password.ts
+            maxLength={200}
             required
             placeholder={isRegister ? "At least 8 characters" : "Your password"}
             className={inputClass}
@@ -132,7 +130,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </label>
 
         {error && (
-          <p className="rounded border border-ember/30 bg-ember/5 px-3 py-2 text-sm text-ember">
+          <p className="rounded-xl border border-[#be5a38]/30 bg-[#be5a38]/10 px-3.5 py-2.5 text-xs font-semibold text-[#be5a38]">
             {error}
           </p>
         )}
@@ -140,7 +138,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-sm bg-charcoal py-2.5 text-sm font-medium text-ink transition-opacity hover:opacity-80 active:opacity-60 disabled:opacity-50"
+          className="w-full rounded-xl bg-[#232f26] py-3 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
         >
           {pending
             ? isRegister
@@ -152,18 +150,18 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-muted">
+      <p className="mt-6 text-sm text-[#737970] dark:text-[#a1a1aa]">
         {isRegister ? (
           <>
             Already have an account?{" "}
-            <Link href="/login" className="text-sage hover:underline">
+            <Link href="/login" className="font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:underline">
               Sign in
             </Link>
           </>
         ) : (
           <>
             New here?{" "}
-            <Link href="/register" className="text-sage hover:underline">
+            <Link href="/register" className="font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:underline">
               Create an account
             </Link>
           </>

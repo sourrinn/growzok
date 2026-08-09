@@ -79,7 +79,10 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
             {habit.name}
           </h1>
           <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">
-            {habit.category} · {frequencyLabel(habit.frequency)}
+            <span className="rounded-md bg-[#e5e1d7]/70 dark:bg-[#27272a] px-2 py-0.5 text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+              {habit.domain}
+            </span>{" "}
+            · {habit.userLabel} · {frequencyLabel(habit.frequency)}
             {habit.target && ` · goal ${habit.target.goal} ${habit.target.unit}`}
           </p>
         </div>
@@ -153,20 +156,27 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
       )}
 
       {insights.length > 0 && (
-        <div className="mb-8">
-          <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f4f4f5]">Insights</p>
-          <ul className="space-y-1.5">
+        <div className="mb-8 rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm dark:border-[#27272a] dark:bg-[#18181b]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+            Insights & Reflection Patterns
+          </p>
+          <ul className="space-y-2">
             {insights.map((text) => (
-              <li key={text} className="text-sm text-[#737970] dark:text-[#a1a1aa]">
-                {text}
+              <li key={text} className="flex items-start gap-2 text-xs leading-relaxed text-[#232f26] dark:text-[#f4f4f5]">
+                <span className="text-[#406852] dark:text-[#a1a1aa] font-bold">•</span>
+                <span>{text}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      <p className="mb-2 text-sm font-medium text-[#232f26] dark:text-[#f4f4f5]">History</p>
-      <Heatmap history={habit.history} color={habit.color} />
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 shadow-sm dark:border-[#27272a] dark:bg-[#18181b]">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+          Completion History Heatmap
+        </p>
+        <Heatmap history={habit.history} color={habit.color} />
+      </div>
     </div>
   );
 }

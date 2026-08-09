@@ -43,7 +43,7 @@ export default function Heatmap({ history, color, weeks = 20 }: Props) {
               <span
                 key={d}
                 title={d}
-                className={`h-[10px] w-[10px] rounded-[1px] ${
+                className={`h-[11px] w-[11px] rounded-[2px] transition-transform hover:scale-125 ${
                   isFuture
                     ? "bg-transparent"
                     : isDone

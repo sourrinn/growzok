@@ -5,6 +5,7 @@ import Link from "next/link";
 import { todayStr } from "@/lib/dates";
 import { computeCurrentStreak } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
+import HabitSymbolIcon from "@/components/HabitSymbolIcon";
 import type { Habit } from "@/types/habit";
 
 interface Props {
@@ -104,6 +105,7 @@ export default function CompactHabitRow({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
+            <HabitSymbolIcon domain={habit.domain} habitName={habit.name} className="h-4 w-4 shrink-0 text-[#737970] dark:text-[#a1a1aa]" />
             <Link
               href={`/habit/${habit.id}`}
               className={`truncate text-sm font-semibold transition-colors hover:underline ${

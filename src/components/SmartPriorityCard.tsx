@@ -5,6 +5,8 @@ import type { Habit } from "@/types/habit";
 import { todayStr } from "@/lib/dates";
 import { computeCurrentStreak } from "@/lib/analytics";
 
+import HabitSymbolIcon from "@/components/HabitSymbolIcon";
+
 interface Props {
   habits: Habit[];
   onToggle: (habitId: string) => void;
@@ -53,10 +55,10 @@ export default function SmartPriorityCard({ habits, onToggle }: Props) {
     <div className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fade-in">
       <div className="flex items-center gap-3">
         <div
-          className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-xs uppercase"
+          className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white shadow-xs"
           style={{ backgroundColor: habit.color }}
         >
-          {habit.name.slice(0, 2)}
+          <HabitSymbolIcon domain={habit.domain} habitName={habit.name} className="h-5 w-5 text-white" />
         </div>
         <div>
           <div className="flex items-center gap-2">

@@ -5,6 +5,7 @@ import { useHabits } from "@/hooks/useHabits";
 import LifeHUDHeader from "@/components/LifeHUDHeader";
 import CircadianClockMatrix from "@/components/CircadianClockMatrix";
 import HabitVelocitySparkline from "@/components/HabitVelocitySparkline";
+import HabitSymbolIcon from "@/components/HabitSymbolIcon";
 import { computeUserGamification } from "@/lib/gamification";
 
 export default function DashboardCommandHub() {
@@ -181,8 +182,11 @@ export default function DashboardCommandHub() {
                       ✓
                     </button>
                     <div className="min-w-0 flex-1">
-                      <h4 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5] truncate">{habit.name}</h4>
-                      <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                      <div className="flex items-center gap-1.5">
+                        <HabitSymbolIcon domain={habit.domain} habitName={habit.name} className="h-4 w-4 shrink-0 text-[#406852] dark:text-[#a3b899]" />
+                        <h4 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5] truncate">{habit.name}</h4>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa] mt-0.5">
                         <span className="rounded bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899]">
                           {habit.domain}
                         </span>

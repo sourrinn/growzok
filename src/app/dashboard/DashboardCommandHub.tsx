@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useHabits } from "@/hooks/useHabits";
 import LifeHUDHeader from "@/components/LifeHUDHeader";
-import HabitCard from "@/components/HabitCard";
+import CircadianClockMatrix from "@/components/CircadianClockMatrix";
 
 export default function DashboardCommandHub() {
   const { habits, loading, toggleHabit, logProgress } = useHabits();
@@ -95,6 +95,9 @@ export default function DashboardCommandHub() {
           </Link>
         </div>
       </div>
+
+      {/* Embedded Circadian 24-Hour Photonic Curve HUD */}
+      <CircadianClockMatrix />
 
       {/* Main Grid: Priority Habits Rail (8 cols) + Workstation Quick Launch (4 cols) */}
       <div className="grid gap-8 lg:grid-cols-12">

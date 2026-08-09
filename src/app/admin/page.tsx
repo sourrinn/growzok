@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import AppShell from "@/components/AppShell";
 import AdminPortalView from "@/components/AdminPortalView";
 
 export const metadata: Metadata = {
@@ -17,5 +18,11 @@ export default async function AdminPage() {
     redirect("/dashboard");
   }
 
-  return <AdminPortalView />;
+  const userName = session.user.name || session.user.email || "";
+
+  return (
+    <AppShell userLabel={userName}>
+      <AdminPortalView />
+    </AppShell>
+  );
 }

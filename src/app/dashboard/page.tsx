@@ -1,17 +1,10 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
-import AppShell from "@/components/AppShell";
-import HabitDashboard from "@/components/HabitDashboard";
+import DashboardCommandHub from "./DashboardCommandHub";
 
-export default async function DashboardPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+export const metadata = {
+  title: "Visionary Life OS Command Center | Growzok",
+  description: "Central command control hub for habits, circadian optics, intermittent fasting, and biometrics.",
+};
 
-  const userName = session.user.name || session.user.email || "";
-
-  return (
-    <AppShell userLabel={userName}>
-      <HabitDashboard />
-    </AppShell>
-  );
+export default function DashboardPage() {
+  return <DashboardCommandHub />;
 }

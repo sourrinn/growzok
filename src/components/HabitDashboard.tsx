@@ -29,7 +29,7 @@ export default function HabitDashboard() {
   const [filter, setFilter] = useState<string>("All");
   const [domainFilter, setDomainFilter] = useState<string>("All");
   const [timeFilter, setTimeFilter] = useState<string>("All");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("pending");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyPending, setOnlyPending] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");

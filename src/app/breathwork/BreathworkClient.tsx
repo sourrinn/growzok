@@ -18,7 +18,11 @@ const PATTERNS: BreathPattern[] = [
   { key: "sigh", name: "Physiological Sigh (Double Inhale)", inhale: 3, holdIn: 1, exhale: 6, holdOut: 0, description: "Real-time stress relief mechanism discovered by neuroscientists." },
 ];
 
-export default function BreathworkClient() {
+interface Props {
+  embedded?: boolean;
+}
+
+export default function BreathworkClient({ embedded = false }: Props) {
   const [selectedKey, setSelectedKey] = useState("box");
   const [isActive, setIsActive] = useState(false);
   const [phase, setPhase] = useState<"Inhale" | "Hold" | "Exhale" | "Pause">("Inhale");
@@ -78,18 +82,20 @@ export default function BreathworkClient() {
       : 1;
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-6">
-      <div>
-        <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Respiratory Autonomic Workstation
-        </span>
-        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Breathwork Pacing Studio
-        </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Paced breathing studio for CO2 tolerance, vagus nerve stimulation, and parasympathetic nervous system activation.
-        </p>
-      </div>
+    <div className={`mx-auto max-w-4xl space-y-8 ${embedded ? "py-2" : "py-6"}`}>
+      {!embedded && (
+        <div>
+          <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+            Respiratory Autonomic Workstation
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            Breathwork Pacing Studio
+          </h1>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            Paced breathing studio for CO2 tolerance, vagus nerve stimulation, and parasympathetic nervous system activation.
+          </p>
+        </div>
+      )}
 
       {/* Pattern Selector Tabs */}
       <div className="grid gap-3 sm:grid-cols-3">

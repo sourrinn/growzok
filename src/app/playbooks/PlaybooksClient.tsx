@@ -84,7 +84,11 @@ const LIFE_GUIDES: LifeGuide[] = [
   },
 ];
 
-export default function PlaybooksClient() {
+interface Props {
+  embedded?: boolean;
+}
+
+export default function PlaybooksClient({ embedded = false }: Props) {
   const [selectedId, setSelectedId] = useState<string>("sleep-energy");
   const [adoptedMsg, setAdoptedMsg] = useState<string | null>(null);
   const { addHabit } = useHabits();
@@ -111,18 +115,20 @@ export default function PlaybooksClient() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-6">
-      <div>
-        <span className="inline-flex mb-2 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Practical Life Science
-        </span>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Human Life Masterclass Guides
-        </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Simple, plain-language guides to sleep better, double your focus, and recharge your energy — with 1-click habit adoption.
-        </p>
-      </div>
+    <div className={`mx-auto max-w-4xl space-y-8 ${embedded ? "py-2" : "py-6"}`}>
+      {!embedded && (
+        <div>
+          <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+            Practical Life Science
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            Human Life Masterclass Guides
+          </h1>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            Simple, plain-language guides to sleep better, double your focus, and recharge your energy — with 1-click habit adoption.
+          </p>
+        </div>
+      )}
 
       {adoptedMsg && (
         <div className="rounded-2xl border border-[#406852]/30 bg-[#e3ede6] p-4 text-xs font-bold text-[#406852] dark:bg-[#121215] dark:text-[#a3b899]">

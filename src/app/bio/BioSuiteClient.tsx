@@ -25,26 +25,26 @@ export default function BioSuiteClient() {
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
+      {/* Master Workstation Header */}
       <div>
-        <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Enterprise Human Telemetry & Bio-Optimization Suite
+        <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+          Human Telemetry & Bio-Optimization Suite
         </span>
-        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Bio-Optimization Workstation Hub
+        <h1 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+          Bio Workstation Hub
         </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Unified physiological suite for circadian optics, fasting autophagy, breathwork, recovery, and vitals.
+        <p className="mt-1 text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa]">
+          Unified suite for circadian optics, fasting autophagy, breathwork, recovery, and life guides.
         </p>
       </div>
 
-      {/* Scalable Multi-Tab Navigation Bar */}
+      {/* Executive Segmented Control Tab Switcher */}
       <div className="flex flex-wrap gap-2 rounded-2xl border border-[#e5e1d7] bg-white p-2 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs">
         <button
           onClick={() => setActiveTab("fasting")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "fasting"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -55,7 +55,7 @@ export default function BioSuiteClient() {
           onClick={() => setActiveTab("vitals")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "vitals"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -66,7 +66,7 @@ export default function BioSuiteClient() {
           onClick={() => setActiveTab("breathwork")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "breathwork"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -77,7 +77,7 @@ export default function BioSuiteClient() {
           onClick={() => setActiveTab("circadian")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "circadian"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -88,7 +88,7 @@ export default function BioSuiteClient() {
           onClick={() => setActiveTab("recovery")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "recovery"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -99,7 +99,7 @@ export default function BioSuiteClient() {
           onClick={() => setActiveTab("playbooks")}
           className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
             activeTab === "playbooks"
-              ? "bg-[#406852] text-white"
+              ? "bg-[#232f26] text-white dark:bg-[#3f3f46] shadow-xs"
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
@@ -107,14 +107,14 @@ export default function BioSuiteClient() {
         </button>
       </div>
 
-      {/* Tab Content Display */}
+      {/* Tab Content Display (Passing embedded=true to hide duplicate sub-headers) */}
       <div className="pt-2">
-        {activeTab === "fasting" && <FastingClient />}
-        {activeTab === "vitals" && <VitalsClient />}
-        {activeTab === "breathwork" && <BreathworkClient />}
-        {activeTab === "circadian" && <CircadianClient />}
-        {activeTab === "recovery" && <RecoveryClient />}
-        {activeTab === "playbooks" && <PlaybooksClient />}
+        {activeTab === "fasting" && <FastingClient embedded={true} />}
+        {activeTab === "vitals" && <VitalsClient embedded={true} />}
+        {activeTab === "breathwork" && <BreathworkClient embedded={true} />}
+        {activeTab === "circadian" && <CircadianClient embedded={true} />}
+        {activeTab === "recovery" && <RecoveryClient embedded={true} />}
+        {activeTab === "playbooks" && <PlaybooksClient embedded={true} />}
       </div>
     </div>
   );

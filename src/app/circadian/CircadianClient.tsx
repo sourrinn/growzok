@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-export default function CircadianClient() {
+interface Props {
+  embedded?: boolean;
+}
+
+export default function CircadianClient({ embedded = false }: Props) {
   const [lat, setLat] = useState("37.7749");
   const [lon, setLon] = useState("-122.4194");
   const [calculated, setCalculated] = useState(true);
@@ -18,18 +22,20 @@ export default function CircadianClient() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-6">
-      <div>
-        <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Solar Photonic Optics
-        </span>
-        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Circadian Solar Window Calculator
-        </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Calculate exact solar noon, morning photic exposure windows, and evening digital sunset cutoffs using browser geolocation.
-        </p>
-      </div>
+    <div className={`mx-auto max-w-4xl space-y-8 ${embedded ? "py-2" : "py-6"}`}>
+      {!embedded && (
+        <div>
+          <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+            Solar Photonic Optics
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            Circadian Solar Window Calculator
+          </h1>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            Calculate exact solar noon, morning photic exposure windows, and evening digital sunset cutoffs using browser geolocation.
+          </p>
+        </div>
+      )}
 
       {/* Geolocation Controls */}
       <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">

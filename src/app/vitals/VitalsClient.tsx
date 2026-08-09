@@ -10,7 +10,11 @@ interface VitalLog {
   weight: number;
 }
 
-export default function VitalsClient() {
+interface Props {
+  embedded?: boolean;
+}
+
+export default function VitalsClient({ embedded = false }: Props) {
   const [rhr, setRhr] = useState("62");
   const [hrv, setHrv] = useState("75");
   const [sleep, setSleep] = useState("7.5");
@@ -34,18 +38,20 @@ export default function VitalsClient() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-6">
-      <div>
-        <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Physiological Biomarkers
-        </span>
-        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Biometric Biomarker & Vitals Tracker
-        </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Monitor resting heart rate, HRV recovery, sleep duration, and body weight with optimal biological range indicators.
-        </p>
-      </div>
+    <div className={`mx-auto max-w-4xl space-y-8 ${embedded ? "py-2" : "py-6"}`}>
+      {!embedded && (
+        <div>
+          <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+            Physiological Biomarkers
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            Biometric Biomarker & Vitals Tracker
+          </h1>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            Monitor resting heart rate, HRV recovery, sleep duration, and body weight with optimal biological range indicators.
+          </p>
+        </div>
+      )}
 
       {/* Vitals Input Form */}
       <form onSubmit={handleLog} className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">

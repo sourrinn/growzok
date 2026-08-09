@@ -18,7 +18,11 @@ const PROTOCOLS: FastingProtocol[] = [
   { key: "24-0", name: "24h Monk Fast", fastHours: 24, eatHours: 0, description: "Full 24-hour immune system and gut microbiome reset." },
 ];
 
-export default function FastingClient() {
+interface Props {
+  embedded?: boolean;
+}
+
+export default function FastingClient({ embedded = false }: Props) {
   const [selectedKey, setSelectedKey] = useState("16-8");
   const [isFasting, setIsFasting] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -74,18 +78,20 @@ export default function FastingClient() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 py-6">
-      <div>
-        <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
-          Metabolic Architecture
-        </span>
-        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
-          Intermittent Fasting & Autophagy Clock
-        </h1>
-        <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          Track fasting duration and monitor real-time cellular autophagy stages with zero paid API dependencies.
-        </p>
-      </div>
+    <div className={`mx-auto max-w-4xl space-y-8 ${embedded ? "py-2" : "py-6"}`}>
+      {!embedded && (
+        <div>
+          <span className="inline-flex mb-3 rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+            Metabolic Architecture
+          </span>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            Intermittent Fasting & Autophagy Clock
+          </h1>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa]">
+            Track fasting duration and monitor real-time cellular autophagy stages with zero paid API dependencies.
+          </p>
+        </div>
+      )}
 
       {/* Protocol Selection Tabs */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

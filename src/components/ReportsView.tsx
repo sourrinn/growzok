@@ -93,7 +93,7 @@ export default function ReportsView() {
           <p className="mt-1 text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa]">{report.label}</p>
         </div>
 
-        <div className="inline-flex w-fit max-w-full self-start items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm overflow-x-auto no-scrollbar shrink-0 sm:self-auto">
+        <div className="inline-flex w-fit max-w-full self-end sm:self-auto items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm overflow-x-auto no-scrollbar shrink-0">
           {PERIODS.map((p) => (
             <button
               key={p.value}

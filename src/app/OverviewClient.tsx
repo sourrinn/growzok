@@ -113,7 +113,7 @@ export default function OverviewClient() {
           <div className="grid items-center gap-12 lg:grid-cols-12">
             {/* Hero Left Content */}
             <div className="space-y-6 lg:col-span-7">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#406852]/20 bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852]">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#406852]/20 bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852] mb-3">
                 🌱 Human Biology & Behavioral Science
               </span>
 
@@ -238,8 +238,8 @@ export default function OverviewClient() {
       {/* Why Traditional Habit Apps Fail You (Targeting Insecurities) */}
       <section id="features" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white/70">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center space-y-3">
-            <span className="rounded-full bg-[#be5a38]/10 px-3.5 py-1 text-xs font-bold text-[#be5a38] uppercase tracking-wider">
+          <div className="text-center">
+            <span className="inline-block rounded-full bg-[#be5a38]/10 px-3.5 py-1 text-xs font-bold text-[#be5a38] uppercase tracking-wider mb-4">
               The Behavioral Reality Check
             </span>
             <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
@@ -311,7 +311,7 @@ export default function OverviewClient() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-12">
             <div className="space-y-4 lg:col-span-6">
-              <span className="rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] uppercase tracking-wider">
+              <span className="inline-block rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] uppercase tracking-wider mb-3">
                 0kB Web Audio Synthesizer
               </span>
               <h2 className="font-display text-3xl font-bold text-[#232f26] sm:text-4xl">
@@ -370,7 +370,7 @@ export default function OverviewClient() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5 space-y-4">
-              <span className="rounded-full bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852]">
+              <span className="inline-block rounded-full bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852] mb-3">
                 16 Fixed Biological Domains
               </span>
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
@@ -428,7 +428,7 @@ export default function OverviewClient() {
           <div className="mt-8 grid gap-6 sm:grid-cols-3">
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
               <div className="space-y-3">
-                <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852]">
+                <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Morning Routine
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">
@@ -451,7 +451,7 @@ export default function OverviewClient() {
 
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
               <div className="space-y-3">
-                <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852]">
+                <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Productivity & Focus
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">
@@ -474,7 +474,7 @@ export default function OverviewClient() {
 
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm">
               <div className="space-y-3">
-                <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852]">
+                <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
                   Evening Wind-Down
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">

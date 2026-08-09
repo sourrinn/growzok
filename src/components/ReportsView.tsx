@@ -667,6 +667,70 @@ export default function ReportsView() {
       {/* Day-of-Week Execution Histogram */}
       <DayOfWeekHistogram stats={dowStats} />
 
+      {/* Daily Micro-Journal & Reflection Log Feed */}
+      {(() => {
+        const allLogs: Array<{ habitName: string; domain: string; color: string; date: string; rating?: number; note?: string }> = [];
+        habits.forEach((h) => {
+          (h.logEntries ?? []).forEach((entry) => {
+            if (entry.note || entry.rating) {
+              allLogs.push({
+                habitName: h.name,
+                domain: h.domain,
+                color: h.color,
+                date: entry.date,
+                rating: entry.rating,
+                note: entry.note,
+              });
+            }
+          });
+        });
+        allLogs.sort((a, b) => b.date.localeCompare(a.date));
+
+        if (allLogs.length === 0) return null;
+
+        return (
+          <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-4 print-break-inside-avoid">
+            <div>
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+                Daily Micro-Journal & Effort Reflection Log
+              </h2>
+              <p className="mt-0.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                Subjective friction ratings and notes recorded during habit executions.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {allLogs.slice(0, 8).map((log, idx) => (
+                <div key={idx} className="flex items-start justify-between gap-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] p-3 text-xs">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: log.color }} />
+                      <span className="font-bold text-[#232f26] dark:text-[#f4f4f5]">{log.habitName}</span>
+                      <span className="rounded bg-[#e5e1d7]/60 dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] text-[#737970] dark:text-[#a1a1aa]">
+                        {log.domain}
+                      </span>
+                    </div>
+                    {log.note && (
+                      <p className="text-[#737970] dark:text-[#a1a1aa] italic pl-4">
+                        "{log.note}"
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right shrink-0 space-y-1">
+                    <span className="text-[10px] text-[#737970] font-medium">{log.date}</span>
+                    {log.rating && (
+                      <div className="text-amber-500 font-bold text-[11px]">
+                        {"★".repeat(log.rating)}{"☆".repeat(5 - log.rating)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* 365-Day Consistency Heatmap Grid */}
       <ConsistencyHeatmap habits={habits} />
 

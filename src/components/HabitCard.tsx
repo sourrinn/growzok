@@ -12,6 +12,7 @@ import {
 } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import StreakStem from "@/components/StreakStem";
+import HabitVelocitySparkline from "@/components/HabitVelocitySparkline";
 interface Props {
   habit: Habit;
   isManaging?: boolean;
@@ -182,6 +183,11 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
                   ◈ Protocol
                 </span>
               ) : null}
+              {habit.stackedAfterId && (
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#406852]/10 dark:bg-[#406852]/20 px-1.5 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899]">
+                  🔗 Stacked
+                </span>
+              )}
               <span>{habit.userLabel}</span>
               <span>·</span>
               <span>{frequencyLabel(habit.frequency)}</span>
@@ -223,7 +229,10 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
 
       {/* Footer: Stem Chart & Stats */}
       <div className="mt-auto flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
-        <StreakStem history={habit.history} color={habit.color} />
+        <div className="flex items-center gap-3">
+          <StreakStem history={habit.history} color={habit.color} />
+          <HabitVelocitySparkline habit={habit} />
+        </div>
 
         <div className="whitespace-nowrap text-right text-xs tabular-nums text-[#737970] dark:text-[#a1a1aa]">
           <div>

@@ -131,6 +131,10 @@ export interface HabitDoc {
   completions: { date: string; completedAt: Date }[];
   /** 'active' (default) | 'archived' — soft delete preserving history for analytics */
   status?: "active" | "archived";
+  /** ID of the habit that triggers this habit in a sequential stack */
+  stackedAfterId?: string;
+  /** Subjective effort rating (1-5) and micro-journal reflection notes per completion date */
+  logEntries?: Array<{ date: string; value?: number; rating?: number; note?: string }>;
 }
 
 /** Shape sent to the client (JSON-safe). Deliberately omits `userId`. */
@@ -154,6 +158,10 @@ export interface Habit {
   completions: Completion[];
   /** 'active' (default) | 'archived' — soft delete preserving history for analytics */
   status: "active" | "archived";
+  /** ID of the habit that triggers this habit in a sequential stack */
+  stackedAfterId?: string;
+  /** Subjective effort rating (1-5) and micro-journal reflection notes per completion date */
+  logEntries?: Array<{ date: string; value?: number; rating?: number; note?: string }>;
 }
 
 export function serializeHabit(doc: HabitDoc): Habit {
@@ -186,5 +194,7 @@ export function serializeHabit(doc: HabitDoc): Habit {
       completedAt: c.completedAt.toISOString(),
     })),
     status: doc.status ?? "active",
+    stackedAfterId: doc.stackedAfterId,
+    logEntries: doc.logEntries ?? [],
   };
 }

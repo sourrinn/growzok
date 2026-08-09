@@ -112,12 +112,12 @@ export default function RecoveryClient({ embedded = false }: Props) {
 
         <div className="space-y-2">
           {logs.map((log, i) => (
-            <div key={i} className="flex items-center justify-between rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] p-3 text-xs">
+            <div key={i} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] p-3 text-xs">
               <div className="flex items-center gap-2">
-                <span>{log.type === "Cold Exposure" ? "🧊" : "🔥"}</span>
+                <span>{log.type === "Cold Exposure" ? "🧣" : "🔥"}</span>
                 <span className="font-bold text-[#232f26] dark:text-[#f4f4f5]">{log.type}</span>
               </div>
-              <div className="flex gap-4 text-[#737970] dark:text-[#a1a1aa]">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[#737970] dark:text-[#a1a1aa]">
                 <span>⏱️ {log.durationMins} Mins</span>
                 <span>🌡️ {log.tempCelsius}°C</span>
                 <span>📅 {log.date}</span>

@@ -58,7 +58,7 @@ export default function CircadianClient({ embedded = false }: Props) {
           </div>
           <button
             onClick={handleDetectLocation}
-            className="rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all"
+            className="w-full sm:w-auto rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all"
           >
             📍 Detect Browser Location
           </button>

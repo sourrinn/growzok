@@ -75,24 +75,32 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
         </button>
       </div>
 
-      {/* Mobile Menu Slide-Over Drawer */}
+      {/* Mobile Menu Slide-Over Drawer with backdrop */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#fbf9f5] dark:bg-[#18181b] p-4 md:hidden">
-          <div className="flex justify-end pb-3">
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-semibold text-[#737970] dark:text-[#a1a1aa]"
-            >
-              ✕ Close
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto space-y-4">
-            <AppSidebar userLabel={userLabel} isCollapsed={false} />
-            {secondarySidebar && (
-              <div className="border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
-                {secondarySidebar}
-              </div>
-            )}
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Semi-transparent backdrop — tap to close */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          {/* Slide-in panel from left */}
+          <div className="absolute inset-y-0 left-0 z-10 w-72 max-w-[85vw] flex flex-col bg-[#fbf9f5] dark:bg-[#18181b] shadow-2xl animate-slide-in-left">
+            <div className="flex justify-end p-3 border-b border-[#e5e1d7] dark:border-[#27272a]">
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-3 py-2 text-xs font-semibold text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/40 dark:hover:bg-[#27272a]"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-4 p-3">
+              <AppSidebar userLabel={userLabel} isCollapsed={false} />
+              {secondarySidebar && (
+                <div className="border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+                  {secondarySidebar}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

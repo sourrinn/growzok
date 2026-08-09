@@ -63,7 +63,7 @@ export default function LifeHUDHeader() {
             className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white px-3 py-1.5 text-xs font-semibold text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
           >
             <span>Search</span>
-            <kbd className="rounded bg-[#e5e1d7]/60 dark:bg-[#27272a] px-1.5 py-0.5 font-mono text-[10px] font-bold">
+            <kbd className="hidden sm:inline rounded bg-[#e5e1d7]/60 dark:bg-[#27272a] px-1.5 py-0.5 font-mono text-[10px] font-bold">
               Ctrl+K
             </kbd>
           </button>

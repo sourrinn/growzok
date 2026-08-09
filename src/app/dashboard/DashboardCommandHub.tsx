@@ -147,7 +147,7 @@ export default function DashboardCommandHub() {
       <CircadianClockMatrix />
 
       {/* Main Grid: Priority Habits Rail (8 cols) + Workstation Quick Launch (4 cols) */}
-      <div className="grid gap-8 lg:grid-cols-12">
+      <div className="grid gap-8 md:grid-cols-12 lg:grid-cols-12">
         {/* Left Column: Priority Habits Rail */}
         <div className="space-y-4 lg:col-span-8">
           <div className="flex items-center justify-between">
@@ -185,8 +185,8 @@ export default function DashboardCommandHub() {
                     >
                       ✓
                     </button>
-                    <div>
-                      <h4 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">{habit.name}</h4>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5] truncate">{habit.name}</h4>
                       <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
                         <span className="rounded bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899]">
                           {habit.domain}

@@ -121,20 +121,20 @@ export default function BreathworkClient({ embedded = false }: Props) {
       </div>
 
       {/* Interactive Visual Ring Pacer */}
-      <div className="rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-12 shadow-sm text-center space-y-8">
-        <div className="relative flex items-center justify-center h-48 w-48 mx-auto">
-          {/* Animated Expanding Ring */}
+      <div className="rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 sm:p-10 shadow-sm text-center space-y-8">
+        <div className="relative flex items-center justify-center h-36 w-36 sm:h-48 sm:w-48 mx-auto overflow-hidden rounded-full">
+          {/* Animated Expanding Ring — clipped by overflow-hidden on container */}
           <div
             className="absolute inset-0 rounded-full border-4 border-[#406852] dark:border-[#a3b899] bg-[#406852]/10 transition-transform duration-1000 ease-in-out"
             style={{ transform: `scale(${ringScale})` }}
           />
 
           <div className="relative z-10 space-y-1">
-            <span className="font-display text-2xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            <span className="font-display text-xl sm:text-2xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {isActive ? phase : "Ready"}
             </span>
             {isActive && (
-              <div className="font-mono text-3xl font-bold text-[#406852] dark:text-[#a3b899]">
+              <div className="font-mono text-2xl sm:text-3xl font-bold text-[#406852] dark:text-[#a3b899]">
                 {secondsInPhase}s
               </div>
             )}
@@ -147,7 +147,7 @@ export default function BreathworkClient({ embedded = false }: Props) {
           </p>
           <button
             onClick={togglePacer}
-            className={`rounded-xl px-8 py-3 text-xs font-bold text-white transition-all ${
+            className={`w-full sm:w-auto rounded-xl px-8 py-3 text-xs font-bold text-white transition-all ${
               isActive ? "bg-[#be5a38] hover:bg-[#a0482b]" : "bg-[#406852] hover:bg-[#232f26]"
             }`}
           >

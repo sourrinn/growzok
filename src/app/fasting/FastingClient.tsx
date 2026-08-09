@@ -115,7 +115,7 @@ export default function FastingClient({ embedded = false }: Props) {
       </div>
 
       {/* Central Interactive Fasting Timer Display */}
-      <div className="rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-8 shadow-sm text-center space-y-6">
+      <div className="rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 sm:p-8 shadow-sm text-center space-y-6">
         <div className="space-y-1">
           <span className="text-xs font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             {isFasting ? "⚡ Fasting Session Active" : "⏸️ Fasting Paused"}
@@ -137,10 +137,10 @@ export default function FastingClient({ embedded = false }: Props) {
         </div>
 
         {/* Action Controls */}
-        <div className="flex justify-center gap-3">
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
           <button
             onClick={toggleFast}
-            className={`rounded-xl px-8 py-3 text-xs font-bold text-white transition-all ${
+            className={`w-full sm:w-auto rounded-xl px-8 py-3 text-xs font-bold text-white transition-all ${
               isFasting ? "bg-[#be5a38] hover:bg-[#a0482b]" : "bg-[#406852] hover:bg-[#232f26]"
             }`}
           >
@@ -148,7 +148,7 @@ export default function FastingClient({ embedded = false }: Props) {
           </button>
           <button
             onClick={resetFast}
-            className="rounded-xl border border-[#e5e1d7] bg-white px-5 py-3 text-xs font-semibold text-[#232f26] dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5]"
+            className="w-full sm:w-auto rounded-xl border border-[#e5e1d7] bg-white px-5 py-3 text-xs font-semibold text-[#232f26] dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5]"
           >
             Reset
           </button>

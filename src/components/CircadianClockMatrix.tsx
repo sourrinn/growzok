@@ -89,15 +89,15 @@ export default function CircadianClockMatrix() {
           />
         </div>
         <div className="flex justify-between text-[10px] font-mono font-bold text-[#737970] dark:text-[#a1a1aa] px-1">
-          <span>🌅 06:00 Dawn</span>
-          <span>☀️ 12:00 Solar Noon</span>
-          <span>🌆 18:00 Dusk</span>
-          <span>🌙 23:00 Night</span>
+          <span>🌅 06:00</span>
+          <span className="hidden sm:inline">☀️ 12:00 Noon</span>
+          <span className="hidden sm:inline">🌆 18:00 Dusk</span>
+          <span>🌙 23:00</span>
         </div>
       </div>
 
       {/* 5 Interactive Phase Segment Cards Grid */}
-      <div className="grid gap-3 sm:grid-cols-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {CIRCADIAN_BLOCKS.map((b, idx) => {
           const isSelected = idx === activeIdx;
           return (

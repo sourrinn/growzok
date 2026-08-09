@@ -158,7 +158,7 @@ export default function AppSidebar({
                 href={item.href}
                 title={isCollapsed ? item.label : undefined}
                 className={`flex items-center rounded-xl transition-all ${
-                  isCollapsed ? "justify-center py-2.5 px-0" : "gap-3 px-3 py-2.5 text-sm"
+                  isCollapsed ? "justify-center py-3 px-0" : "gap-3 px-3 py-3 text-sm"
                 } font-medium ${
                   item.active
                     ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
@@ -184,10 +184,10 @@ export default function AppSidebar({
                 new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true })
               );
             }}
-            className="w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/40 dark:hover:bg-[#27272a] transition-all"
+            className="w-full flex items-center justify-between rounded-xl px-3 py-3 text-xs text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/40 dark:hover:bg-[#27272a] transition-all"
           >
             <span className="font-medium">Search & Commands</span>
-            <span className="flex items-center gap-1">
+            <span className="hidden sm:flex items-center gap-1">
               <kbd className="rounded border border-[#e5e1d7] bg-white px-1.5 py-0.5 font-mono text-[10px] text-[#737970] dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#a1a1aa]">⌘K</kbd>
             </span>
           </button>

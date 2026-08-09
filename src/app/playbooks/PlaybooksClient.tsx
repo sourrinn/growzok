@@ -136,7 +136,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-12">
+      <div className="grid gap-6 md:grid-cols-12 lg:grid-cols-12">
         {/* Sidebar Guide Tabs */}
         <div className="lg:col-span-4 space-y-2">
           {LIFE_GUIDES.map((g) => (
@@ -178,7 +178,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
 
             <button
               onClick={handleAdoptGuide}
-              className="rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all shrink-0 self-start sm:self-auto"
+              className="w-full sm:w-auto rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all shrink-0 self-start sm:self-auto"
             >
               ⚡ Adopt Guide as Active Habits
             </button>

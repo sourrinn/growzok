@@ -182,9 +182,9 @@ export default function HabitDashboard() {
       </header>
 
       {/* Main Responsive Grid Layout */}
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Left / Center Main Content (8 cols on desktop) */}
-        <div className="space-y-6 lg:col-span-8">
+      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+        {/* Left / Center Main Content */}
+        <div className="space-y-6 min-w-0">
           {/* Welcome Back Momentum Reset Banner */}
           {!loading && habits.length > 0 && (
             <WelcomeBackBanner habits={habits} />
@@ -198,7 +198,7 @@ export default function HabitDashboard() {
           {/* Time of Day & Biological Domain Quick Filter Chips */}
           {!loading && habits.length > 0 && (
             <div className="space-y-2">
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar scroll-x-safe">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
                   Time:
                 </span>
@@ -207,7 +207,7 @@ export default function HabitDashboard() {
                     key={t}
                     type="button"
                     onClick={() => setTimeFilter(t)}
-                    className={`rounded-xl px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                    className={`shrink-0 rounded-xl px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
                       timeFilter === t
                         ? "bg-[#232f26] text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5] shadow-xs"
                         : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
@@ -218,7 +218,7 @@ export default function HabitDashboard() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar scroll-x-safe">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
                   Domain:
                 </span>
@@ -227,7 +227,7 @@ export default function HabitDashboard() {
                     key={dom}
                     type="button"
                     onClick={() => setDomainFilter(dom)}
-                    className={`rounded-xl px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                    className={`shrink-0 rounded-xl px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
                       domainFilter === dom
                         ? "bg-[#406852] text-white dark:bg-[#a3b899] dark:text-[#18181b] shadow-xs"
                         : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
@@ -299,7 +299,7 @@ export default function HabitDashboard() {
 
           {/* User Label Filters (Morning, Evening, etc.) */}
           {labelsPresent.length > 1 && (
-            <div className="flex items-center gap-1.5 border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3 overflow-x-auto no-scrollbar flex-nowrap shrink-0">
+            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3 no-scrollbar scroll-x-safe">
               {filterOptions.map((c) => (
                 <button
                   key={c}
@@ -328,8 +328,8 @@ export default function HabitDashboard() {
           />
         </div>
 
-        {/* Right Sidebar Widgets (4 cols on desktop) */}
-        <div className="lg:col-span-4">
+        {/* Right Sidebar Widgets */}
+        <div className="min-w-0">
           <DashboardSidebar
             habits={habits}
             onlyPending={onlyPending}

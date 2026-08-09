@@ -7,6 +7,11 @@ import { frequencyLabel } from "@/lib/frequency";
 import { todayStr } from "@/lib/dates";
 import { Skeleton, SkeletonStatTile } from "@/components/Skeleton";
 import ConsistencyHeatmap from "@/components/ConsistencyHeatmap";
+import { computeUserGamification } from "@/lib/gamification";
+import { generateBehavioralInsights } from "@/lib/heuristicCoach";
+import { computeHabitSynergies } from "@/lib/synergy";
+import SocialShareModal from "@/components/SocialShareModal";
+
 
 const PERIODS: { value: ReportPeriod; label: string }[] = [
   { value: "week", label: "Week" },
@@ -42,11 +47,16 @@ function domainColor(domain: string): string {
 export default function ReportsView() {
   const { habits, loading } = useHabits();
   const [period, setPeriod] = useState<ReportPeriod>("month");
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const report = useMemo(() => buildReport(habits, period), [habits, period]);
   const wowStats = useMemo(() => computeWeekOverWeek(habits), [habits]);
+  const gamification = useMemo(() => computeUserGamification(habits), [habits]);
+  const coachInsights = useMemo(() => generateBehavioralInsights(habits), [habits]);
+  const synergies = useMemo(() => computeHabitSynergies(habits), [habits]);
 
   const today = todayStr();
+
 
   // Find top recommended focus area for informative guidance
   const actionHabit = useMemo(() => {
@@ -136,6 +146,136 @@ export default function ReportsView() {
           </button>
         </div>
       </div>
+
+      {/* Behavioral AI Coach Insights Rail */}
+      {coachInsights.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 print-break-inside-avoid">
+          {coachInsights.map((insight) => {
+            const isWarn = insight.severity === "warning";
+            const isSuccess = insight.severity === "success";
+            return (
+              <div
+                key={insight.id}
+                className={`rounded-2xl border p-4 shadow-xs space-y-1.5 transition-all ${
+                  isWarn
+                    ? "border-[#be5a38]/30 bg-[#be5a38]/5 text-[#be5a38]"
+                    : isSuccess
+                    ? "border-[#406852]/30 bg-[#406852]/5 text-[#406852] dark:text-[#a3b899]"
+                    : "border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5]"
+                }`}
+              >
+                <h3 className="text-xs font-bold flex items-center justify-between">
+                  <span>{insight.title}</span>
+                  <span className="text-[10px] opacity-60 uppercase font-semibold">Coach Insight</span>
+                </h3>
+                <p className="text-xs opacity-90 leading-relaxed">{insight.message}</p>
+                <p className="text-[11px] font-medium pt-1 text-[#737970] dark:text-[#a1a1aa]">
+                  💡 {insight.recommendation}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Mastery & Badges Showcase Bar */}
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 dark:border-[#27272a] dark:bg-[#18181b] shadow-sm space-y-4 print-break-inside-avoid">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-[#406852] px-2.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+                Level {gamification.level}
+              </span>
+              <h2 className="font-display text-lg font-bold text-[#232f26] dark:text-[#f4f4f5]">
+                {gamification.levelTitle}
+              </h2>
+            </div>
+            <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
+              {gamification.xp} Total System XP • {gamification.unlockedBadgesCount} of {gamification.badges.length} Trophies Unlocked
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShareModalOpen(true)}
+            data-print-hidden
+            className="flex items-center justify-center gap-2 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-semibold text-white hover:bg-[#406852] dark:bg-[#f4f4f5] dark:text-[#18181b] dark:hover:bg-white transition-all shadow-xs shrink-0"
+          >
+            🎨 Share Achievement Card
+          </button>
+        </div>
+
+        {/* Level XP Progress Bar */}
+        <div className="space-y-1">
+          <div className="flex justify-between text-[11px] font-semibold text-[#737970] dark:text-[#a1a1aa]">
+            <span>Level {gamification.level} Progress</span>
+            <span>{gamification.progressToNextLevelPct}% to Level {gamification.level + 1}</span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#27272a]">
+            <div
+              className="h-full rounded-full bg-[#406852] dark:bg-[#a3b899] transition-all duration-500"
+              style={{ width: `${gamification.progressToNextLevelPct}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Badges Ribbon */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+          {gamification.badges.map((badge) => (
+            <div
+              key={badge.id}
+              className={`flex items-center gap-2.5 rounded-xl border p-2.5 text-xs transition-all ${
+                badge.unlocked
+                  ? "border-[#406852]/30 bg-[#e3ede6]/40 dark:border-[#a3b899]/30 dark:bg-[#27272a]"
+                  : "border-[#e5e1d7] opacity-40 dark:border-[#27272a] grayscale"
+              }`}
+            >
+              <span className="text-xl">{badge.icon}</span>
+              <div className="truncate">
+                <p className="font-bold text-[#232f26] dark:text-[#f4f4f5] truncate">{badge.name}</p>
+                <p className="text-[10px] text-[#737970] dark:text-[#a1a1aa] truncate">{badge.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Habit Synergy Matrix (if pairs exist) */}
+      {synergies.length > 0 && (
+        <div className="rounded-2xl border border-[#e5e1d7] bg-white p-5 dark:border-[#27272a] dark:bg-[#18181b] shadow-sm space-y-3 print-break-inside-avoid">
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+              Habit Synergy Boosters
+            </h2>
+            <p className="mt-0.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+              Statistically proven habit pairs that boost each other's execution rate.
+            </p>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            {synergies.map((syn, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 text-xs dark:border-[#27272a] dark:bg-[#121215]"
+              >
+                <span className="text-lg">✨</span>
+                <div className="flex-1 truncate">
+                  <p className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                    {syn.habitA.name} ➔ {syn.habitB.name}
+                  </p>
+                  <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] leading-tight mt-0.5">
+                    {syn.insightText}
+                  </p>
+                </div>
+                <span className="rounded-full bg-[#406852]/10 px-2 py-0.5 text-[11px] font-bold text-[#406852] dark:text-[#a3b899]">
+                  +{syn.boostPct}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
 
       {/* Top Metric KPI Cards (4 Tiles) */}
       <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -524,6 +664,15 @@ export default function ReportsView() {
 
       {/* 365-Day Consistency Heatmap Grid */}
       <ConsistencyHeatmap habits={habits} />
+
+      {/* Social Share Card Modal */}
+      {shareModalOpen && (
+        <SocialShareModal
+          stats={gamification}
+          userName="Growzok User"
+          onClose={() => setShareModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

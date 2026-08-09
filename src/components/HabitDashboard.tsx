@@ -5,7 +5,10 @@ import { useHabits } from "@/hooks/useHabits";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import SmartPriorityCard from "@/components/SmartPriorityCard";
+import OnboardingWizardModal from "@/components/OnboardingWizardModal";
 import { todayStr } from "@/lib/dates";
+import type { HabitDomain } from "@/types/habit";
 
 type ViewMode = "grid" | "compact";
 type StatusFilter = "all" | "pending" | "completed";
@@ -29,6 +32,15 @@ export default function HabitDashboard() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [todayFormatted, setTodayFormatted] = useState<string>("");
   const [isManagingBoard, setIsManagingBoard] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const onboarded = localStorage.getItem("growzok-onboarded");
+    if (!onboarded && !loading && habits.length === 0) {
+      setShowOnboarding(true);
+    }
+  }, [loading, habits]);
+
 
   useEffect(() => {
     setTodayFormatted(
@@ -162,6 +174,11 @@ export default function HabitDashboard() {
       <div className="grid gap-8 lg:grid-cols-12">
         {/* Left / Center Main Content (8 cols on desktop) */}
         <div className="space-y-6 lg:col-span-8">
+          {/* Smart Priority Digest Card */}
+          {!loading && habits.length > 0 && (
+            <SmartPriorityCard habits={habits} onToggle={toggleHabit} />
+          )}
+
           <AddHabit onAdd={addHabit} />
 
           {error && (
@@ -259,6 +276,26 @@ export default function HabitDashboard() {
           />
         </div>
       </div>
+      {/* First-Run Onboarding Wizard Modal */}
+      {showOnboarding && (
+        <OnboardingWizardModal
+          onClose={() => setShowOnboarding(false)}
+          onComplete={async (presets) => {
+            setShowOnboarding(false);
+            for (const p of presets) {
+              await addHabit({
+                name: p.name,
+                domain: p.domain,
+                userLabel: p.category,
+                category: p.category as any,
+                frequency: { type: "daily" },
+                missAllowance: 0,
+                target: null,
+              });
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

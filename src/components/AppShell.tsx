@@ -64,16 +64,19 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
 
       {/* Mobile Top Navigation Bar (Left: Menu, Center: Branding, Right: Profile) */}
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-[#e5e1d7] bg-[#fbf9f5]/90 dark:border-[#27272a] dark:bg-[#09090b]/90 px-4 py-2.5 backdrop-blur-md md:hidden">
-        {/* Left: Menu Toggle Button */}
+        {/* Left: Menu Toggle Button (Icon-Only Hamburger) */}
         <button
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white px-3 py-1.5 text-xs font-semibold text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs active:scale-95 transition-all shrink-0"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs active:scale-95 transition-all shrink-0"
           aria-label="Toggle menu"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4">
-            <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+            {mobileMenuOpen ? (
+              <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" />
+            )}
           </svg>
-          <span>{mobileMenuOpen ? "Close" : "Menu"}</span>
         </button>
 
         {/* Center: Branding */}

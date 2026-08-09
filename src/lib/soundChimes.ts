@@ -24,8 +24,18 @@ function isSoundEnabled(): boolean {
   return localStorage.getItem("growzok-sound-effects") !== "disabled";
 }
 
+export function getChimePreset(): string {
+  if (typeof window === "undefined") return "triad";
+  return localStorage.getItem("growzok_chime_preset") || "triad";
+}
+
+export function setChimePreset(preset: string) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("growzok_chime_preset", preset);
+}
+
 /**
- * Plays a pleasant 2-tone success chime (F4 -> C5) upon habit completion.
+ * Plays a pleasant completion chime based on the selected audio preset.
  */
 export function playCompletionChime() {
   if (!isSoundEnabled()) return;
@@ -33,14 +43,28 @@ export function playCompletionChime() {
   if (!ctx) return;
 
   const now = ctx.currentTime;
+  const preset = getChimePreset();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
-  osc.type = "sine";
-
-  // F4 (349.23 Hz) -> C5 (523.25 Hz)
-  osc.frequency.setValueAtTime(349.23, now);
-  osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.08);
+  if (preset === "crystal") {
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(659.25, now);
+    osc.frequency.exponentialRampToValueAtTime(987.77, now + 0.08);
+  } else if (preset === "gong") {
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(440, now + 0.15);
+  } else if (preset === "retro") {
+    osc.type = "square";
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
+  } else {
+    // Default Major Triad
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(349.23, now);
+    osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.08);
+  }
 
   gain.gain.setValueAtTime(0.12, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);

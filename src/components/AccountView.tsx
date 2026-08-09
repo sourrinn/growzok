@@ -1,10 +1,12 @@
 "use client";
 
 import { signOut } from "next-auth/react";
+import { useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import CustomSelect from "@/components/CustomSelect";
 import { useHabits } from "@/hooks/useHabits";
 import { downloadCSVFile } from "@/lib/csvExporter";
+import { getChimePreset, setChimePreset, playCompletionChime } from "@/lib/soundChimes";
 
 interface Props {
   userName: string;
@@ -136,6 +138,36 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
             >
               📥 Export Backup (JSON)
             </a>
+
+            <label className="cursor-pointer rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs font-semibold text-[#232f26] dark:border-[#3f3f46] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs hover:bg-[#fbf9f5]">
+              📤 Restore from JSON
+              <input
+                type="file"
+                accept=".json"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    const text = await file.text();
+                    const data = JSON.parse(text);
+                    const res = await fetch("/api/user/restore", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ habits: data }),
+                    });
+                    if (res.ok) {
+                      alert("Successfully restored habits from backup file!");
+                      window.location.reload();
+                    } else {
+                      alert("Failed to restore backup file.");
+                    }
+                  } catch {
+                    alert("Invalid JSON backup file.");
+                  }
+                }}
+              />
+            </label>
           </div>
         </div>
       </div>

@@ -111,9 +111,9 @@ export default function AddHabit({
   };
 
   return (
-    <div className="mb-8 rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] focus-within:border-[#232f26]/40 dark:focus-within:border-[#3f3f46] focus-within:shadow-md">
-      {/* Primary Input Row */}
-      <div className="w-full">
+    <div className="mb-8 rounded-3xl border border-[#e5e1d7] bg-white p-4 sm:p-5 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] focus-within:border-[#232f26]/40 dark:focus-within:border-[#3f3f46] space-y-3.5">
+      {/* Primary Input Container */}
+      <div className="relative rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] px-3.5 py-2.5 sm:px-4 sm:py-3 focus-within:border-[#406852] dark:focus-within:border-[#a3b899] transition-all">
         <input
           type="text"
           value={value}
@@ -122,24 +122,26 @@ export default function AddHabit({
             if (e.key === "Enter") submit();
           }}
           maxLength={60}
-          placeholder="What habit do you want to plant today? e.g. Read 10 pages"
-          className="w-full bg-transparent py-1.5 text-sm sm:text-base font-medium text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
+          placeholder="What habit do you want to plant today?"
+          className="w-full bg-transparent text-sm sm:text-base font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970]/80 dark:placeholder:text-[#a1a1aa]/80"
         />
       </div>
 
-      {/* Interactive Pill Controls Row */}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[#e5e1d7]/60 dark:border-[#27272a] pt-3 text-xs">
-        <div className="flex flex-wrap items-center gap-2">
-          {/* User Label / Category */}
-          <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] px-3 py-1.5 font-medium text-[#232f26] dark:text-[#f4f4f5]">
-            <span className="text-[10px] text-[#737970] dark:text-[#a1a1aa]">Label:</span>
+      {/* Interactive Controls Grid */}
+      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 pt-1 text-xs">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full">
+          {/* Label Pill */}
+          <div className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] px-3 py-2 font-medium text-[#232f26] dark:text-[#f4f4f5] justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0">
+              Label:
+            </span>
             <input
               type="text"
               value={userLabel}
               onChange={(e) => setUserLabel(e.target.value.slice(0, 30))}
               placeholder="Personal"
               aria-label="Label"
-              className="w-20 bg-transparent text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
+              className="w-full text-right bg-transparent text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
             />
           </div>
 
@@ -149,16 +151,19 @@ export default function AddHabit({
             options={HABIT_DOMAINS.map((d) => ({ value: d, label: d }))}
             value={domain}
             onChange={(val) => setDomain(val as HabitDomain)}
+            className="w-full sm:w-auto"
           />
 
-          {/* Schedule / Frequency Dropdown */}
+          {/* Schedule Dropdown */}
           <CustomSelect
             prefixLabel="Schedule: "
             options={FREQ_OPTIONS}
             value={freqKind}
             onChange={(val) => setFreqKind(val as FrequencyKind)}
+            className="w-full sm:w-auto"
           />
 
+          {/* Frequency Times per Week Selector */}
           {freqKind === "timesPerWeek" && (
             <CustomSelect
               options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({
@@ -167,69 +172,61 @@ export default function AddHabit({
               }))}
               value={String(times)}
               onChange={(val) => setTimes(Number(val))}
+              className="w-full sm:w-auto"
             />
           )}
 
-          {freqKind === "custom" && (
-            <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-1">
-              {WEEKDAY_SHORT.map((label, day) => (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => toggleDay(day)}
-                  aria-pressed={customDays.has(day)}
-                  className={`h-6 w-6 rounded-lg text-[10px] font-bold transition-all ${
-                    customDays.has(day)
-                      ? "bg-[#232f26] text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5]"
-                      : "text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/50 dark:hover:bg-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Toggle Numeric Target & Advanced Config Button */}
+          {/* Goal Config Toggle Pill */}
           <button
             type="button"
             onClick={() => setShowAdvanced((prev) => !prev)}
-            className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${
+            className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-all text-center justify-center ${
               showAdvanced || hasTarget
-                ? "border-[#406852] bg-[#e3ede6] text-[#406852] dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] font-semibold"
-                : "border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
+                ? "border-[#406852] bg-[#406852]/10 text-[#406852] dark:border-[#a3b899] dark:bg-[#a3b899]/20 dark:text-[#a3b899]"
+                : "border-[#e5e1d7] bg-[#fbf9f5] text-[#737970] dark:border-[#27272a] dark:bg-[#121215] dark:text-[#a1a1aa] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
             }`}
           >
-            {showAdvanced ? "Hide Goal Config" : "Add Numeric Goal"}
+            {showAdvanced ? "Hide Goal Config" : "+ Numeric Goal"}
           </button>
         </div>
 
-        {/* Plant Habit Button at Bottom Right */}
-        <button
-          onClick={submit}
-          className="rounded-xl bg-[#232f26] px-5 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] ml-auto shrink-0"
-        >
-          Plant Habit
-        </button>
+        {freqKind === "custom" && (
+          <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] p-1 w-full justify-between sm:w-auto mt-1 sm:mt-0">
+            {WEEKDAY_SHORT.map((label, day) => (
+              <button
+                key={day}
+                type="button"
+                onClick={() => toggleDay(day)}
+                aria-pressed={customDays.has(day)}
+                className={`h-7 flex-1 sm:flex-initial sm:w-7 rounded-lg text-[10px] font-bold transition-all ${
+                  customDays.has(day)
+                    ? "bg-[#232f26] text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5]"
+                    : "text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/50 dark:hover:bg-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Expandable Advanced Options Box */}
       {showAdvanced && (
-        <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-[#e5e1d7]/60 dark:border-[#27272a] pt-3 text-xs text-[#737970] dark:text-[#a1a1aa]">
-          {/* Numeric Target Checkbox & Controls */}
-          <div className="flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-1.5 font-medium text-[#232f26] dark:text-[#f4f4f5] cursor-pointer">
+        <div className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-3.5 dark:border-[#27272a] dark:bg-[#121215] space-y-3 text-xs animate-slide-up">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <label className="flex items-center gap-2 font-semibold text-[#232f26] dark:text-[#f4f4f5] cursor-pointer">
               <input
                 type="checkbox"
                 checked={hasTarget}
                 onChange={(e) => setHasTarget(e.target.checked)}
-                className="rounded accent-[#232f26] dark:accent-[#f4f4f5]"
+                className="rounded accent-[#232f26] dark:accent-[#f4f4f5] h-4 w-4"
               />
-              Track target number
+              Track numeric target
             </label>
 
             {hasTarget && (
-              <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-1.5">
+              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-2">
                 <CustomSelect
                   options={TARGET_TYPES}
                   value={targetType}
@@ -241,24 +238,23 @@ export default function AddHabit({
                   value={goal}
                   onChange={(e) => setGoal(Number(e.target.value))}
                   aria-label="Goal number"
-                  className="w-16 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-2 py-1 text-center font-semibold text-[#232f26] dark:text-[#f4f4f5] outline-none"
+                  className="w-16 rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] px-2 py-1 text-center font-bold text-[#232f26] dark:text-[#f4f4f5] outline-none text-xs"
                 />
                 <input
                   type="text"
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
-                  placeholder="unit e.g. steps"
+                  placeholder="unit e.g. pages"
                   maxLength={20}
-                  className="w-28 rounded-lg border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-2 py-1 font-medium text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
+                  className="w-28 rounded-lg border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] px-2 py-1 font-medium text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] text-xs"
                 />
               </div>
             )}
           </div>
 
-          {/* Miss Allowance Picker */}
           {freqKind !== "timesPerWeek" && (
-            <div className="flex items-center gap-2">
-              <span>Allowed misses / week:</span>
+            <div className="flex items-center gap-2 text-xs text-[#737970] dark:text-[#a1a1aa]">
+              <span>Allowed misses per week:</span>
               <CustomSelect
                 options={[0, 1, 2, 3, 4, 5, 6, 7].map((n) => ({
                   value: String(n),
@@ -271,6 +267,17 @@ export default function AddHabit({
           )}
         </div>
       )}
+
+      {/* Primary Action Button Bar */}
+      <div className="pt-1">
+        <button
+          onClick={submit}
+          className="w-full sm:w-auto sm:ml-auto rounded-xl bg-[#232f26] px-6 py-2.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] dark:hover:bg-white transition-all hover:bg-black active:scale-[0.98] shadow-sm flex items-center justify-center gap-1.5"
+        >
+          <span>Plant Habit</span>
+          <span>→</span>
+        </button>
+      </div>
 
       {pendingInput && (
         <ConfirmActionModal

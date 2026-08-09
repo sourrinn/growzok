@@ -1,9 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { Habit } from "@/types/habit";
 import { todayStr } from "@/lib/dates";
 import { computeCurrentStreak, computeSuccessRate } from "@/lib/analytics";
+
+const PomodoroFocusMode = dynamic(() => import("@/components/PomodoroFocusMode"), { ssr: false });
+
 
 interface Props {
   habits: Habit[];
@@ -17,7 +22,9 @@ export default function DashboardSidebar({
   onTogglePendingOnly,
 }: Props) {
   const today = todayStr();
+  const [focusOpen, setFocusOpen] = useState(false);
   const completedTodayCount = habits.filter((h) => h.history.includes(today)).length;
+
   const totalHabits = habits.length;
   const completionPct =
     totalHabits > 0 ? Math.round((completedTodayCount / totalHabits) * 100) : 0;
@@ -82,7 +89,29 @@ export default function DashboardSidebar({
             </button>
           </div>
         )}
+
+        {/* Enter Focus Mode Button */}
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={() => setFocusOpen(true)}
+            className="w-full rounded-xl bg-gradient-to-r from-[#232f26] to-[#406852] px-3 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98] shadow-sm"
+          >
+            ⚡ Enter Focus Mode
+          </button>
+        </div>
       </div>
+
+      {/* Full-Screen Pomodoro Focus Mode Portal */}
+      {focusOpen && (
+        <PomodoroFocusMode
+          onClose={() => setFocusOpen(false)}
+          habitName="Today's Routine"
+          stepNames={habits
+            .filter((h) => !h.history.includes(today))
+            .map((h) => h.name)}
+        />
+      )}
 
       {/* Top Active Streaks */}
       {habitsWithStreaks.length > 0 && (

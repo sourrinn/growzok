@@ -25,6 +25,27 @@ html.dark {
   --color-muted: #a1a1aa;
 }
 
+/* OLED / AMOLED Pitch Black Mode — zero pixel emission on OLED displays */
+html[data-theme="amoled"] {
+  --color-ink: #000000;
+  background-color: #000000;
+}
+
+html[data-theme="amoled"] body {
+  background-color: #000000;
+}
+
+/* Override all card/sidebar backgrounds to true black in AMOLED mode */
+html[data-theme="amoled"] .dark\:bg-\[\#18181b\],
+html[data-theme="amoled"] .dark\:bg-\[\#121215\],
+html[data-theme="amoled"] .dark\:bg-\[\#27272a\] {
+  background-color: #000000 !important;
+}
+
+html[data-theme="amoled"] .dark\:border-\[\#27272a\] {
+  border-color: #1a1a1a !important;
+}
+
 html,
 body {
   background-color: var(--color-ink);

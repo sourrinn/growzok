@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppSidebar from "@/components/AppSidebar";
+import CommandPalette from "@/components/CommandPalette";
 
 interface Props {
   userLabel?: string;
@@ -112,6 +113,9 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
           {children}
         </main>
       </div>
+
+      {/* Global Ctrl+K Command Palette */}
+      <CommandPalette />
     </div>
   );
 }

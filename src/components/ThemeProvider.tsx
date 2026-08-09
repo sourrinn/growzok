@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark" | "system" | "amoled";
 
 interface ThemeContextType {
   theme: Theme;
@@ -20,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true);
     const stored = localStorage.getItem("growzok-theme") as Theme | null;
-    if (stored === "light" || stored === "dark" || stored === "system") {
+    if (stored === "light" || stored === "dark" || stored === "system" || stored === "amoled") {
       setThemeState(stored);
     } else {
       setThemeState("system");
@@ -36,7 +36,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (theme === "system") {
       dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     } else {
-      dark = theme === "dark";
+      dark = theme === "dark" || theme === "amoled";
     }
 
     setIsDark(dark);
@@ -45,6 +45,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
+    }
+
+    // AMOLED pitch black: set data attribute so CSS variables can override backgrounds
+    if (theme === "amoled") {
+      root.setAttribute("data-theme", "amoled");
+    } else {
+      root.removeAttribute("data-theme");
     }
 
     localStorage.setItem("growzok-theme", theme);

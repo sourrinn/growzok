@@ -152,8 +152,25 @@ export default function AppSidebar({
         </div>
       </div>
 
-      {/* Bottom Section: Account Settings */}
-      <div className="border-t border-[#e5e1d7] pt-3 dark:border-[#27272a]">
+      {/* Bottom Section: Ctrl+K hint + Account Settings */}
+      <div className="border-t border-[#e5e1d7] pt-3 dark:border-[#27272a] space-y-1">
+        {/* Ctrl+K Command Palette hint */}
+        {!isCollapsed && (
+          <button
+            type="button"
+            onClick={() => {
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true })
+              );
+            }}
+            className="w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs text-[#737970] dark:text-[#a1a1aa] hover:bg-[#e5e1d7]/40 dark:hover:bg-[#27272a] transition-all"
+          >
+            <span className="font-medium">Search & Commands</span>
+            <span className="flex items-center gap-1">
+              <kbd className="rounded border border-[#e5e1d7] bg-white px-1.5 py-0.5 font-mono text-[10px] text-[#737970] dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#a1a1aa]">⌘K</kbd>
+            </span>
+          </button>
+        )}
         <Link
           href="/account"
           title={isCollapsed ? "Account Settings" : undefined}

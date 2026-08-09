@@ -28,6 +28,7 @@ export default function HabitDashboard() {
 
   const [filter, setFilter] = useState<string>("All");
   const [domainFilter, setDomainFilter] = useState<string>("All");
+  const [timeFilter, setTimeFilter] = useState<string>("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyPending, setOnlyPending] = useState<boolean>(false);
@@ -76,9 +77,15 @@ export default function HabitDashboard() {
   // Multi-tier filtering for high-density 20+ habits
   const filteredHabits = useMemo(() => {
     return habits.filter((h) => {
-      // 1. Label Filter & Domain Filter
+      // 1. Label Filter, Domain Filter, and Time of Day Filter
       if (filter !== "All" && h.userLabel !== filter) return false;
       if (domainFilter !== "All" && h.domain !== domainFilter) return false;
+      if (timeFilter !== "All") {
+        const timeLower = timeFilter.toLowerCase();
+        const matchLabel = h.userLabel.toLowerCase().includes(timeLower);
+        const matchName = h.name.toLowerCase().includes(timeLower);
+        if (!matchLabel && !matchName) return false;
+      }
 
       // 2. Search Query Filter
       if (searchQuery.trim()) {
@@ -98,7 +105,7 @@ export default function HabitDashboard() {
 
       return true;
     });
-  }, [habits, filter, domainFilter, searchQuery, statusFilter, onlyPending, today]);
+  }, [habits, filter, domainFilter, timeFilter, searchQuery, statusFilter, onlyPending, today]);
 
 
   return (
@@ -188,23 +195,48 @@ export default function HabitDashboard() {
             <SmartPriorityCard habits={habits} onToggle={toggleHabit} />
           )}
 
-          {/* Biological Domain Quick Filter Chips */}
+          {/* Time of Day & Biological Domain Quick Filter Chips */}
           {!loading && habits.length > 0 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              {["All", "Sleep", "Hydration", "Cardio", "Strength", "Breathing", "Productivity", "Digital Minimalism"].map((dom) => (
-                <button
-                  key={dom}
-                  type="button"
-                  onClick={() => setDomainFilter(dom)}
-                  className={`rounded-xl px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
-                    domainFilter === dom
-                      ? "bg-[#406852] text-white dark:bg-[#a3b899] dark:text-[#18181b] shadow-xs"
-                      : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
-                  }`}
-                >
-                  {dom}
-                </button>
-              ))}
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
+                  Time:
+                </span>
+                {["All", "Morning", "Afternoon", "Evening", "Night"].map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setTimeFilter(t)}
+                    className={`rounded-xl px-2.5 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                      timeFilter === t
+                        ? "bg-[#232f26] text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5] shadow-xs"
+                        : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
+                    }`}
+                  >
+                    {t === "Morning" ? "🌅 Morning" : t === "Afternoon" ? "☀️ Afternoon" : t === "Evening" ? "🌙 Evening" : t === "Night" ? "🌌 Night" : "All"}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
+                  Domain:
+                </span>
+                {["All", "Sleep", "Hydration", "Cardio", "Strength", "Breathing", "Productivity", "Digital Minimalism"].map((dom) => (
+                  <button
+                    key={dom}
+                    type="button"
+                    onClick={() => setDomainFilter(dom)}
+                    className={`rounded-xl px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                      domainFilter === dom
+                        ? "bg-[#406852] text-white dark:bg-[#a3b899] dark:text-[#18181b] shadow-xs"
+                        : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
+                    }`}
+                  >
+                    {dom}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 

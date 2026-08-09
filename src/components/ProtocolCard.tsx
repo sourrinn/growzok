@@ -39,9 +39,9 @@ export default function ProtocolCard({ protocol }: Props) {
   return (
     <Link
       href={`/protocols/${protocol.slug}`}
-      className="group flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
+      className="group flex h-full flex-col rounded-2xl border border-[#e5e1d7] bg-white p-6 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
     >
-      <div className="space-y-4">
+      <div className="flex-1 space-y-4">
         {/* Category Badge & Rating */}
         <div className="flex items-start justify-between gap-2">
           <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-3 py-1 text-xs font-semibold text-[#406852] dark:text-[#a1a1aa]">
@@ -110,7 +110,7 @@ export default function ProtocolCard({ protocol }: Props) {
       </div>
 
       {/* Footer Metrics & Action CTA */}
-      <div className="mt-5 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+      <div className="mt-auto border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
         <div className="flex items-center justify-between text-xs text-[#737970] dark:text-[#a1a1aa]">
           <div>
             <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">

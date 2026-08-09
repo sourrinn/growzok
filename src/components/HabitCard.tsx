@@ -63,8 +63,8 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
   const inputWidthRem = Math.max(3.5, (draftValue || "0").length * 0.7 + 1.2);
 
   return (
-    <div className="group flex h-full flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
-      <div className="flex items-start justify-between gap-3">
+    <div className="group flex h-full flex-col rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
+      <div className="flex flex-1 items-start justify-between gap-3 min-h-0">
         {/* Checkbox / Numeric Logger + Habit Info */}
         <div className="flex items-start gap-3 min-w-0 flex-1">
           {/* Numeric Target Input Logger */}
@@ -223,7 +223,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
       </div>
 
       {/* Footer: Stem Chart & Stats */}
-      <div className="mt-4 flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
+      <div className="mt-auto flex items-end justify-between border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
         <StreakStem history={habit.history} color={habit.color} />
 
         <div className="whitespace-nowrap text-right text-xs tabular-nums text-[#737970] dark:text-[#a1a1aa]">

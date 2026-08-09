@@ -141,9 +141,9 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
           return (
             <div
               key={protocol.key}
-              className="group flex flex-col justify-between rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 shadow-sm transition-all hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
+              className="group flex h-full flex-col rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 shadow-sm transition-all hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
             >
-              <div>
+              <div className="flex-1">
                 {/* Meta row */}
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <span className="rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
@@ -185,7 +185,7 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
               </div>
 
               {/* Action Buttons */}
-              <div className="mt-4 flex items-center gap-2 border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
+              <div className="mt-auto flex items-center gap-2 border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
                 <button
                   onClick={() => handleQuickAdoptClick(protocol)}
                   disabled={isAdopting}

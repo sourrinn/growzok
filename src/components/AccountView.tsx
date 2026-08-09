@@ -1,3 +1,5 @@
+"use client";
+
 import { signOut } from "next-auth/react";
 import { useTheme } from "@/components/ThemeProvider";
 

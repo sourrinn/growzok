@@ -38,11 +38,11 @@ export default function CommandPalette() {
   );
 
   const pages = [
-    { name: "Dashboard", href: "/dashboard", icon: "📊" },
-    { name: "Reports & Analytics", href: "/reports", icon: "📈" },
+    { name: "Dashboard", href: "/dashboard", icon: "•" },
+    { name: "Reports & Analytics", href: "/reports", icon: "•" },
     { name: "Protocols Hub", href: "/protocols", icon: "◈" },
-    { name: "Account Settings", href: "/account", icon: "👤" },
-    { name: "Admin Portal", href: "/admin", icon: "⚙️" },
+    { name: "Account Settings", href: "/account", icon: "•" },
+    { name: "Admin Portal", href: "/admin", icon: "•" },
   ].filter((p) => fuzzyMatch(p.name, query));
 
   const handleNavigate = (href: string) => {
@@ -63,7 +63,6 @@ export default function CommandPalette() {
       >
         {/* Search Input Bar */}
         <div className="flex items-center border-b border-[#e5e1d7] dark:border-[#27272a] px-4 py-3">
-          <span className="text-sm text-[#737970] dark:text-[#a1a1aa] mr-2">🔍</span>
           <input
             type="text"
             placeholder="Type a command, habit, or search protocols… (ESC to close)"
@@ -130,7 +129,7 @@ export default function CommandPalette() {
                             : "bg-[#232f26] text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5]"
                         }`}
                       >
-                        {isDone ? "✓ Done" : "⚡ Complete"}
+                        {isDone ? "✓ Done" : "Complete"}
                       </span>
                     </button>
                   );

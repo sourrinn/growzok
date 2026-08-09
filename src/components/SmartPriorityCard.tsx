@@ -34,7 +34,6 @@ export default function SmartPriorityCard({ habits, onToggle }: Props) {
     return (
       <div className="rounded-2xl border border-[#406852]/30 bg-[#406852]/5 p-4 dark:border-[#a3b899]/30 dark:bg-[#27272a] text-xs flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-3">
-          <span className="text-xl">🎉</span>
           <div>
             <p className="font-bold text-[#406852] dark:text-[#a3b899]">
               All Habits Completed Today!
@@ -54,10 +53,10 @@ export default function SmartPriorityCard({ habits, onToggle }: Props) {
     <div className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 animate-fade-in">
       <div className="flex items-center gap-3">
         <div
-          className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white text-base font-bold shadow-xs"
+          className="h-10 w-10 shrink-0 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-xs uppercase"
           style={{ backgroundColor: habit.color }}
         >
-          ⚡
+          {habit.name.slice(0, 2)}
         </div>
         <div>
           <div className="flex items-center gap-2">

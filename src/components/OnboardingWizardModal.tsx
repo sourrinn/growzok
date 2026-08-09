@@ -8,24 +8,23 @@ interface Props {
   onClose: () => void;
 }
 
-const STARTER_PRESETS: Record<
-  string,
-  { name: string; domain: HabitDomain; category: string; icon: string; desc: string }[]
-> = {
+type StarterPreset = { name: string; domain: HabitDomain; category: string; icon: string; desc: string };
+
+const STARTER_PRESETS: Record<string, StarterPreset[]> = {
   Circadian: [
-    { name: "Morning Sunlight Exposure", domain: "Sleep", category: "Health", icon: "☀️", desc: "10-15m viewing natural sunlight within 1 hr of waking" },
-    { name: "Hydrate (500ml Water + Minerals)", domain: "Hydration", category: "Health", icon: "💧", desc: "Rehydrate immediately upon waking" },
-    { name: "Delayed Coffee (90m post-wake)", domain: "Sleep", category: "Health", icon: "☕", desc: "Prevent mid-afternoon energy crashes" },
+    { name: "Morning Sunlight Exposure", domain: "Sleep", category: "Health", icon: "", desc: "10-15m viewing natural sunlight within 1 hr of waking" },
+    { name: "Hydrate (500ml Water + Minerals)", domain: "Hydration", category: "Health", icon: "", desc: "Rehydrate immediately upon waking" },
+    { name: "Delayed Coffee (90m post-wake)", domain: "Sleep", category: "Health", icon: "", desc: "Prevent mid-afternoon energy crashes" },
   ],
   Physical: [
-    { name: "Zone 2 Cardio / Fast Walk", domain: "Cardio", category: "Fitness", icon: "🏃", desc: "25m steady aerobic cardiovascular base" },
-    { name: "Daily Joint Mobility Flow", domain: "Mobility", category: "Fitness", icon: "🧘", desc: "10m morning spinal decompression & hip opener" },
-    { name: "High-Protein Breakfast", domain: "Nutrition", category: "Health", icon: "🍳", desc: "30g+ protein within 2 hours of waking" },
+    { name: "Zone 2 Cardio / Fast Walk", domain: "Cardio", category: "Fitness", icon: "", desc: "25m steady aerobic cardiovascular base" },
+    { name: "Daily Joint Mobility Flow", domain: "Mobility", category: "Fitness", icon: "", desc: "10m morning spinal decompression & hip opener" },
+    { name: "High-Protein Breakfast", domain: "Nutrition", category: "Health", icon: "", desc: "30g+ protein within 2 hours of waking" },
   ],
   Focus: [
-    { name: "Deep Work (90m Block)", domain: "Productivity", category: "Productivity", icon: "🧠", desc: "Single-task focus before checking communications" },
-    { name: "Box Breathing Reset", domain: "Breathing", category: "Health", icon: "🫁", desc: "4x4 cadence box breathing to lower stress" },
-    { name: "No Phone First 30 Mins", domain: "Digital Minimalism", category: "Personal", icon: "📱", desc: "Protect morning attention bandwidth" },
+    { name: "Deep Work (90m Block)", domain: "Productivity", category: "Productivity", icon: "", desc: "Single-task focus before checking communications" },
+    { name: "Box Breathing Reset", domain: "Breathing", category: "Health", icon: "", desc: "4x4 cadence box breathing to lower stress" },
+    { name: "No Phone First 30 Mins", domain: "Digital Minimalism", category: "Personal", icon: "", desc: "Protect morning attention bandwidth" },
   ],
 };
 
@@ -71,9 +70,9 @@ export default function OnboardingWizardModal({ onComplete, onClose }: Props) {
             </p>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                { key: "Circadian", title: "🌅 Circadian & Sleep", icon: "🌙", desc: "Energy, alertness & sleep quality" },
-                { key: "Physical", title: "⚡ Energy & Vitality", icon: "💪", desc: "Cardio, mobility & nutrition" },
-                { key: "Focus", title: "🧠 Deep Focus & Calm", icon: "🎯", desc: "Cognitive output & digital detox" },
+                { key: "Circadian", title: "Circadian & Sleep", desc: "Energy, alertness & sleep quality" },
+                { key: "Physical", title: "Energy & Vitality", desc: "Cardio, mobility & nutrition" },
+                { key: "Focus", title: "Deep Focus & Calm", desc: "Cognitive output & digital detox" },
               ].map((track) => (
                 <button
                   key={track.key}
@@ -84,7 +83,6 @@ export default function OnboardingWizardModal({ onComplete, onClose }: Props) {
                       : "border-[#e5e1d7] hover:border-[#406852]/40 text-[#232f26] dark:border-[#27272a] dark:text-[#f4f4f5]"
                   }`}
                 >
-                  <span className="text-2xl mb-2">{track.icon}</span>
                   <span className="font-bold text-xs">{track.title}</span>
                   <span className="text-[10px] text-[#737970] dark:text-[#a1a1aa] mt-1">{track.desc}</span>
                 </button>
@@ -112,7 +110,6 @@ export default function OnboardingWizardModal({ onComplete, onClose }: Props) {
                   key={idx}
                   className="flex items-center gap-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 text-xs dark:border-[#27272a] dark:bg-[#121215]"
                 >
-                  <span className="text-xl">{p.icon}</span>
                   <div className="flex-1">
                     <p className="font-bold text-[#232f26] dark:text-[#f4f4f5]">{p.name}</p>
                     <p className="text-[10px] text-[#737970] dark:text-[#a1a1aa]">{p.desc}</p>
@@ -135,7 +132,7 @@ export default function OnboardingWizardModal({ onComplete, onClose }: Props) {
                 onClick={handleFinish}
                 className="flex-1 rounded-xl bg-[#232f26] py-2.5 text-xs font-semibold text-white hover:bg-[#406852] dark:bg-[#f4f4f5] dark:text-[#18181b] dark:hover:bg-white transition-all shadow-sm"
               >
-                🚀 Initialize Dashboard & Plant Habits
+                Initialize Dashboard & Plant Habits
               </button>
             </div>
           </div>

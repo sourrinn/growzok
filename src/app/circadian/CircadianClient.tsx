@@ -60,7 +60,7 @@ export default function CircadianClient({ embedded = false }: Props) {
             onClick={handleDetectLocation}
             className="w-full sm:w-auto rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all"
           >
-            📍 Detect Browser Location
+            Detect Browser Location
           </button>
         </div>
       </div>
@@ -69,7 +69,6 @@ export default function CircadianClient({ embedded = false }: Props) {
       {calculated && (
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-2">
-            <span className="text-xl">🌅</span>
             <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">Morning Photonic Window</h3>
             <p className="text-xs font-mono text-[#406852] dark:text-[#a3b899] font-bold">06:15 AM – 08:30 AM</p>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
@@ -78,7 +77,6 @@ export default function CircadianClient({ embedded = false }: Props) {
           </div>
 
           <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-2">
-            <span className="text-xl">☀️</span>
             <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">Solar Peak / Solar Noon</h3>
             <p className="text-xs font-mono text-[#406852] dark:text-[#a3b899] font-bold">01:12 PM</p>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
@@ -87,7 +85,6 @@ export default function CircadianClient({ embedded = false }: Props) {
           </div>
 
           <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-2">
-            <span className="text-xl">🌙</span>
             <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">Digital Sunset Cutoff</h3>
             <p className="text-xs font-mono text-[#be5a38] font-bold">08:45 PM</p>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] leading-relaxed">

@@ -185,7 +185,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
               ) : null}
               {habit.stackedAfterId && (
                 <span className="inline-flex items-center gap-1 rounded-md bg-[#406852]/10 dark:bg-[#406852]/20 px-1.5 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899]">
-                  🔗 Stacked
+                  Stacked
                 </span>
               )}
               <span>{habit.userLabel}</span>

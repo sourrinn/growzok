@@ -32,7 +32,7 @@ export default function LifeHUDHeader() {
                 {timeStr || "12:00:00 PM"}
               </span>
               <span className="rounded-full bg-[#406852]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899] uppercase">
-                🌅 Morning Photonic Window
+                Morning Photonic Window
               </span>
             </div>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">
@@ -44,7 +44,6 @@ export default function LifeHUDHeader() {
         {/* Right: XP Level Badge & Command Palette Trigger */}
         <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
           <div className="flex items-center gap-2 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-1.5 dark:border-[#27272a] dark:bg-[#121215]">
-            <span className="text-xs">🏆</span>
             <div className="text-xs">
               <span className="font-bold text-[#232f26] dark:text-[#f4f4f5]">
                 Level {gamification.level}

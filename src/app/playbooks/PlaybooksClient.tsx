@@ -19,7 +19,7 @@ const LIFE_GUIDES: LifeGuide[] = [
     id: "sleep-energy",
     title: "Better Sleep & Morning Energy",
     category: "Sleep & Energy",
-    icon: "🌅",
+    icon: "",
     summary: "Simple science-backed morning and night habits to wake up refreshed and fall asleep quickly without tossing and turning.",
     benefits: "Boosts morning alertness by 40% and improves deep sleep quality.",
     steps: [
@@ -37,7 +37,7 @@ const LIFE_GUIDES: LifeGuide[] = [
     id: "brain-recharge",
     title: "10-Minute Brain Recharge (NSDR)",
     category: "Mental Clarity",
-    icon: "🧠",
+    icon: "",
     summary: "A quick 10-minute guided relaxation routine to restore mental focus and energy when you feel afternoon brain fog.",
     benefits: "Restores mental focus as effectively as a 45-minute afternoon power nap.",
     steps: [
@@ -53,7 +53,7 @@ const LIFE_GUIDES: LifeGuide[] = [
     id: "beat-phone-addiction",
     title: "Beat Phone Addiction & Focus Reset",
     category: "Focus & Discipline",
-    icon: "⚡",
+    icon: "",
     summary: "Break the habit of endless phone scrolling and reclaim your deep focus for work and study.",
     benefits: "Saves 2+ hours of lost distraction time every day.",
     steps: [
@@ -70,7 +70,7 @@ const LIFE_GUIDES: LifeGuide[] = [
     id: "cold-energy-boost",
     title: "Cold Shower Mood & Energy Boost",
     category: "Physical Vitality",
-    icon: "❄️",
+    icon: "",
     summary: "End your daily shower with 60 seconds of cold water to instantly elevate mood, alertness, and metabolism.",
     benefits: "Increases natural dopamine and alertness for 3+ hours post-shower.",
     steps: [
@@ -107,7 +107,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
           target: { type: "count", goal: 1, unit: "times" },
         });
       }
-      setAdoptedMsg(`🎉 Successfully adopted ${activeGuide.routinesToCreate.length} habit routines into your active workspace!`);
+      setAdoptedMsg(`Successfully adopted ${activeGuide.routinesToCreate.length} habit routines into your active workspace!`);
       setTimeout(() => setAdoptedMsg(null), 5000);
     } catch (e) {
       alert("Adopted routines!");
@@ -153,7 +153,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg">{g.icon}</span>
+                {g.icon && <span className="text-lg">{g.icon}</span>}
                 <span className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">{g.title}</span>
               </div>
               <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa] line-clamp-2">{g.summary}</p>
@@ -165,7 +165,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
         <div className="lg:col-span-8 rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 sm:p-8 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#e5e1d7] dark:border-[#27272a] pb-5">
             <div className="flex items-center gap-3">
-              <span className="text-4xl">{activeGuide.icon}</span>
+              {activeGuide.icon && <span className="text-4xl">{activeGuide.icon}</span>}
               <div>
                 <span className="rounded bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:text-[#a3b899]">
                   {activeGuide.category}
@@ -180,7 +180,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
               onClick={handleAdoptGuide}
               className="w-full sm:w-auto rounded-xl bg-[#406852] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#232f26] transition-all shrink-0 self-start sm:self-auto"
             >
-              ⚡ Adopt Guide as Active Habits
+              Adopt Guide as Active Habits
             </button>
           </div>
 
@@ -192,7 +192,7 @@ export default function PlaybooksClient({ embedded = false }: Props) {
               {activeGuide.summary}
             </p>
             <div className="rounded-xl bg-[#fbf9f5] dark:bg-[#121215] p-3 text-xs font-semibold text-[#406852] dark:text-[#a3b899]">
-              💡 Benefit: {activeGuide.benefits}
+              Benefit: {activeGuide.benefits}
             </div>
           </div>
 

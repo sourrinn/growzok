@@ -118,7 +118,7 @@ export default function FastingClient({ embedded = false }: Props) {
       <div className="rounded-3xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 sm:p-8 shadow-sm text-center space-y-6">
         <div className="space-y-1">
           <span className="text-xs font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
-            {isFasting ? "⚡ Fasting Session Active" : "⏸️ Fasting Paused"}
+            {isFasting ? "Fasting Session Active" : "Fasting Paused"}
           </span>
           <div className="font-mono text-4xl sm:text-6xl font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             {formatHMS(elapsedSeconds)}
@@ -158,7 +158,6 @@ export default function FastingClient({ embedded = false }: Props) {
       {/* Real-Time Biological Stage Indicator */}
       <div className="rounded-2xl border border-[#406852]/30 bg-[#e3ede6]/40 dark:border-[#406852]/40 dark:bg-[#121215] p-5 space-y-2">
         <div className="flex items-center gap-2">
-          <span className="text-xl">🔬</span>
           <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
             Current Biological Stage: {stageName}
           </h3>

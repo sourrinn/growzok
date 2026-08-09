@@ -15,11 +15,11 @@ interface Props {
 }
 
 const THEME_OPTIONS = [
-  { value: "light", label: "☀️ Light Mode" },
-  { value: "dark", label: "🌙 Dark Mode" },
-  { value: "system", label: "💻 System Default" },
-  { value: "amoled", label: "🖤 AMOLED Pitch Black (OLED)" },
-  { value: "auto", label: "🌅 Auto (Light 6am – 8pm / Dark otherwise)" },
+  { value: "light", label: "Light Mode" },
+  { value: "dark", label: "Dark Mode" },
+  { value: "system", label: "System Default" },
+  { value: "amoled", label: "AMOLED Pitch Black (OLED)" },
+  { value: "auto", label: "Auto (Light 6am – 8pm / Dark otherwise)" },
 ];
 
 export default function AccountView({ userName, userEmail, habitsCount }: Props) {
@@ -103,7 +103,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3.5">
           <div className="space-y-0.5 truncate pr-2">
             <span className="text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5]">
-              📅 iCal Feed URL
+              iCal Feed URL
             </span>
             <p className="text-[11px] font-mono text-[#737970] dark:text-[#a1a1aa] truncate">
               {typeof window !== "undefined" ? `${window.location.origin}/api/calendar/feed.ics` : "/api/calendar/feed.ics"}
@@ -120,7 +120,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
               }}
               className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs font-semibold text-[#232f26] dark:border-[#3f3f46] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs hover:bg-[#fbf9f5]"
             >
-              📋 Copy Feed Link
+              Copy Feed Link
             </button>
 
             <button
@@ -128,7 +128,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
               onClick={() => downloadCSVFile(habits)}
               className="rounded-xl border border-[#406852] bg-[#406852]/10 px-3.5 py-2 text-xs font-bold text-[#406852] dark:border-[#a3b899] dark:text-[#a3b899] shadow-xs hover:bg-[#406852]/20"
             >
-              📊 Export CSV Dataset
+              Export CSV Dataset
             </button>
 
             <a
@@ -136,11 +136,11 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
               download
               className="rounded-xl bg-[#232f26] px-3.5 py-2 text-xs font-semibold text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5] shadow-xs hover:bg-black"
             >
-              📥 Export Backup (JSON)
+              Export Backup (JSON)
             </a>
 
             <label className="cursor-pointer rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs font-semibold text-[#232f26] dark:border-[#3f3f46] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs hover:bg-[#fbf9f5]">
-              📤 Restore from JSON
+              Restore from JSON
               <input
                 type="file"
                 accept=".json"

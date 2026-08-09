@@ -37,7 +37,6 @@ export default function WelcomeBackBanner({ habits }: Props) {
     <div className="relative rounded-2xl border border-[#406852]/30 bg-[#e3ede6]/60 dark:border-[#406852]/40 dark:bg-[#121215] p-5 shadow-sm space-y-2 animate-slide-up">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xl">🌱</span>
           <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
             Welcome Back! Let's Reset Your Daily Rhythm
           </h3>

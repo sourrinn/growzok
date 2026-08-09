@@ -137,7 +137,7 @@ export default function HabitDashboard() {
                 }`}
                 title="Grid Cards View"
               >
-                ⊞ Cards
+                Cards
               </button>
               <button
                 type="button"
@@ -149,7 +149,7 @@ export default function HabitDashboard() {
                 }`}
                 title="Compact Density View for 20+ Habits"
               >
-                ☰ Compact
+                Compact
               </button>
             </div>
 
@@ -213,7 +213,7 @@ export default function HabitDashboard() {
                         : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
                     }`}
                   >
-                    {t === "Morning" ? "🌅 Morning" : t === "Afternoon" ? "☀️ Afternoon" : t === "Evening" ? "🌙 Evening" : t === "Night" ? "🌌 Night" : "All"}
+                    {t}
                   </button>
                 ))}
               </div>

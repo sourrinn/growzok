@@ -86,7 +86,7 @@ export default function DashboardCommandHub() {
 
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 rounded-full bg-[#406852]/10 px-3 py-1 text-xs font-bold text-[#406852] dark:text-[#a3b899]">
-                <span>🏆</span> Level {gamification.level}
+                Level {gamification.level}
               </div>
               <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">
                 {gamification.xp} Total XP Earned
@@ -101,8 +101,7 @@ export default function DashboardCommandHub() {
             href="/habits"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
-            <span className="text-lg">⚡</span>
-            <div className="mt-1 font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+            <div className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
               {completedTodayCount} of {totalHabitsCount} Habits
             </div>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">Routine execution</p>
@@ -112,8 +111,7 @@ export default function DashboardCommandHub() {
             href="/bio?tab=fasting"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
-            <span className="text-lg">⏱️</span>
-            <div className="mt-1 font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+            <div className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
               16:8 Fasting
             </div>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">Autophagy active</p>
@@ -123,8 +121,7 @@ export default function DashboardCommandHub() {
             href="/bio?tab=vitals"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
-            <span className="text-lg">📈</span>
-            <div className="mt-1 font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+            <div className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
               75 ms HRV
             </div>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">Optimal recovery</p>
@@ -134,8 +131,7 @@ export default function DashboardCommandHub() {
             href="/bio?tab=breathwork"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
-            <span className="text-lg">🫁</span>
-            <div className="mt-1 font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+            <div className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
               Box Breathing
             </div>
             <p className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">Vagus pacer ready</p>
@@ -166,7 +162,6 @@ export default function DashboardCommandHub() {
             <div className="p-8 text-center text-xs text-[#737970]">Loading command hub...</div>
           ) : pendingHabits.length === 0 ? (
             <div className="rounded-2xl border border-[#406852]/30 bg-[#e3ede6]/40 p-6 text-center space-y-2">
-              <span className="text-2xl">🎉</span>
               <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
                 All Daily Routines Executed!
               </h3>
@@ -213,7 +208,6 @@ export default function DashboardCommandHub() {
           {/* Smart Neuroscience Advisory Card */}
           <div className="rounded-2xl border border-[#406852]/30 bg-[#e3ede6]/40 dark:border-[#406852]/40 dark:bg-[#121215] p-5 space-y-2">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🧠</span>
               <h3 className="font-bold text-xs uppercase tracking-wider text-[#232f26] dark:text-[#f4f4f5]">
                 Circadian Photonic Advisory
               </h3>
@@ -233,21 +227,21 @@ export default function DashboardCommandHub() {
                 href="/bio?tab=circadian"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
-                <span>☀️ Solar Optics Calculator</span>
+                <span>Solar Optics Calculator</span>
                 <span>→</span>
               </Link>
               <Link
                 href="/bio?tab=playbooks"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
-                <span>🧠 Bio-Optimization Playbooks</span>
+                <span>Bio-Optimization Playbooks</span>
                 <span>→</span>
               </Link>
               <Link
                 href="/bio?tab=recovery"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
-                <span>🧊 Thermal Recovery Log</span>
+                <span>Thermal Recovery Log</span>
                 <span>→</span>
               </Link>
             </div>

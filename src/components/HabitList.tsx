@@ -63,7 +63,7 @@ export default function HabitList({
         {
           id: "all",
           title: "Active Routines",
-          icon: "⚡",
+          icon: "",
           habits,
           defaultOpen: true,
         },
@@ -93,19 +93,19 @@ export default function HabitList({
     const result: GroupSection[] = [];
 
     if (morning.length > 0) {
-      result.push({ id: "morning", title: "Morning Routines", icon: "🌅", habits: morning, defaultOpen: true });
+      result.push({ id: "morning", title: "Morning Routines", icon: "", habits: morning, defaultOpen: true });
     }
     if (afternoon.length > 0) {
-      result.push({ id: "afternoon", title: "Afternoon Focus", icon: "☀️", habits: afternoon, defaultOpen: true });
+      result.push({ id: "afternoon", title: "Afternoon Focus", icon: "", habits: afternoon, defaultOpen: true });
     }
     if (evening.length > 0) {
-      result.push({ id: "evening", title: "Evening Wind Down", icon: "🌙", habits: evening, defaultOpen: true });
+      result.push({ id: "evening", title: "Evening Wind Down", icon: "", habits: evening, defaultOpen: true });
     }
     if (flexible.length > 0) {
-      result.push({ id: "flexible", title: "Flexible & Anytime", icon: "⚡", habits: flexible, defaultOpen: true });
+      result.push({ id: "flexible", title: "Flexible & Anytime", icon: "", habits: flexible, defaultOpen: true });
     }
     if (completed.length > 0) {
-      result.push({ id: "completed", title: "Completed Today", icon: "✅", habits: completed, defaultOpen: false });
+      result.push({ id: "completed", title: "Completed Today", icon: "", habits: completed, defaultOpen: false });
     }
 
     return result;

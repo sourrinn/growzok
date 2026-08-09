@@ -48,7 +48,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>⏱️</span> Fasting Clock
+          Fasting Clock
         </button>
 
         <button
@@ -59,7 +59,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>📈</span> Biometric Vitals
+          Biometric Vitals
         </button>
 
         <button
@@ -70,7 +70,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>🫁</span> Breath Pacer
+          Breath Pacer
         </button>
 
         <button
@@ -81,7 +81,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>☀️</span> Solar Optics
+          Solar Optics
         </button>
 
         <button
@@ -92,7 +92,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>🧊</span> Thermal Recovery
+          Thermal Recovery
         </button>
 
         <button
@@ -103,7 +103,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>🧠</span> Life Guides
+          Life Guides
         </button>
       </div>
 

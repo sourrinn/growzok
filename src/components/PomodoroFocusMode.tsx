@@ -11,11 +11,11 @@ interface SoundConfig {
 }
 
 const SOUNDSCAPES: Record<Soundscape, SoundConfig> = {
-  none: { label: "Silent", icon: "🔇" },
-  whitenoise: { label: "White Noise", icon: "🌫️" },
-  pinknoise: { label: "Pink Noise", icon: "🌸" },
-  rain: { label: "Rain", icon: "🌧️" },
-  forest: { label: "Forest", icon: "🌲" },
+  none: { label: "Silent", icon: "" },
+  whitenoise: { label: "White Noise", icon: "" },
+  pinknoise: { label: "Pink Noise", icon: "" },
+  rain: { label: "Rain", icon: "" },
+  forest: { label: "Forest", icon: "" },
 };
 
 interface PomodoroFocusModeProps {
@@ -211,7 +211,7 @@ export default function PomodoroFocusMode({
             {formatTime(timeLeft)}
           </span>
           <span className="mt-1 text-[11px] text-white/40 font-medium uppercase tracking-wider">
-            {running ? "Focusing" : timeLeft === 0 ? "Session Complete 🎉" : "Paused"}
+            {running ? "Focusing" : timeLeft === 0 ? "Session Complete" : "Paused"}
           </span>
         </div>
       </div>

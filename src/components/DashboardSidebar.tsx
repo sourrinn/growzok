@@ -97,7 +97,7 @@ export default function DashboardSidebar({
             onClick={() => setFocusOpen(true)}
             className="w-full rounded-xl bg-gradient-to-r from-[#232f26] to-[#406852] px-3 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98] shadow-sm"
           >
-            ⚡ Enter Focus Mode
+            Enter Focus Mode
           </button>
         </div>
       </div>

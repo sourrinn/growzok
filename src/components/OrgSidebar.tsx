@@ -7,6 +7,7 @@ interface Props {
   templatesCount: number;
   domainsCount?: number;
   categoriesCount?: number;
+  onOpenSyncModal?: () => void;
 }
 
 export default function OrgSidebar({
@@ -16,6 +17,7 @@ export default function OrgSidebar({
   templatesCount,
   domainsCount = 0,
   categoriesCount = 0,
+  onOpenSyncModal,
 }: Props) {
   return (
     <aside className="flex h-full w-60 flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] dark:border-[#27272a] dark:bg-[#121215] dark:text-[#f4f4f5]">
@@ -121,8 +123,19 @@ export default function OrgSidebar({
         </div>
       </div>
 
-      <div className="border-t border-[#e5e1d7] dark:border-[#27272a] pt-3 text-[10px] text-[#737970] dark:text-[#a1a1aa] text-center">
-        Syncs in real-time with database
+      <div className="space-y-2 border-t border-[#e5e1d7] pt-3 text-[10px] text-[#737970] dark:border-[#27272a] dark:text-[#a1a1aa]">
+        {onOpenSyncModal && (
+          <button
+            onClick={onOpenSyncModal}
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white px-3 py-2 text-xs font-semibold text-[#232f26] shadow-xs transition-all hover:bg-[#e3ede6] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] dark:hover:bg-[#27272a]"
+          >
+            <span>⚡</span>
+            <span>Sync System Data</span>
+          </button>
+        )}
+        <div className="text-center text-[10px] text-[#737970] dark:text-[#a1a1aa]">
+          Syncs in real-time with database
+        </div>
       </div>
     </aside>
   );

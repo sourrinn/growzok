@@ -9,6 +9,7 @@ import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
 import { HABIT_TEMPLATES } from "@/lib/templates";
 import AdminDependencyWarningModal from "@/components/AdminDependencyWarningModal";
+import AdminSystemSyncModal from "@/components/AdminSystemSyncModal";
 import { SkeletonProtocolCard } from "@/components/Skeleton";
 
 const CATEGORIES: TemplateCategory[] = [
@@ -86,6 +87,9 @@ export default function AdminPortalView() {
   const [catName, setCatName] = useState("");
   const [catDesc, setCatDesc] = useState("");
   const [creatingCategory, setCreatingCategory] = useState(false);
+
+  // System Data Sync Modal State
+  const [showSyncModal, setShowSyncModal] = useState(false);
 
   // Pending Deletion State for Dependency Pre-flight Modal
   const [pendingDelete, setPendingDelete] = useState<{
@@ -446,6 +450,7 @@ export default function AdminPortalView() {
           templatesCount={allTemplatesList.length}
           domainsCount={domains.length}
           categoriesCount={categories.length}
+          onOpenSyncModal={() => setShowSyncModal(true)}
         />
       }
     >
@@ -471,12 +476,21 @@ export default function AdminPortalView() {
                 </p>
               </div>
 
-              <button
-                onClick={() => setShowCreateCatalogModal(true)}
-                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
-              >
-                + Add Catalog Habit
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowSyncModal(true)}
+                  className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2.5 text-xs font-semibold text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs hover:bg-[#e3ede6] dark:hover:bg-[#27272a] transition-colors flex items-center gap-1.5"
+                >
+                  <span>⚡</span>
+                  <span>Sync System Data</span>
+                </button>
+                <button
+                  onClick={() => setShowCreateCatalogModal(true)}
+                  className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
+                >
+                  + Add Catalog Habit
+                </button>
+              </div>
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
@@ -1125,6 +1139,20 @@ export default function AdminPortalView() {
           entityKey={pendingDelete.entityKey}
           onConfirmDelete={pendingDelete.onDelete}
           onClose={() => setPendingDelete(null)}
+        />
+      )}
+
+      {/* SYSTEM DATA SYNC & CLEANUP MODAL */}
+      {showSyncModal && (
+        <AdminSystemSyncModal
+          onClose={() => setShowSyncModal(false)}
+          onSyncComplete={() => {
+            fetchCatalog();
+            fetchTemplates();
+            fetchDomains();
+            fetchCategories();
+            fetchUsage();
+          }}
         />
       )}
       </div>

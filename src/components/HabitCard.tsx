@@ -64,7 +64,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
 
   return (
     <div className="group flex h-full flex-col rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm transition-all dark:border-[#27272a] dark:bg-[#18181b] hover:shadow-md">
-      <div className="flex flex-1 items-start justify-between gap-3 min-h-0">
+      <div className="flex flex-1 items-start justify-between gap-3 min-h-0 pb-3">
         {/* Checkbox / Numeric Logger + Habit Info */}
         <div className="flex items-start gap-3 min-w-0 flex-1">
           {/* Numeric Target Input Logger */}
@@ -167,10 +167,21 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
             >
               {habit.name}
             </Link>
-            <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+
+            {/* Metadata & Provenance Row */}
+            <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
               <span className="rounded-md bg-[#e5e1d7]/70 dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
                 {habit.domain}
               </span>
+              {habit.isPersonal ? (
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#f4efe2] dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
+                  ✦ Personal
+                </span>
+              ) : habit.templateKey ? (
+                <span className="inline-flex items-center gap-1 rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-1.5 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#a1a1aa]">
+                  ◈ Protocol
+                </span>
+              ) : null}
               <span>{habit.userLabel}</span>
               <span>·</span>
               <span>{frequencyLabel(habit.frequency)}</span>
@@ -179,18 +190,6 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
                   · goal {habit.target.goal} {habit.target.unit}
                 </span>
               )}
-            </div>
-            {/* Provenance badge — subtle but informative */}
-            <div className="mt-1">
-              {habit.isPersonal ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#f4efe2] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#6b4923] dark:text-[#d4cca9]">
-                  ✦ Personal
-                </span>
-              ) : habit.templateKey ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#2d4a3e] dark:text-[#a1a1aa]">
-                  ◈ Protocol
-                </span>
-              ) : null}
             </div>
           </div>
         </div>

@@ -634,7 +634,7 @@ export default function AdminPortalView() {
               <div className="grid gap-6 sm:grid-cols-2">
                 {allTemplatesList.map((t: any) => (
                   <div key={t.key || t.id} className="flex h-full flex-col rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm">
-                    <div className="flex-1 space-y-3">
+                    <div className="flex-1 space-y-3 pb-3.5">
                       <div className="flex items-center justify-between">
                         <span className="rounded-full bg-[#e3ede6] dark:bg-[#27272a] px-2.5 py-0.5 text-[11px] font-semibold text-[#406852] dark:text-[#a1a1aa]">
                           {t.category}

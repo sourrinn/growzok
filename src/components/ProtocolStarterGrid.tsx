@@ -143,7 +143,7 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
               key={protocol.key}
               className="group flex h-full flex-col rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 shadow-sm transition-all hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:shadow-md"
             >
-              <div className="flex-1">
+              <div className="flex-1 pb-3.5">
                 {/* Meta row */}
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <span className="rounded-full bg-[#e5e1d7]/60 dark:bg-[#27272a] px-2.5 py-0.5 text-[11px] font-medium text-[#232f26] dark:text-[#f4f4f5]">
@@ -165,7 +165,7 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
                 </p>
 
                 {/* Habit preview pills */}
-                <div className="mt-3 flex flex-wrap gap-1">
+                <div className="mt-3 flex flex-wrap gap-1 pb-1">
                   {protocol.habits.slice(0, 3).map((h, i) => (
                     <span
                       key={i}

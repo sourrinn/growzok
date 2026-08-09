@@ -88,6 +88,39 @@ export default function AppSidebar({
         </svg>
       ),
     },
+    {
+      label: "Breath Pacer",
+      href: "/breathwork",
+      active: pathname === "/breathwork",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <circle cx="12" cy="12" r="9" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      ),
+    },
+    {
+      label: "Solar Optics",
+      href: "/circadian",
+      active: pathname === "/circadian",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+        </svg>
+      ),
+    },
+    {
+      label: "Thermal Recovery",
+      href: "/recovery",
+      active: pathname === "/recovery",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <path d="M12 2v20M2 12h20" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
   ];
 
   const adminNavItem = {

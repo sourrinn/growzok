@@ -272,7 +272,7 @@ export default function HabitDashboard() {
               {/* Row 2: Domain Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto pt-2 border-t border-[#e5e1d7]/60 dark:border-[#27272a] no-scrollbar scroll-x-safe">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
-                  Domain:
+                  Domain -
                 </span>
                 {["All", "Sleep", "Hydration", "Cardio", "Strength", "Breathing", "Productivity", "Digital Minimalism"].map((dom) => (
                   <button
@@ -294,7 +294,7 @@ export default function HabitDashboard() {
               {labelsPresent.length > 1 && (
                 <div className="flex items-center gap-1.5 overflow-x-auto pt-1 no-scrollbar scroll-x-safe">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
-                    Label:
+                    Label -
                   </span>
                   {filterOptions.map((c) => (
                     <button

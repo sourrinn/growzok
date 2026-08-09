@@ -7,9 +7,15 @@ import { computeCurrentStreak, computeSuccessRate } from "@/lib/analytics";
 
 interface Props {
   habits: Habit[];
+  onlyPending?: boolean;
+  onTogglePendingOnly?: () => void;
 }
 
-export default function DashboardSidebar({ habits }: Props) {
+export default function DashboardSidebar({
+  habits,
+  onlyPending = false,
+  onTogglePendingOnly,
+}: Props) {
   const today = todayStr();
   const completedTodayCount = habits.filter((h) => h.history.includes(today)).length;
   const totalHabits = habits.length;
@@ -30,8 +36,8 @@ export default function DashboardSidebar({ habits }: Props) {
 
   return (
     <aside className="space-y-6">
-      {/* Today's Completion Card */}
-      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
+      {/* Today's Rhythm Card */}
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Today's Rhythm
@@ -42,7 +48,7 @@ export default function DashboardSidebar({ habits }: Props) {
         </div>
 
         {/* Progress Bar */}
-        <div className="mt-3 flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#27272a]">
             <div
               className="h-full bg-gradient-to-r from-[#232f26] to-[#406852] dark:from-[#3f3f46] dark:to-[#f4f4f5] transition-all duration-500 rounded-full"
@@ -55,9 +61,26 @@ export default function DashboardSidebar({ habits }: Props) {
         </div>
 
         {totalHabits > 0 && completionPct === 100 && (
-          <p className="mt-2 text-xs font-medium text-[#406852] dark:text-[#f4f4f5]">
+          <p className="text-xs font-medium text-[#406852] dark:text-[#f4f4f5]">
             All habits completed for today. Great momentum.
           </p>
+        )}
+
+        {/* Show Pending Activities Button */}
+        {onTogglePendingOnly && (
+          <div className="pt-2 border-t border-[#e5e1d7]/60 dark:border-[#27272a]">
+            <button
+              type="button"
+              onClick={onTogglePendingOnly}
+              className={`w-full rounded-xl px-3 py-1.5 text-xs font-semibold transition-all ${
+                onlyPending
+                  ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-xs"
+                  : "border border-[#e5e1d7] bg-[#fbf9f5] text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
+              }`}
+            >
+              {onlyPending ? "✓ Showing Pending Only" : "Show Pending Activities"}
+            </button>
+          </div>
         )}
       </div>
 

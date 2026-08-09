@@ -5,7 +5,6 @@ import { useHabits } from "@/hooks/useHabits";
 import AddHabit from "@/components/AddHabit";
 import HabitList from "@/components/HabitList";
 import DashboardSidebar from "@/components/DashboardSidebar";
-import DashboardProgressBar from "@/components/DashboardProgressBar";
 import { todayStr } from "@/lib/dates";
 
 type ViewMode = "grid" | "compact";
@@ -159,13 +158,6 @@ export default function HabitDashboard() {
         )}
       </header>
 
-      {/* Daily Progress Command Bar */}
-      <DashboardProgressBar
-        habits={habits}
-        onlyPending={onlyPending}
-        onTogglePendingOnly={() => setOnlyPending((prev) => !prev)}
-      />
-
       {/* Main Responsive Grid Layout */}
       <div className="grid gap-8 lg:grid-cols-12">
         {/* Left / Center Main Content (8 cols on desktop) */}
@@ -260,7 +252,11 @@ export default function HabitDashboard() {
 
         {/* Right Sidebar Widgets (4 cols on desktop) */}
         <div className="lg:col-span-4">
-          <DashboardSidebar habits={habits} />
+          <DashboardSidebar
+            habits={habits}
+            onlyPending={onlyPending}
+            onTogglePendingOnly={() => setOnlyPending((prev) => !prev)}
+          />
         </div>
       </div>
     </div>

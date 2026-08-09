@@ -77,11 +77,8 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
         </button>
 
         {/* Center: Branding */}
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#232f26] font-display text-sm font-bold text-white dark:bg-[#27272a] dark:text-[#f4f4f5]">
-            G
-          </span>
-          <span className="font-display text-base font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+        <Link href="/" className="flex items-center">
+          <span className="font-display text-lg font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             Growzok
           </span>
         </Link>

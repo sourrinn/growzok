@@ -102,18 +102,13 @@ export default function AppSidebar({
         <div className="flex items-center justify-between px-1 py-1">
           {!isCollapsed ? (
             <>
-              <Link href="/" className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5]">
-                  G
+              <Link href="/" className="flex items-center gap-2">
+                <span className="font-display text-xl font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+                  Growzok
                 </span>
-                <div>
-                  <span className="font-display text-lg font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
-                    Growzok
-                  </span>
-                  <span className="ml-2 rounded-full bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:bg-[#27272a] dark:text-[#a1a1aa]">
-                    v2.0
-                  </span>
-                </div>
+                <span className="rounded-full bg-[#e3ede6] px-2 py-0.5 text-[10px] font-semibold text-[#406852] dark:bg-[#27272a] dark:text-[#a1a1aa]">
+                  v2.0
+                </span>
               </Link>
               {onToggleCollapse && (
                 <button

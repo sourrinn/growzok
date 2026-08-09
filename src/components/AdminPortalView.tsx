@@ -468,7 +468,7 @@ export default function AdminPortalView() {
           <div className="space-y-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
               <div>
-                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
                   Master Habit Catalog
                 </h1>
                 <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
@@ -493,16 +493,16 @@ export default function AdminPortalView() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 sm:p-6 shadow-sm overflow-x-auto">
+              <table className="w-full text-left text-xs min-w-[580px]">
                 <thead>
                   <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
-                    <th className="pb-3 font-semibold">Habit Key</th>
-                    <th className="pb-3 font-semibold">Habit Name</th>
-                    <th className="pb-3 font-semibold">Biological Domain</th>
-                    <th className="pb-3 font-semibold">Template Usage</th>
-                    <th className="pb-3 font-semibold">User Adoption</th>
-                    <th className="pb-3 font-semibold text-right">Actions</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Habit Key</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Habit Name</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Biological Domain</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Template Usage</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">User Adoption</th>
+                    <th className="pb-3 font-semibold text-right whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
@@ -714,13 +714,13 @@ export default function AdminPortalView() {
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs min-w-[500px]">
                 <thead>
                   <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
-                    <th className="pb-3 font-semibold">Domain Name</th>
-                    <th className="pb-3 font-semibold">Description</th>
-                    <th className="pb-3 font-semibold">Type</th>
-                    <th className="pb-3 font-semibold text-right">Actions</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Domain Name</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Description</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Type</th>
+                    <th className="pb-3 font-semibold text-right whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
@@ -775,13 +775,13 @@ export default function AdminPortalView() {
             </div>
 
             <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs min-w-[500px]">
                 <thead>
                   <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
-                    <th className="pb-3 font-semibold">Category Name</th>
-                    <th className="pb-3 font-semibold">Description</th>
-                    <th className="pb-3 font-semibold">Type</th>
-                    <th className="pb-3 font-semibold text-right">Actions</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Category Name</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Description</th>
+                    <th className="pb-3 font-semibold whitespace-nowrap">Type</th>
+                    <th className="pb-3 font-semibold text-right whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">

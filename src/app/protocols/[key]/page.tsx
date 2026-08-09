@@ -118,7 +118,7 @@ export default async function ProtocolDetailPage({ params }: Props) {
             </span>
           </div>
 
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+          <h1 className="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             {protocol.name}
           </h1>
           <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#737970] dark:text-[#a1a1aa]">

@@ -102,10 +102,10 @@ export default function ProtocolsView() {
     <div className="space-y-8">
       {/* Hero Header */}
       <div>
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
           Protocol Hub
         </h1>
-        <p className="mt-1.5 text-sm text-[#737970] dark:text-[#a1a1aa]">
+        <p className="mt-1.5 text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa]">
           Science-backed & organization habit protocols. Preview routines and adopt them into your personal dashboard in one tap.
         </p>
       </div>
@@ -132,12 +132,12 @@ export default function ProtocolsView() {
 
       {/* Category Pills Bar (Row 1) */}
       <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-nowrap shrink-0">
           {(["All", ...availableCategories] as (ProtocolCategory | "All")[]).map((cat) => (
             <button
               key={cat}
               onClick={() => setCategoryFilter(cat)}
-              className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${
+              className={`rounded-full px-3.5 sm:px-4 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
                 categoryFilter === cat
                   ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
                   : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/30 dark:hover:border-[#3f3f46] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"

@@ -87,18 +87,18 @@ export default function ReportsView() {
       {/* Header & Time Period Selector */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             Reports & Analytics
           </h1>
-          <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">{report.label}</p>
+          <p className="mt-1 text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa]">{report.label}</p>
         </div>
 
-        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm">
+        <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-1 shadow-sm overflow-x-auto no-scrollbar shrink-0">
           {PERIODS.map((p) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
-              className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
+              className={`rounded-lg px-3 sm:px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
                 period === p.value
                   ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
                   : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-[#f4f4f5]"
@@ -111,14 +111,14 @@ export default function ReportsView() {
       </div>
 
       {/* Top Metric KPI Cards (4 Tiles) */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3.5 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Completed */}
         <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
             Total Completed
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            <span className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.completed}
             </span>
             <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">of {report.trackable} trackable</span>
@@ -131,7 +131,7 @@ export default function ReportsView() {
             Overall Success Rate
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            <span className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {Math.round(report.rate * 100)}%
             </span>
             <span
@@ -154,7 +154,7 @@ export default function ReportsView() {
             Active Momentum
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            <span className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.activeStreaksCount}
             </span>
             <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">habits in streak</span>
@@ -167,7 +167,7 @@ export default function ReportsView() {
             Missed Days
           </p>
           <div className="mt-2 flex items-baseline justify-between">
-            <span className="font-display text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
+            <span className="font-display text-2xl sm:text-3xl font-bold text-[#232f26] dark:text-[#f4f4f5]">
               {report.missed}
             </span>
             <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">days unfulfilled</span>
@@ -175,29 +175,81 @@ export default function ReportsView() {
         </div>
       </div>
 
-      {/* Habit Performance Matrix Table */}
-      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm">
+      {/* Habit Performance Matrix Table & Mobile Cards */}
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-4 sm:p-6 shadow-sm">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
           Habit Performance Matrix
         </h2>
 
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        {/* Mobile Stacked Card View (Shown on screens < 640px) */}
+        <div className="mt-4 space-y-3 sm:hidden">
+          {report.rows.map(({ habit, completed, trackable, rate, streak }) => (
+            <div
+              key={habit.id}
+              className="rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3.5 space-y-2.5"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5]">{habit.name}</h3>
+                  <div className="mt-1 flex items-center gap-1.5 text-xs text-[#737970] dark:text-[#a1a1aa]">
+                    <span
+                      className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${domainColor(
+                        habit.domain
+                      )}`}
+                    >
+                      {habit.domain}
+                    </span>
+                    <span>·</span>
+                    <span>{frequencyLabel(habit.frequency)}</span>
+                  </div>
+                </div>
+                {streak > 0 && (
+                  <span className="shrink-0 rounded-full bg-[#e3ede6] dark:bg-[#18181b] px-2 py-0.5 text-[10px] font-bold text-[#232f26] dark:text-[#f4f4f5]">
+                    🔥 {streak}d
+                  </span>
+                )}
+              </div>
+
+              {/* Progress & Rate Bar */}
+              <div className="border-t border-[#e5e1d7]/60 dark:border-[#3f3f46] pt-2 flex items-center justify-between text-xs">
+                <span className="text-[#737970] dark:text-[#a1a1aa]">
+                  <strong className="text-[#232f26] dark:text-[#f4f4f5]">{completed}</strong> / {trackable} days
+                </span>
+
+                <div className="flex items-center gap-2">
+                  <div className="h-1.5 w-14 overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#18181b]">
+                    <div
+                      className="h-full bg-[#232f26] dark:bg-[#f4f4f5] transition-all"
+                      style={{ width: `${Math.round(rate * 100)}%` }}
+                    />
+                  </div>
+                  <span className="font-bold tabular-nums text-[#232f26] dark:text-[#f4f4f5]">
+                    {Math.round(rate * 100)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop / Tablet Scrollable Table (Shown on screens >= 640px) */}
+        <div className="mt-4 hidden overflow-x-auto sm:block">
+          <table className="w-full text-left text-xs min-w-[640px]">
             <thead>
               <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
-                <th className="pb-3 font-semibold">Habit Name</th>
-                <th className="pb-3 font-semibold">Domain</th>
-                <th className="pb-3 font-semibold">Schedule</th>
-                <th className="pb-3 font-semibold">Streak</th>
-                <th className="pb-3 font-semibold text-center">Period Progress</th>
-                <th className="pb-3 font-semibold text-right">Success Rate</th>
+                <th className="pb-3 font-semibold whitespace-nowrap">Habit Name</th>
+                <th className="pb-3 font-semibold whitespace-nowrap">Domain</th>
+                <th className="pb-3 font-semibold whitespace-nowrap">Schedule</th>
+                <th className="pb-3 font-semibold whitespace-nowrap">Streak</th>
+                <th className="pb-3 font-semibold text-center whitespace-nowrap">Period Progress</th>
+                <th className="pb-3 font-semibold text-right whitespace-nowrap">Success Rate</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
               {report.rows.map(({ habit, completed, trackable, rate, streak }) => (
                 <tr key={habit.id} className="group hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
-                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">{habit.name}</td>
-                  <td className="py-3">
+                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5] whitespace-nowrap">{habit.name}</td>
+                  <td className="py-3 whitespace-nowrap">
                     <span
                       className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${domainColor(
                         habit.domain
@@ -206,14 +258,14 @@ export default function ReportsView() {
                       {habit.domain}
                     </span>
                   </td>
-                  <td className="py-3 text-[#737970] dark:text-[#a1a1aa]">{frequencyLabel(habit.frequency)}</td>
-                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                  <td className="py-3 text-[#737970] dark:text-[#a1a1aa] whitespace-nowrap">{frequencyLabel(habit.frequency)}</td>
+                  <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5] whitespace-nowrap">
                     {streak > 0 ? `${streak}d streak` : "—"}
                   </td>
-                  <td className="py-3 text-center text-[#737970] dark:text-[#a1a1aa]">
+                  <td className="py-3 text-center text-[#737970] dark:text-[#a1a1aa] whitespace-nowrap">
                     <span className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">{completed}</span> / {trackable} days
                   </td>
-                  <td className="py-3 text-right">
+                  <td className="py-3 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-2">
                       <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[#e5e1d7] dark:bg-[#27272a]">
                         <div

@@ -44,13 +44,13 @@ export default function HabitDashboard() {
   return (
     <div>
       {/* Top Banner Header */}
-      <header className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <header className="mb-6 sm:mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             Daily Habits
           </h1>
           {todayFormatted && (
-            <p className="mt-1 text-sm tabular-nums text-[#737970] dark:text-[#a1a1aa]">{todayFormatted}</p>
+            <p className="mt-1 text-xs sm:text-sm tabular-nums text-[#737970] dark:text-[#a1a1aa]">{todayFormatted}</p>
           )}
         </div>
         {!loading && habits.length > 0 && (
@@ -99,12 +99,12 @@ export default function HabitDashboard() {
           )}
 
           {labelsPresent.length > 1 && (
-            <div className="flex flex-wrap gap-1.5 border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3">
+            <div className="flex items-center gap-1.5 border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3 overflow-x-auto no-scrollbar flex-nowrap shrink-0">
               {filterOptions.map((c) => (
                 <button
                   key={c}
                   onClick={() => setFilter(c)}
-                  className={`rounded-full px-3.5 py-1 text-xs font-medium transition-all ${
+                  className={`rounded-full px-3.5 py-1 text-xs font-medium whitespace-nowrap transition-all ${
                     filter === c
                       ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
                       : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] dark:hover:border-[#3f3f46] dark:hover:text-[#f4f4f5] hover:border-[#232f26]/30 hover:text-[#232f26]"

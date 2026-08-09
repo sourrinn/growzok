@@ -73,9 +73,9 @@ export default function HabitDetail({ habitId }: { habitId: string }) {
         ← Back
       </Link>
 
-      <header className="mb-8 mt-3 flex items-start justify-between">
+      <header className="mb-6 sm:mb-8 mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-3xl font-medium tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
             {habit.name}
           </h1>
           <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">

@@ -23,7 +23,7 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
     <div className="mx-auto max-w-3xl space-y-8">
       {/* Header */}
       <div>
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-[#232f26] dark:text-[#f4f4f5]">
           Account Settings
         </h1>
         <p className="mt-1 text-sm text-[#737970] dark:text-[#a1a1aa]">

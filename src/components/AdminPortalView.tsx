@@ -8,6 +8,7 @@ import { HABIT_DOMAINS, type HabitDomain } from "@/types/habit";
 import type { TemplateCategory, TemplateDifficulty } from "@/types/template";
 import { MASTER_HABIT_CATALOG } from "@/lib/habitCatalog";
 import { HABIT_TEMPLATES } from "@/lib/templates";
+import AdminDependencyWarningModal from "@/components/AdminDependencyWarningModal";
 import { SkeletonProtocolCard } from "@/components/Skeleton";
 
 const CATEGORIES: TemplateCategory[] = [
@@ -30,7 +31,7 @@ function normalizeName(name: string): string {
 }
 
 export default function AdminPortalView() {
-  const [activeSection, setActiveSection] = useState<"habits" | "templates">("habits");
+  const [activeSection, setActiveSection] = useState<"habits" | "templates" | "domains" | "categories">("habits");
 
   // State for Custom Templates
   const [customTemplates, setCustomTemplates] = useState<any[]>([]);
@@ -70,6 +71,30 @@ export default function AdminPortalView() {
   const [cType, setCType] = useState("time");
   const [creatingCatalog, setCreatingCatalog] = useState(false);
 
+  // Biological Domains State
+  const [domains, setDomains] = useState<any[]>([]);
+  const [loadingDomains, setLoadingDomains] = useState(true);
+  const [showCreateDomainModal, setShowCreateDomainModal] = useState(false);
+  const [dName, setDName] = useState("");
+  const [dDesc, setDDesc] = useState("");
+  const [creatingDomain, setCreatingDomain] = useState(false);
+
+  // Protocol Categories State
+  const [categories, setCategories] = useState<any[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+  const [catName, setCatName] = useState("");
+  const [catDesc, setCatDesc] = useState("");
+  const [creatingCategory, setCreatingCategory] = useState(false);
+
+  // Pending Deletion State for Dependency Pre-flight Modal
+  const [pendingDelete, setPendingDelete] = useState<{
+    entityType: "domain" | "category" | "catalog" | "template";
+    entityName: string;
+    entityKey: string;
+    onDelete: () => Promise<void>;
+  } | null>(null);
+
   const fetchTemplates = () => {
     setLoadingTemplates(true);
     fetch("/api/admin/templates")
@@ -88,6 +113,24 @@ export default function AdminPortalView() {
       .finally(() => setLoadingCatalog(false));
   };
 
+  const fetchDomains = () => {
+    setLoadingDomains(true);
+    fetch("/api/admin/domains")
+      .then((res) => res.json())
+      .then((data) => setDomains(data.domains || []))
+      .catch(() => {})
+      .finally(() => setLoadingDomains(false));
+  };
+
+  const fetchCategories = () => {
+    setLoadingCategories(true);
+    fetch("/api/admin/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.categories || []))
+      .catch(() => {})
+      .finally(() => setLoadingCategories(false));
+  };
+
   const fetchUsage = () => {
     fetch("/api/admin/catalog/usage")
       .then((res) => res.json())
@@ -98,6 +141,8 @@ export default function AdminPortalView() {
   useEffect(() => {
     fetchTemplates();
     fetchCatalog();
+    fetchDomains();
+    fetchCategories();
     fetchUsage();
   }, []);
 
@@ -237,12 +282,108 @@ export default function AdminPortalView() {
     }
   };
 
-  const handleDeleteTemplate = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this template system?")) return;
+  const handleDeleteTemplate = (t: any) => {
+    setPendingDelete({
+      entityType: "template",
+      entityName: t.name,
+      entityKey: t.key || t.id,
+      onDelete: async () => {
+        const res = await fetch(`/api/admin/templates?id=${t.id}`, { method: "DELETE" });
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Failed to delete template.");
+        }
+        fetchTemplates();
+      },
+    });
+  };
+
+  const handleCreateDomain = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!dName.trim()) return;
+    setCreatingDomain(true);
     try {
-      const res = await fetch(`/api/admin/templates?id=${id}`, { method: "DELETE" });
-      if (res.ok) fetchTemplates();
-    } catch {}
+      const res = await fetch("/api/admin/domains", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: dName.trim(), description: dDesc.trim() }),
+      });
+      if (res.ok) {
+        setShowCreateDomainModal(false);
+        setDName("");
+        setDDesc("");
+        fetchDomains();
+      } else {
+        const data = await res.json();
+        setErrorMsg(data.error || "Could not create domain.");
+      }
+    } catch {
+      setErrorMsg("Network error creating domain.");
+    } finally {
+      setCreatingDomain(false);
+    }
+  };
+
+  const handleDeleteDomain = (d: any) => {
+    setPendingDelete({
+      entityType: "domain",
+      entityName: d.name,
+      entityKey: d.name,
+      onDelete: async () => {
+        const res = await fetch(`/api/admin/domains?name=${encodeURIComponent(d.name)}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Failed to delete domain.");
+        }
+        fetchDomains();
+      },
+    });
+  };
+
+  const handleCreateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!catName.trim()) return;
+    setCreatingCategory(true);
+    try {
+      const res = await fetch("/api/admin/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: catName.trim(), description: catDesc.trim() }),
+      });
+      if (res.ok) {
+        setShowCreateCategoryModal(false);
+        setCatName("");
+        setCatDesc("");
+        fetchCategories();
+      } else {
+        const data = await res.json();
+        setErrorMsg(data.error || "Could not create category.");
+      }
+    } catch {
+      setErrorMsg("Network error creating category.");
+    } finally {
+      setCreatingCategory(false);
+    }
+  };
+
+  const handleDeleteCategory = (c: any) => {
+    setPendingDelete({
+      entityType: "category",
+      entityName: c.name,
+      entityKey: c.name,
+      onDelete: async () => {
+        const res = await fetch(`/api/admin/categories?name=${encodeURIComponent(c.name)}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Failed to delete category.");
+        }
+        fetchCategories();
+      },
+    });
   };
 
   const handleCreateCatalog = async (e: React.FormEvent) => {
@@ -277,28 +418,21 @@ export default function AdminPortalView() {
     }
   };
 
-  const handleDeleteCatalog = async (id: string, name: string, habitKey: string) => {
-    const usages = habitUsageMap[habitKey] || habitUsageMap[normalizeName(name)] || [];
-    if (usages.length > 0) {
-      alert(`Cannot delete "${name}": It is currently included in template protocol "${usages[0]}". Please remove it from that template first.`);
-      return;
-    }
-
-    if (!confirm(`Delete standalone catalog habit "${name}"?`)) return;
-
-    try {
-      setErrorMsg(null);
-      const res = await fetch(`/api/admin/catalog?id=${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMsg(data.error || "Could not delete habit.");
-      } else {
+  const handleDeleteCatalog = (h: any) => {
+    setPendingDelete({
+      entityType: "catalog",
+      entityName: h.name,
+      entityKey: h.habitKey || h.name,
+      onDelete: async () => {
+        const res = await fetch(`/api/admin/catalog?id=${h.id}`, { method: "DELETE" });
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Could not delete catalog habit.");
+        }
         fetchCatalog();
         fetchUsage();
-      }
-    } catch {
-      setErrorMsg("Network error trying to delete habit.");
-    }
+      },
+    });
   };
 
   return (
@@ -310,6 +444,8 @@ export default function AdminPortalView() {
           onSelectSection={setActiveSection}
           habitsCount={allHabitItems.length}
           templatesCount={allTemplatesList.length}
+          domainsCount={domains.length}
+          categoriesCount={categories.length}
         />
       }
     >
@@ -425,7 +561,7 @@ export default function AdminPortalView() {
                         </td>
                         <td className="py-3 text-right">
                           <button
-                            onClick={() => handleDeleteCatalog(h.id, h.name, h.habitKey)}
+                            onClick={() => handleDeleteCatalog(h)}
                             className={`font-semibold ${
                               isProtected ? "text-[#737970] dark:text-[#a1a1aa] cursor-not-allowed opacity-60" : "text-[#be5a38] hover:underline"
                             }`}
@@ -541,7 +677,128 @@ export default function AdminPortalView() {
             )}
           </div>
         )}
-      </div>
+
+        {/* SECTION 3: BIOLOGICAL DOMAINS */}
+        {activeSection === "domains" && (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
+              <div>
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                  Biological Domains
+                </h1>
+                <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
+                  Manage system biological taxonomies. Domains referenced by active user habits, catalog items, or protocols are protected from deletion.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowCreateDomainModal(true)}
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
+              >
+                + Add Biological Domain
+              </button>
+            </div>
+
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
+                    <th className="pb-3 font-semibold">Domain Name</th>
+                    <th className="pb-3 font-semibold">Description</th>
+                    <th className="pb-3 font-semibold">Type</th>
+                    <th className="pb-3 font-semibold text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
+                  {domains.map((d) => (
+                    <tr key={d.name} className="hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
+                      <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                        <span className="rounded-md bg-[#e3ede6] dark:bg-[#27272a] px-2 py-0.5 font-medium text-[#406852] dark:text-[#f4f4f5]">
+                          {d.name}
+                        </span>
+                      </td>
+                      <td className="py-3 text-[#737970] dark:text-[#a1a1aa]">{d.description}</td>
+                      <td className="py-3">
+                        <span className="rounded-md bg-[#e5e1d7] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#232f26] dark:text-[#a1a1aa]">
+                          {d.isSystemDefault ? "System Default" : "Org Custom"}
+                        </span>
+                      </td>
+                      <td className="py-3 text-right">
+                        <button
+                          onClick={() => handleDeleteDomain(d)}
+                          className="font-semibold text-[#be5a38] hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* SECTION 4: PROTOCOL CATEGORIES */}
+        {activeSection === "categories" && (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-4">
+              <div>
+                <h1 className="font-display text-3xl font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                  Protocol Categories
+                </h1>
+                <p className="text-xs text-[#737970] dark:text-[#a1a1aa]">
+                  Manage system categories for marketplace protocols. Categories referenced by active protocol templates are protected from deletion.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowCreateCategoryModal(true)}
+                className="rounded-xl bg-[#232f26] px-4 py-2.5 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-opacity hover:opacity-90"
+              >
+                + Add Protocol Category
+              </button>
+            </div>
+
+            <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#e5e1d7] dark:border-[#27272a] text-[#737970] dark:text-[#a1a1aa]">
+                    <th className="pb-3 font-semibold">Category Name</th>
+                    <th className="pb-3 font-semibold">Description</th>
+                    <th className="pb-3 font-semibold">Type</th>
+                    <th className="pb-3 font-semibold text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#e5e1d7]/60 dark:divide-[#27272a]">
+                  {categories.map((c) => (
+                    <tr key={c.name} className="hover:bg-[#fbf9f5] dark:hover:bg-[#27272a]">
+                      <td className="py-3 font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+                        <span className="rounded-md bg-[#f4efe2] dark:bg-[#27272a] px-2 py-0.5 font-medium text-[#6b4923] dark:text-[#d4cca9]">
+                          {c.name}
+                        </span>
+                      </td>
+                      <td className="py-3 text-[#737970] dark:text-[#a1a1aa]">{c.description}</td>
+                      <td className="py-3">
+                        <span className="rounded-md bg-[#e5e1d7] dark:bg-[#27272a] px-2 py-0.5 text-[10px] font-semibold text-[#232f26] dark:text-[#a1a1aa]">
+                          {c.isSystemDefault ? "System Default" : "Org Custom"}
+                        </span>
+                      </td>
+                      <td className="py-3 text-right">
+                        <button
+                          onClick={() => handleDeleteCategory(c)}
+                          className="font-semibold text-[#be5a38] hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
       {/* CREATE / EDIT TEMPLATE MODAL */}
       {showCreateTemplateModal && (
@@ -771,6 +1028,106 @@ export default function AdminPortalView() {
           </div>
         </div>
       )}
+
+      {/* CREATE BIOLOGICAL DOMAIN MODAL */}
+      {showCreateDomainModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl space-y-4 animate-scale-in">
+            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
+              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">Add Biological Domain</h3>
+              <button onClick={() => setShowCreateDomainModal(false)} className="text-[#737970] dark:text-[#a1a1aa]">✕</button>
+            </div>
+
+            <form onSubmit={handleCreateDomain} className="space-y-3 text-xs">
+              <div>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Domain Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Ergonomics, Mental Health, Longevity"
+                  value={dName}
+                  onChange={(e) => setDName(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Description</label>
+                <textarea
+                  rows={2}
+                  placeholder="Domain scope & purpose..."
+                  value={dDesc}
+                  onChange={(e) => setDDesc(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+                <button type="button" onClick={() => setShowCreateDomainModal(false)} className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] px-4 py-2 font-semibold">Cancel</button>
+                <button type="submit" disabled={creatingDomain} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]">
+                  {creatingDomain ? "Adding…" : "Add Domain →"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CREATE PROTOCOL CATEGORY MODAL */}
+      {showCreateCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#18181b] border border-[#e5e1d7] dark:border-[#27272a] p-6 shadow-2xl space-y-4 animate-scale-in">
+            <div className="flex items-center justify-between border-b border-[#e5e1d7] dark:border-[#27272a] pb-3">
+              <h3 className="text-lg font-semibold text-[#232f26] dark:text-[#f4f4f5]">Add Protocol Category</h3>
+              <button onClick={() => setShowCreateCategoryModal(false)} className="text-[#737970] dark:text-[#a1a1aa]">✕</button>
+            </div>
+
+            <form onSubmit={handleCreateCategory} className="space-y-3 text-xs">
+              <div>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Category Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Biohacking, Executive Leadership"
+                  value={catName}
+                  onChange={(e) => setCatName(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none focus:border-[#232f26] dark:focus:border-[#3f3f46]"
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-[#232f26] dark:text-[#f4f4f5]">Description</label>
+                <textarea
+                  rows={2}
+                  placeholder="Category scope & focus..."
+                  value={catDesc}
+                  onChange={(e) => setCatDesc(e.target.value)}
+                  className="mt-1 w-full rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#27272a] dark:text-[#f4f4f5] p-2.5 text-xs outline-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 border-t border-[#e5e1d7] dark:border-[#27272a] pt-4">
+                <button type="button" onClick={() => setShowCreateCategoryModal(false)} className="rounded-xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] px-4 py-2 font-semibold">Cancel</button>
+                <button type="submit" disabled={creatingCategory} className="rounded-xl bg-[#232f26] px-5 py-2 font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46]">
+                  {creatingCategory ? "Adding…" : "Add Category →"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DEPENDENCY PRE-FLIGHT WARNING MODAL */}
+      {pendingDelete && (
+        <AdminDependencyWarningModal
+          entityType={pendingDelete.entityType}
+          entityName={pendingDelete.entityName}
+          entityKey={pendingDelete.entityKey}
+          onConfirmDelete={pendingDelete.onDelete}
+          onClose={() => setPendingDelete(null)}
+        />
+      )}
+      </div>
     </AppShell>
   );
 }

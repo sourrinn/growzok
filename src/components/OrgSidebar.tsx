@@ -1,10 +1,12 @@
 "use client";
 
 interface Props {
-  activeSection: "habits" | "templates";
-  onSelectSection: (section: "habits" | "templates") => void;
+  activeSection: "habits" | "templates" | "domains" | "categories";
+  onSelectSection: (section: "habits" | "templates" | "domains" | "categories") => void;
   habitsCount: number;
   templatesCount: number;
+  domainsCount?: number;
+  categoriesCount?: number;
 }
 
 export default function OrgSidebar({
@@ -12,6 +14,8 @@ export default function OrgSidebar({
   onSelectSection,
   habitsCount,
   templatesCount,
+  domainsCount = 0,
+  categoriesCount = 0,
 }: Props) {
   return (
     <aside className="flex h-full w-60 flex-col justify-between border-r border-[#e5e1d7] bg-[#fbf9f5] p-3 text-[#232f26] dark:border-[#27272a] dark:bg-[#121215] dark:text-[#f4f4f5]">
@@ -29,7 +33,7 @@ export default function OrgSidebar({
         {/* Navigation Section */}
         <div className="space-y-1">
           <p className="px-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
-            Organization Control
+            Catalog & Systems
           </p>
 
           <nav className="mt-2 space-y-1.5">
@@ -71,6 +75,46 @@ export default function OrgSidebar({
               </div>
               <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "templates" ? "bg-white/20 text-white dark:bg-white/10 dark:text-[#f4f4f5]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#27272a] dark:text-[#a1a1aa]"}`}>
                 {templatesCount}
+              </span>
+            </button>
+
+            {/* Biological Domains Sub-Nav */}
+            <button
+              onClick={() => onSelectSection("domains")}
+              className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs font-medium transition-all ${
+                activeSection === "domains"
+                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
+                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]"
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 shrink-0">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>Biological Domains</span>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "domains" ? "bg-white/20 text-white dark:bg-white/10 dark:text-[#f4f4f5]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#27272a] dark:text-[#a1a1aa]"}`}>
+                {domainsCount}
+              </span>
+            </button>
+
+            {/* Protocol Categories Sub-Nav */}
+            <button
+              onClick={() => onSelectSection("categories")}
+              className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs font-medium transition-all ${
+                activeSection === "categories"
+                  ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
+                  : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]"
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4 shrink-0">
+                  <path d="M4 6h16M4 12h16M4 18h7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>Protocol Categories</span>
+              </div>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] ${activeSection === "categories" ? "bg-white/20 text-white dark:bg-white/10 dark:text-[#f4f4f5]" : "bg-[#e5e1d7] text-[#232f26] dark:bg-[#27272a] dark:text-[#a1a1aa]"}`}>
+                {categoriesCount}
               </span>
             </button>
           </nav>

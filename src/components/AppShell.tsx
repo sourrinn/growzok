@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import AppSidebar from "@/components/AppSidebar";
 import CommandPalette from "@/components/CommandPalette";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 interface Props {
   userLabel?: string;
@@ -124,6 +125,9 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
 
       {/* Global Ctrl+K Command Palette */}
       <CommandPalette />
+
+      {/* Fixed Mobile Bottom Navigation (Icon-Only, Excludes Admin) */}
+      <MobileBottomNav />
     </div>
   );
 }

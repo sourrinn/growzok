@@ -1,0 +1,17 @@
+{
+  "name": "Growzok — Science-Backed Habit Protocols",
+  "short_name": "Growzok",
+  "description": "Master science-backed habit protocols, track daily routines, and optimize biological performance.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#18181b",
+  "theme_color": "#232f26",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

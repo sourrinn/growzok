@@ -82,6 +82,50 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
         </div>
       </div>
 
+      {/* Calendar iCal Subscription & Data Portability (100% Free) */}
+      <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm space-y-4">
+        <div>
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+            Calendar Feed & Data Portability
+          </h2>
+          <p className="mt-1 text-xs text-[#737970] dark:text-[#a1a1aa] leading-relaxed">
+            Subscribe to your Growzok routines directly inside Google Calendar, Apple Calendar, or Outlook for free using standard iCal feeds.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] p-3.5">
+          <div className="space-y-0.5 truncate pr-2">
+            <span className="text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5]">
+              📅 iCal Feed URL
+            </span>
+            <p className="text-[11px] font-mono text-[#737970] dark:text-[#a1a1aa] truncate">
+              {typeof window !== "undefined" ? `${window.location.origin}/api/calendar/feed.ics` : "/api/calendar/feed.ics"}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                const url = `${window.location.origin}/api/calendar/feed.ics`;
+                navigator.clipboard.writeText(url);
+                alert("Calendar Feed URL copied to clipboard! Paste this into Google Calendar or Apple Calendar.");
+              }}
+              className="rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs font-semibold text-[#232f26] dark:border-[#3f3f46] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs hover:bg-[#fbf9f5]"
+            >
+              📋 Copy Feed Link
+            </button>
+            <a
+              href="/api/user/export"
+              download
+              className="rounded-xl bg-[#232f26] px-3.5 py-2 text-xs font-semibold text-white dark:bg-[#3f3f46] dark:text-[#f4f4f5] shadow-xs hover:bg-black"
+            >
+              📥 Export Backup (JSON)
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Security & Authentication */}
       <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-6 shadow-sm">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">

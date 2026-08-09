@@ -6,6 +6,7 @@ import { buildReport, type ReportPeriod } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import { todayStr } from "@/lib/dates";
 import { Skeleton, SkeletonStatTile } from "@/components/Skeleton";
+import ConsistencyHeatmap from "@/components/ConsistencyHeatmap";
 
 const PERIODS: { value: ReportPeriod; label: string }[] = [
   { value: "week", label: "Week" },
@@ -436,6 +437,9 @@ export default function ReportsView() {
           )}
         </div>
       </div>
+
+      {/* 365-Day Consistency Heatmap Grid */}
+      <ConsistencyHeatmap habits={habits} />
     </div>
   );
 }

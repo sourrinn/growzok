@@ -240,9 +240,14 @@ export function useHabits(): UseHabits {
           setHabits([]);
           return redirectToLogin();
         }
-        if (!res.ok) throw new Error("delete");
-      } catch {
-        setError("Couldn't delete that habit.");
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Couldn't delete that habit.");
+        }
+        setError(null);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Couldn't delete that habit.";
+        setError(msg);
         setHabits(snapshot);
       }
     },

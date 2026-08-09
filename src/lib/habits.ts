@@ -66,11 +66,14 @@ export async function createHabit(
 }
 
 export async function deleteHabit(userId: string, id: string): Promise<boolean> {
-  if (!ObjectId.isValid(id)) return false;
   const col = await collection();
-  // Scope by userId so a user can only delete their own habit.
-  const result = await col.deleteOne({ _id: new ObjectId(id), userId });
-  return result.deletedCount === 1;
+  if (ObjectId.isValid(id)) {
+    const res = await col.deleteOne({ _id: new ObjectId(id), userId });
+    if (res.deletedCount === 1) return true;
+  }
+  // Fallback for custom or string _id formats
+  const resStr = await col.deleteOne({ _id: id as unknown as ObjectId, userId });
+  return resStr.deletedCount === 1;
 }
 
 export async function updateHabit(

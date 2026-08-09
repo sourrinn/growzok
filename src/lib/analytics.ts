@@ -271,13 +271,6 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
       bestStreak,
     });
 
-    if (sr.trackable > 0) {
-      if (!topHabit || sr.rate > topHabit.rate) topHabit = { habit, rate: sr.rate };
-      if (!weakestHabit || sr.rate < weakestHabit.rate) {
-        weakestHabit = { habit, rate: sr.rate };
-      }
-    }
-
     const catTot = categoryTotals.get(habit.category) ?? { completed: 0, trackable: 0 };
     catTot.completed += sr.completed;
     catTot.trackable += sr.trackable;
@@ -291,6 +284,20 @@ export function buildReport(habits: Habit[], period: ReportPeriod): Report {
 
   // Sort rows descending by success rate
   rows.sort((a, b) => b.rate - a.rate);
+
+  if (rows.length > 0) {
+    topHabit = { habit: rows[0].habit, rate: rows[0].rate };
+    
+    // Find weakest habit that has lower rate or distinct habit
+    const distinctWeak = rows.slice(1).find((r) => r.rate < topHabit!.rate) ?? rows[rows.length - 1];
+    if (distinctWeak && distinctWeak.habit.id !== topHabit.habit.id && distinctWeak.rate < topHabit.rate) {
+      weakestHabit = { habit: distinctWeak.habit, rate: distinctWeak.rate };
+    } else if (rows.length > 1 && rows[rows.length - 1].habit.id !== topHabit.habit.id) {
+      weakestHabit = { habit: rows[rows.length - 1].habit, rate: rows[rows.length - 1].rate };
+    } else {
+      weakestHabit = null;
+    }
+  }
 
   const categories: CategoryStat[] = Array.from(categoryTotals.entries())
     .map(([category, t]) => ({

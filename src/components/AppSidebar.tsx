@@ -4,8 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { useTheme } from "@/components/ThemeProvider";
-
 interface Props {
   userLabel?: string;
   isCollapsed?: boolean;
@@ -20,8 +18,6 @@ export default function AppSidebar({
 }: Props) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { theme, setTheme, isDark } = useTheme();
-
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
 
   const baseNavItems = [
@@ -156,29 +152,8 @@ export default function AppSidebar({
         </div>
       </div>
 
-      {/* Bottom Section: Theme Switcher & Account Settings */}
-      <div className="space-y-1.5 border-t border-[#e5e1d7] pt-3 dark:border-[#27272a]">
-        {/* Theme Switcher Button */}
-        <button
-          onClick={() => setTheme(isDark ? "light" : "dark")}
-          title={isCollapsed ? (isDark ? "Light Mode" : "Dark Mode") : undefined}
-          className={`flex w-full items-center rounded-xl transition-all ${
-            isCollapsed ? "justify-center py-2.5 px-0" : "gap-3 px-3 py-2.5 text-sm"
-          } font-medium text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]`}
-        >
-          {isDark ? (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0 text-amber-400">
-              <circle cx="12" cy="12" r="5" />
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0 text-[#232f26]">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-            </svg>
-          )}
-          {!isCollapsed && <span>{isDark ? "Light Mode" : "Dark Mode"}</span>}
-        </button>
-
+      {/* Bottom Section: Account Settings */}
+      <div className="border-t border-[#e5e1d7] pt-3 dark:border-[#27272a]">
         <Link
           href="/account"
           title={isCollapsed ? "Account Settings" : undefined}

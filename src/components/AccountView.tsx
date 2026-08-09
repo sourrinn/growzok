@@ -2,12 +2,19 @@
 
 import { signOut } from "next-auth/react";
 import { useTheme } from "@/components/ThemeProvider";
+import CustomSelect from "@/components/CustomSelect";
 
 interface Props {
   userName: string;
   userEmail: string;
   habitsCount: number;
 }
+
+const THEME_OPTIONS = [
+  { value: "light", label: "☀️ Light Mode" },
+  { value: "dark", label: "🌙 Dark Mode" },
+  { value: "system", label: "💻 System Default" },
+];
 
 export default function AccountView({ userName, userEmail, habitsCount }: Props) {
   const { theme, setTheme } = useTheme();
@@ -62,42 +69,16 @@ export default function AccountView({ userName, userEmail, habitsCount }: Props)
           Customize how Growzok looks on your display. Preference is automatically saved to your browser.
         </p>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <button
-            type="button"
-            onClick={() => setTheme("light")}
-            className={`flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-semibold transition-all ${
-              theme === "light"
-                ? "border-[#232f26] bg-[#232f26] text-white shadow-sm"
-                : "border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] text-[#232f26] dark:text-[#f4f4f5] hover:bg-white dark:hover:bg-[#3f3f46]"
-            }`}
-          >
-            <span>☀️ Light Mode</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setTheme("dark")}
-            className={`flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-semibold transition-all ${
-              theme === "dark"
-                ? "border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-bold"
-                : "border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] text-[#232f26] dark:text-[#f4f4f5] hover:bg-white dark:hover:bg-[#3f3f46]"
-            }`}
-          >
-            <span>🌙 Dark Mode</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setTheme("system")}
-            className={`flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-semibold transition-all ${
-              theme === "system"
-                ? "border-[#232f26] bg-[#232f26] text-white dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm"
-                : "border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#27272a] text-[#232f26] dark:text-[#f4f4f5] hover:bg-white dark:hover:bg-[#3f3f46]"
-            }`}
-          >
-            <span>💻 System Default</span>
-          </button>
+        <div className="mt-4 max-w-sm">
+          <label className="block text-xs font-semibold text-[#232f26] dark:text-[#f4f4f5] mb-1.5">
+            Theme Mode Preference
+          </label>
+          <CustomSelect
+            options={THEME_OPTIONS}
+            value={theme}
+            onChange={(val) => setTheme(val as "light" | "dark" | "system")}
+            className="w-full"
+          />
         </div>
       </div>
 

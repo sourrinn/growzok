@@ -103,7 +103,7 @@ export default function BioSuiteClient() {
               : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
           }`}
         >
-          <span>🧠</span> Bio Playbooks
+          <span>🧠</span> Life Guides
         </button>
       </div>
 

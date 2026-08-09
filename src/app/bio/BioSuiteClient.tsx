@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import FastingClient from "../fasting/FastingClient";
 import VitalsClient from "../vitals/VitalsClient";
 import BreathworkClient from "../breathwork/BreathworkClient";
@@ -9,7 +10,18 @@ import RecoveryClient from "../recovery/RecoveryClient";
 import PlaybooksClient from "../playbooks/PlaybooksClient";
 
 export default function BioSuiteClient() {
-  const [activeTab, setActiveTab] = useState<"fasting" | "vitals" | "breathwork" | "circadian" | "recovery" | "playbooks">("fasting");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") as any;
+  const [activeTab, setActiveTab] = useState<"fasting" | "vitals" | "breathwork" | "circadian" | "recovery" | "playbooks">(
+    initialTab || "fasting"
+  );
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && ["fasting", "vitals", "breathwork", "circadian", "recovery", "playbooks"].includes(tabParam)) {
+      setActiveTab(tabParam as any);
+    }
+  }, [searchParams]);
 
   return (
     <div className="space-y-6">

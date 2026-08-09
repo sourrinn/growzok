@@ -62,7 +62,7 @@ export default function DashboardCommandHub() {
           </Link>
 
           <Link
-            href="/fasting"
+            href="/bio?tab=fasting"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
             <span className="text-lg">⏱️</span>
@@ -73,7 +73,7 @@ export default function DashboardCommandHub() {
           </Link>
 
           <Link
-            href="/vitals"
+            href="/bio?tab=vitals"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
             <span className="text-lg">📈</span>
@@ -84,7 +84,7 @@ export default function DashboardCommandHub() {
           </Link>
 
           <Link
-            href="/breathwork"
+            href="/bio?tab=breathwork"
             className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-4 text-left dark:border-[#27272a] dark:bg-[#121215] transition-all hover:border-[#406852]"
           >
             <span className="text-lg">🫁</span>
@@ -165,21 +165,21 @@ export default function DashboardCommandHub() {
             </h3>
             <div className="space-y-2 text-xs">
               <Link
-                href="/circadian"
+                href="/bio?tab=circadian"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
                 <span>☀️ Solar Optics Calculator</span>
                 <span>→</span>
               </Link>
               <Link
-                href="/playbooks"
+                href="/bio?tab=playbooks"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
                 <span>🧠 Bio-Optimization Playbooks</span>
                 <span>→</span>
               </Link>
               <Link
-                href="/recovery"
+                href="/bio?tab=recovery"
                 className="flex items-center justify-between p-3 rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] dark:border-[#27272a] dark:bg-[#121215] font-semibold text-[#232f26] dark:text-[#f4f4f5] hover:border-[#406852]"
               >
                 <span>🧊 Thermal Recovery Log</span>

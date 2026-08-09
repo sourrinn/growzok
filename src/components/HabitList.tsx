@@ -7,6 +7,8 @@ import type { EditHabitInput } from "@/hooks/useHabits";
 import { SkeletonHabitCard } from "@/components/Skeleton";
 import EditHabitModal from "@/components/EditHabitModal";
 
+import ConfirmActionModal from "@/components/ConfirmActionModal";
+
 interface Props {
   habits: Habit[];
   loading: boolean;
@@ -27,6 +29,7 @@ export default function HabitList({
   onDelete,
 }: Props) {
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+  const [deletingHabit, setDeletingHabit] = useState<Habit | null>(null);
 
   if (loading) {
     return (
@@ -49,6 +52,12 @@ export default function HabitList({
     );
   }
 
+  const handleConfirmDelete = async (_reason: string) => {
+    if (!deletingHabit) return;
+    await onDelete(deletingHabit.id);
+    setDeletingHabit(null);
+  };
+
   return (
     <>
       <ul className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -70,7 +79,7 @@ export default function HabitList({
                 onToggle={onToggle}
                 onLogProgress={onLogProgress}
                 onEditClick={() => setEditingHabit(habit)}
-                onDelete={onDelete}
+                onDeleteClick={() => setDeletingHabit(habit)}
               />
             </li>
           );
@@ -82,6 +91,19 @@ export default function HabitList({
           habit={editingHabit}
           onSave={onEdit}
           onClose={() => setEditingHabit(null)}
+        />
+      )}
+
+      {deletingHabit && (
+        <ConfirmActionModal
+          type="delete"
+          deleteData={{
+            habitId: deletingHabit.id,
+            habitName: deletingHabit.name,
+            domain: deletingHabit.domain,
+          }}
+          onConfirm={handleConfirmDelete}
+          onClose={() => setDeletingHabit(null)}
         />
       )}
     </>

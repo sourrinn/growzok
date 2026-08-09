@@ -39,6 +39,8 @@ function normalizeName(name: string): string {
   return name.trim().toLowerCase();
 }
 
+import ConfirmActionModal, { type ConfirmAdoptData } from "@/components/ConfirmActionModal";
+
 export default function ProtocolAdoptModal({ protocol: protocolProp, template: templateProp, onClose }: Props) {
   const protocol = (protocolProp || templateProp)!;
   const router = useRouter();
@@ -87,6 +89,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
     )
   );
   const [submitting, setSubmitting] = useState(false);
+  const [pendingConfirm, setPendingConfirm] = useState<ConfirmAdoptData | null>(null);
 
   const toggleHabit = (idx: number) => {
     if (duplicateIndices.has(idx)) return;
@@ -98,10 +101,19 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
     });
   };
 
-  const handleAdopt = async () => {
+  const handleAdoptClick = () => {
     if (selected.size === 0) return;
-    setSubmitting(true);
+    const selectedHabitNames = Array.from(selected).map((idx) => protocol.habits[idx].name);
+    setPendingConfirm({
+      title: protocol.name,
+      category: protocol.category,
+      habitCount: selected.size,
+      habitsPreview: selectedHabitNames,
+    });
+  };
 
+  const handleConfirmAdopt = async (_reason: string) => {
+    setSubmitting(true);
     const items: ProtocolHabit[] = Array.from(selected).map((idx) => {
       const h = protocol.habits[idx];
       const goalOverride = goalOverrides[idx];
@@ -116,6 +128,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
 
     await addFromTemplate(items, protocol.key);
     setSubmitting(false);
+    setPendingConfirm(null);
     onClose();
     router.push("/dashboard");
   };
@@ -234,7 +247,7 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
               Cancel
             </button>
             <button
-              onClick={handleAdopt}
+              onClick={handleAdoptClick}
               disabled={submitting || selected.size === 0}
               className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-opacity hover:opacity-90 disabled:opacity-40"
             >
@@ -243,6 +256,15 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
           </div>
         </div>
       </div>
+
+      {pendingConfirm && (
+        <ConfirmActionModal
+          type="adopt"
+          adoptData={pendingConfirm}
+          onConfirm={handleConfirmAdopt}
+          onClose={() => setPendingConfirm(null)}
+        />
+      )}
     </div>
   );
 }

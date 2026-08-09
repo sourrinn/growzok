@@ -13,6 +13,7 @@ import {
 import type { NewHabitInput } from "@/hooks/useHabits";
 
 import CustomSelect from "@/components/CustomSelect";
+import ConfirmActionModal, { type ConfirmAddData } from "@/components/ConfirmActionModal";
 
 type FrequencyKind = "daily" | "weekdays" | "weekends" | "timesPerWeek" | "custom";
 
@@ -51,6 +52,11 @@ export default function AddHabit({
   const [goal, setGoal] = useState(1);
   const [unit, setUnit] = useState("");
 
+  const [pendingInput, setPendingInput] = useState<{
+    input: NewHabitInput;
+    summary: ConfirmAddData;
+  } | null>(null);
+
   const toggleDay = (day: number) => {
     setCustomDays((prev) => {
       const next = new Set(prev);
@@ -60,7 +66,7 @@ export default function AddHabit({
     });
   };
 
-  const submit = async () => {
+  const submit = () => {
     const name = value.trim();
     if (!name) return;
     if (freqKind === "custom" && customDays.size === 0) return;
@@ -82,8 +88,26 @@ export default function AddHabit({
         ? (userLabel as HabitCategory)
         : "Personal";
 
+    const scheduleLabel =
+      freqKind === "timesPerWeek"
+        ? `${times}× / week`
+        : freqKind === "custom"
+          ? "Custom days"
+          : freqKind.charAt(0).toUpperCase() + freqKind.slice(1);
+
+    const targetGoalLabel = target ? `${target.goal} ${target.unit || target.type}` : undefined;
+
+    setPendingInput({
+      input: { name, category, domain, userLabel, frequency, target, missAllowance },
+      summary: { name, domain, userLabel, scheduleLabel, targetGoalLabel },
+    });
+  };
+
+  const handleConfirmAdd = async (_reason: string) => {
+    if (!pendingInput) return;
     setValue("");
-    await onAdd({ name, category, domain, userLabel, frequency, target, missAllowance });
+    await onAdd(pendingInput.input);
+    setPendingInput(null);
   };
 
   return (
@@ -242,6 +266,15 @@ export default function AddHabit({
             </div>
           )}
         </div>
+      )}
+
+      {pendingInput && (
+        <ConfirmActionModal
+          type="add"
+          addData={pendingInput.summary}
+          onConfirm={handleConfirmAdd}
+          onClose={() => setPendingInput(null)}
+        />
       )}
     </div>
   );

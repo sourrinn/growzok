@@ -37,10 +37,16 @@ function domainColor(domain: string): string {
   return DOMAIN_COLORS[domain] ?? "bg-mist text-charcoal border-mist";
 }
 
+import ConfirmActionModal, { type ConfirmAdoptData } from "@/components/ConfirmActionModal";
+
 export default function ProtocolStarterGrid({ onAdopt }: Props) {
   const [goalFilter, setGoalFilter] = useState<GoalFilter>("All");
   const [previewProtocol, setPreviewProtocol] = useState<Protocol | null>(null);
   const [adoptingKey, setAdoptingKey] = useState<string | null>(null);
+  const [pendingProtocol, setPendingProtocol] = useState<{
+    protocol: Protocol;
+    summary: ConfirmAdoptData;
+  } | null>(null);
 
   const filteredProtocols = useMemo(() => {
     if (goalFilter === "All") return STANDARD_PROTOCOLS;
@@ -57,12 +63,27 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
     });
   }, [goalFilter]);
 
-  const handleQuickAdopt = async (protocol: Protocol) => {
+  const handleQuickAdoptClick = (protocol: Protocol) => {
+    setPendingProtocol({
+      protocol,
+      summary: {
+        title: protocol.name,
+        category: protocol.category,
+        habitCount: protocol.habits.length,
+        habitsPreview: protocol.habits.map((h) => h.name),
+      },
+    });
+  };
+
+  const handleConfirmAdopt = async (_reason: string) => {
+    if (!pendingProtocol) return;
+    const { protocol } = pendingProtocol;
     setAdoptingKey(protocol.key);
     try {
       await onAdopt(protocol.habits);
     } finally {
       setAdoptingKey(null);
+      setPendingProtocol(null);
     }
   };
 
@@ -166,7 +187,7 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
               {/* Action Buttons */}
               <div className="mt-4 flex items-center gap-2 border-t border-[#e5e1d7]/50 dark:border-[#27272a] pt-3">
                 <button
-                  onClick={() => handleQuickAdopt(protocol)}
+                  onClick={() => handleQuickAdoptClick(protocol)}
                   disabled={isAdopting}
                   className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#232f26] py-1.5 text-xs font-medium text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
                 >
@@ -209,6 +230,16 @@ export default function ProtocolStarterGrid({ onAdopt }: Props) {
         <ProtocolAdoptModal
           protocol={previewProtocol}
           onClose={() => setPreviewProtocol(null)}
+        />
+      )}
+
+      {/* Confirmation Modal when user clicks 'One-Tap Add' */}
+      {pendingProtocol && (
+        <ConfirmActionModal
+          type="adopt"
+          adoptData={pendingProtocol.summary}
+          onConfirm={handleConfirmAdopt}
+          onClose={() => setPendingProtocol(null)}
         />
       )}
     </div>

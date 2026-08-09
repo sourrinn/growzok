@@ -18,10 +18,10 @@ interface Props {
   onToggle: (id: string) => void;
   onLogProgress: (id: string, value: number) => void;
   onEditClick: () => void;
-  onDelete: (id: string) => void;
+  onDeleteClick: () => void;
 }
 
-export default function HabitCard({ habit, isManaging = false, onToggle, onLogProgress, onEditClick, onDelete }: Props) {
+export default function HabitCard({ habit, isManaging = false, onToggle, onLogProgress, onEditClick, onDeleteClick }: Props) {
   const today = todayStr();
   const doneToday = habit.history.includes(today);
   const successRate = computeSuccessRate(habit);
@@ -209,7 +209,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
               </svg>
             </button>
             <button
-              onClick={() => onDelete(habit.id)}
+              onClick={onDeleteClick}
               aria-label={`Delete ${habit.name}`}
               title="Delete habit"
               className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#be5a38] bg-[#be5a38] text-white shadow-sm transition-all hover:opacity-90 active:scale-95"

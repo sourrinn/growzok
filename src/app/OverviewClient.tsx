@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { playFocusFinishChime } from "@/lib/soundChimes";
+import AZAlphabetGrid from "@/components/AZAlphabetGrid";
+import BeforeAfterSimulator from "@/components/BeforeAfterSimulator";
 
 const DOMAIN_BADGES = [
   "Sleep Hygiene",
@@ -333,6 +335,20 @@ export default function OverviewClient() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* System Comparison Simulator */}
+      <section className="border-t border-[#e5e1d7] bg-white py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BeforeAfterSimulator />
+        </div>
+      </section>
+
+      {/* The A-Z of Human Mastery Alphabet Grid */}
+      <section className="border-t border-[#e5e1d7] bg-[#fbf9f5] py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AZAlphabetGrid />
         </div>
       </section>
 

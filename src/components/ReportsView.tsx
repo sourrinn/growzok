@@ -12,6 +12,7 @@ import { computeUserGamification } from "@/lib/gamification";
 import { generateBehavioralInsights } from "@/lib/heuristicCoach";
 import { computeHabitSynergies } from "@/lib/synergy";
 import SocialShareModal from "@/components/SocialShareModal";
+import StreakProtectionCard from "@/components/StreakProtectionCard";
 
 
 const PERIODS: { value: ReportPeriod; label: string }[] = [
@@ -536,6 +537,9 @@ export default function ReportsView() {
 
         {/* Spotlight Cards (4 cols) */}
         <div className="space-y-6 lg:col-span-4">
+          {/* Monthly Streak Protection Active Pill Card */}
+          <StreakProtectionCard />
+
           {/* Top Performer */}
           {report.topHabit && (
             <div className="rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] p-5 shadow-sm space-y-3">

@@ -153,19 +153,28 @@ export default function ProtocolsView() {
           ))}
         </div>
 
-        {/* Biological Domain Dropdown & Counter Row (Row 2) */}
+        {/* Biological Domain Quick Filter Chips (Row 2) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar flex-nowrap shrink-0">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] shrink-0 mr-1">
+            Domain:
+          </span>
+          {(["All", "Sleep", "Hydration", "Cardio", "Strength", "Breathing", "Productivity", "Digital Minimalism"] as (HabitDomain | "All")[]).map((dom) => (
+            <button
+              key={dom}
+              onClick={() => setDomainFilter(dom)}
+              className={`rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap transition-all ${
+                domainFilter === dom
+                  ? "bg-[#406852] text-white dark:bg-[#a3b899] dark:text-[#18181b] shadow-xs"
+                  : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:text-[#232f26]"
+              }`}
+            >
+              {dom}
+            </button>
+          ))}
+        </div>
+
+        {/* Counter Row (Row 3) */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#e5e1d7]/60 dark:border-[#27272a] pt-3 text-xs">
-          <div className="flex items-center gap-2">
-            <CustomSelect
-              prefixLabel="Domain: "
-              options={[
-                { value: "All", label: "All Biological Domains" },
-                ...HABIT_DOMAINS.map((dom) => ({ value: dom, label: dom })),
-              ]}
-              value={domainFilter}
-              onChange={(val) => setDomainFilter(val as HabitDomain | "All")}
-            />
-          </div>
 
           <div className="flex items-center gap-3">
             <span className="text-[#737970] dark:text-[#a1a1aa]">

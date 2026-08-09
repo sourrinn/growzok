@@ -65,11 +65,8 @@ export default function OverviewClient() {
       {/* 1. Top Marketing Navbar */}
       <header className="sticky top-0 z-50 border-b border-[#e5e1d7]/80 bg-[#fbf9f5]/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#232f26] font-display text-lg font-bold text-[#fbf9f5]">
-              G
-            </span>
-            <span className="font-display text-xl font-semibold tracking-tight text-[#232f26]">
+          <Link href="/" className="flex items-center">
+            <span className="font-display text-xl font-bold tracking-tight text-[#232f26]">
               Growzok
             </span>
           </Link>
@@ -122,7 +119,7 @@ export default function OverviewClient() {
             {/* Hero Left Content */}
             <div className="space-y-6 lg:col-span-7">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#406852]/20 bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852] mb-3">
-                🔬 Built on Circadian & Behavioral Neuroscience
+                Built on Circadian & Behavioral Neuroscience
               </span>
 
               <h1 className="font-display text-4xl font-bold tracking-tight text-[#232f26] sm:text-5xl lg:text-6xl leading-[1.1]">
@@ -235,7 +232,7 @@ export default function OverviewClient() {
                 </div>
 
                 <div className="rounded-xl bg-[#fbf9f5] border border-[#e5e1d7] p-3 text-center text-xs text-[#737970]">
-                  💡 Frequency-aware intelligence shields your streak on non-scheduled days.
+                  Frequency-aware intelligence shields your streak on non-scheduled days.
                 </div>
               </div>
             </div>
@@ -284,7 +281,7 @@ export default function OverviewClient() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
-              <span className="text-2xl">⚡</span>
+              <div className="h-9 w-9 rounded-xl bg-[#be5a38]/10 flex items-center justify-center text-[#be5a38] font-bold text-xs">01</div>
               <h3 className="font-bold text-sm text-[#be5a38]">Mid-Week Fatigue Relapse</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
                 <strong className="text-[#232f26]">The Problem:</strong> "Starting with intense motivation on Monday, hitting friction by Thursday, and quitting out of guilt."
@@ -297,7 +294,7 @@ export default function OverviewClient() {
             </div>
 
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
-              <span className="text-2xl">📱</span>
+              <div className="h-9 w-9 rounded-xl bg-[#be5a38]/10 flex items-center justify-center text-[#be5a38] font-bold text-xs">02</div>
               <h3 className="font-bold text-sm text-[#be5a38]">Digital Attention Drain</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
                 <strong className="text-[#232f26]">The Problem:</strong> "Unlocking your phone to log a habit exposes your brain to instant notification noise and digital fatigue."
@@ -310,7 +307,7 @@ export default function OverviewClient() {
             </div>
 
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
-              <span className="text-2xl">❓</span>
+              <div className="h-9 w-9 rounded-xl bg-[#be5a38]/10 flex items-center justify-center text-[#be5a38] font-bold text-xs">03</div>
               <h3 className="font-bold text-sm text-[#be5a38]">Decision Paralysis</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
                 <strong className="text-[#232f26]">The Problem:</strong> "Wasting cognitive energy trying to design routines from scratch without knowing what moves the needle."
@@ -323,7 +320,7 @@ export default function OverviewClient() {
             </div>
 
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
-              <span className="text-2xl">💸</span>
+              <div className="h-9 w-9 rounded-xl bg-[#be5a38]/10 flex items-center justify-center text-[#be5a38] font-bold text-xs">04</div>
               <h3 className="font-bold text-sm text-[#be5a38]">Subscription Exploitation</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
                 <strong className="text-[#232f26]">The Problem:</strong> "Renting your own behavioral history behind restrictive monthly paywalls and locked data silos."

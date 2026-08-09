@@ -5,44 +5,44 @@ import Link from "next/link";
 import { playFocusFinishChime } from "@/lib/soundChimes";
 
 const DOMAIN_BADGES = [
-  "Sleep",
+  "Sleep Hygiene",
   "Hydration",
   "Nutrition",
-  "Cardio",
+  "Cardiovascular",
   "Strength",
   "Mobility",
-  "Breathing",
+  "Breathwork",
   "Grooming",
-  "Preventive",
+  "Preventive Health",
   "Recovery",
-  "Productivity",
-  "Finance",
-  "Social",
-  "Learning",
+  "Deep Work",
+  "Financial Hygiene",
+  "Social Capital",
+  "Accelerated Learning",
   "Digital Minimalism",
-  "Gut Health",
+  "Gut Microbiome",
 ];
 
 const FAQS = [
   {
-    q: "What makes Growzok's 3-tier taxonomy different from ordinary habit apps?",
-    a: "Unlike plain text list apps, Growzok separates your habits into 16 biological & behavioral domains (e.g. Sleep, Hydration, Recovery) while giving you full freedom to label and bundle them for your personal daily workflow.",
+    q: "How does Growzok's biological taxonomy differ from generic habit apps?",
+    a: "Generic list apps treat all tasks identically. Growzok structures your habits across 16 fixed biological and behavioral domains—such as Circadian Sleep, Deep Work, and Recovery—allowing you to measure and optimize specific dimensions of human performance.",
   },
   {
-    q: "How do frequency-aware streaks work?",
-    a: "If you set a habit for Weekdays only, Saturdays and Sundays will not penalise your success rate or break your streak. For N-times per week habits, progress is tracked against weekly targets rather than daily pressure.",
+    q: "What makes frequency-aware streak algorithms superior?",
+    a: "Traditional habit trackers penalize rest days and weekend schedules, causing artificial streak resets that trigger guilt and routine abandonment. Growzok evaluates completion exclusively against your active schedule parameters.",
   },
   {
-    q: "Can I customize presets before adopting them?",
-    a: "Yes! Every template bundle opens a pre-flight customization drawer where you can adjust numeric goals, uncheck individual habits, or edit recommended times of day before adding them to your account.",
+    q: "Can protocol templates be personalized prior to adoption?",
+    a: "Every protocol bundle opens a pre-flight customization panel where you can refine target volumes, adjust schedule frequency, or select specific habits tailored to your immediate personal goals.",
   },
   {
-    q: "Is Growzok private and secure?",
-    a: "Every account operates under strict user-level data isolation. Passwords are derived using Node's scrypt algorithm, and session data is handled with secure JWT tokens.",
+    q: "How is personal data privacy and sovereignty maintained?",
+    a: "Your data remains under your absolute control. Account authentication uses cryptographic scrypt hashing, and your complete history can be exported at any time into open formats without restrictions.",
   },
   {
-    q: "Can I export my habit data?",
-    a: "Absolutely. Growzok supports 1-click JSON backup exports, CSV table exports, and iCal (.ics) calendar feed subscriptions for Google Calendar and Apple Calendar with zero paid lockouts.",
+    q: "How does data export and calendar integration function?",
+    a: "Growzok provides standard iCal (.ics) subscription feeds for automatic synchronization with Google Calendar and Apple Calendar, alongside complete structured JSON and CSV dataset exports.",
   },
 ];
 
@@ -73,20 +73,20 @@ export default function OverviewClient() {
           </Link>
 
           <nav className="hidden items-center gap-7 text-sm font-semibold sm:flex">
-            <a href="#features" className="text-[#737970] transition-colors hover:text-[#232f26]">
-              Why Growzok
+            <a href="#philosophy" className="text-[#737970] transition-colors hover:text-[#232f26]">
+              The Philosophy
             </a>
             <a href="#focus" className="text-[#737970] transition-colors hover:text-[#232f26]">
-              Focus Engine
+              Focus Architecture
             </a>
             <a href="#taxonomy" className="text-[#737970] transition-colors hover:text-[#232f26]">
-              Taxonomy
+              Biological Domains
             </a>
-            <a href="#systems" className="text-[#737970] transition-colors hover:text-[#232f26]">
+            <a href="#protocols" className="text-[#737970] transition-colors hover:text-[#232f26]">
               Protocols
             </a>
             <a href="#mastery" className="text-[#737970] transition-colors hover:text-[#232f26]">
-              Mastery
+              System Mastery
             </a>
             <a href="#faq" className="text-[#737970] transition-colors hover:text-[#232f26]">
               FAQ
@@ -104,13 +104,13 @@ export default function OverviewClient() {
               href="/register"
               className="rounded-xl bg-[#232f26] px-4.5 py-2 text-sm font-semibold text-[#fbf9f5] transition-all hover:bg-black active:scale-[0.98] shadow-xs"
             >
-              Get Started Free →
+              Claim Your System →
             </Link>
           </div>
         </div>
       </header>
 
-      {/* 2. Hero Section & Interactive Demo Widget */}
+      {/* 2. Hero Section */}
       <section className="relative overflow-hidden py-16 sm:py-24">
         <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-[#406852]/10 blur-3xl" />
         <div className="absolute -right-20 top-40 h-96 w-96 rounded-full bg-[#d4cca9]/20 blur-3xl" />
@@ -120,15 +120,15 @@ export default function OverviewClient() {
             {/* Hero Left Content */}
             <div className="space-y-6 lg:col-span-7">
               <span className="inline-flex items-center gap-2 rounded-full border border-[#406852]/20 bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852] mb-3">
-                🌱 Human Biology & Behavioral Science
+                🔬 Built on Circadian & Behavioral Neuroscience
               </span>
 
               <h1 className="font-display text-4xl font-bold tracking-tight text-[#232f26] sm:text-5xl lg:text-6xl leading-[1.1]">
-                Master Your Daily Rhythm with Biological Precision.
+                Architect Your Daily Rhythm. Eliminate Relapse.
               </h1>
 
               <p className="max-w-xl text-base text-[#737970] sm:text-lg leading-relaxed">
-                Growzok combines a 16-domain biological taxonomy, frequency-aware streak algorithms, and 1-tap preset protocols for high performers.
+                Growzok replaces fragile willpower with frequency-aware behavioral systems, scientific biological domains, and friction-free daily momentum.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -136,22 +136,22 @@ export default function OverviewClient() {
                   href="/register"
                   className="rounded-xl bg-[#232f26] px-6 py-3.5 text-sm font-semibold text-[#fbf9f5] shadow-md transition-all hover:bg-black active:scale-[0.98]"
                 >
-                  Get Started Free →
+                  Claim Your System →
                 </Link>
                 <Link
                   href="/protocols"
                   className="rounded-xl border border-[#e5e1d7] bg-white px-6 py-3.5 text-sm font-semibold text-[#232f26] transition-all hover:border-[#232f26]/40 hover:bg-gray-50 shadow-xs"
                 >
-                  Explore Protocols ➔
+                  Explore Protocol Library ➔
                 </Link>
               </div>
 
               <div className="flex flex-wrap items-center gap-6 pt-4 text-xs text-[#737970]">
                 <div className="flex items-center gap-1.5 font-medium">
-                  <span className="text-[#be5a38] font-bold">•</span> 100% Free Core Engine
+                  <span className="text-[#be5a38] font-bold">•</span> Zero Cost Core Platform
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
-                  <span className="text-[#be5a38] font-bold">•</span> No Credit Card Required
+                  <span className="text-[#be5a38] font-bold">•</span> Zero Credit Card Required
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <span className="text-[#be5a38] font-bold">•</span> Frequency-Aware Streaks
@@ -165,12 +165,12 @@ export default function OverviewClient() {
                 <div className="flex items-center justify-between border-b border-[#e5e1d7] pb-4">
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-[#737970]">
-                      Interactive Demo
+                      System Execution Engine
                     </h3>
-                    <p className="text-sm font-bold text-[#232f26]">Try Toggling Below</p>
+                    <p className="text-sm font-bold text-[#232f26]">Test Active Routine</p>
                   </div>
                   <span className="rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852]">
-                    Live Rhythm
+                    Optimal Rhythm
                   </span>
                 </div>
 
@@ -195,7 +195,7 @@ export default function OverviewClient() {
                         </h4>
                         <div className="mt-0.5 flex items-center gap-2 text-xs text-[#737970]">
                           <span className="rounded bg-[#e2f0f4] px-1.5 py-0.5 text-[10px] font-bold text-[#1f5669]">
-                            Sleep
+                            Circadian Sleep
                           </span>
                           <span>Health · Daily · 10 mins</span>
                         </div>
@@ -222,18 +222,18 @@ export default function OverviewClient() {
                           <span className="rounded bg-[#e2f0f4] px-1.5 py-0.5 text-[10px] font-bold text-[#1f5669]">
                             Hydration
                           </span>
-                          <span>Goal: 1,000 ml</span>
+                          <span>Target: 1,000 ml</span>
                         </div>
                       </div>
                     </div>
                     <span className="text-xs font-bold text-[#406852]">
-                      {demoCount * 250 >= 1000 ? "✓ Goal Met" : "In Progress"}
+                      {demoCount * 250 >= 1000 ? "✓ Target Met" : "In Progress"}
                     </span>
                   </div>
                 </div>
 
                 <div className="rounded-xl bg-[#fbf9f5] border border-[#e5e1d7] p-3 text-center text-xs text-[#737970]">
-                  💡 Frequency-aware algorithm keeps streaks intact on non-scheduled days.
+                  💡 Frequency-aware intelligence shields your streak on non-scheduled days.
                 </div>
               </div>
             </div>
@@ -241,68 +241,68 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* 3. Stats & Trust Banner Bar */}
+      {/* 3. Executive Metrics Bar */}
       <section className="border-y border-[#e5e1d7] bg-white/80 py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div className="space-y-1">
               <p className="font-display text-2xl sm:text-3xl font-bold text-[#232f26]">16 Domains</p>
-              <p className="text-xs font-medium text-[#737970]">Fixed Biological Categories</p>
+              <p className="text-xs font-medium text-[#737970]">Structured Biological Taxonomy</p>
             </div>
             <div className="space-y-1">
-              <p className="font-display text-2xl sm:text-3xl font-bold text-[#406852]">100% Privacy</p>
-              <p className="text-xs font-medium text-[#737970]">0 Tracking & 1-Click JSON/iCal</p>
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#406852]">Zero Lock-In</p>
+              <p className="text-xs font-medium text-[#737970]">Absolute Personal Data Ownership</p>
             </div>
             <div className="space-y-1">
-              <p className="font-display text-2xl sm:text-3xl font-bold text-[#232f26]">0kB Audio</p>
-              <p className="text-xs font-medium text-[#737970]">GPU Web Audio Ambient Engine</p>
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#232f26]">In-Browser GPU</p>
+              <p className="text-xs font-medium text-[#737970]">Synthesized Ambient Focus Audio</p>
             </div>
             <div className="space-y-1">
-              <p className="font-display text-2xl sm:text-3xl font-bold text-[#be5a38]">Streak Freeze</p>
-              <p className="text-xs font-medium text-[#737970]">1 Monthly Travel Grace Pass</p>
+              <p className="font-display text-2xl sm:text-3xl font-bold text-[#be5a38]">Streak Grace</p>
+              <p className="text-xs font-medium text-[#737970]">Automated Monthly Shielding</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. Why Traditional Habit Apps Fail You (Targeting Insecurities) */}
-      <section id="features" className="py-16 sm:py-24 bg-[#fbf9f5]">
+      {/* 4. The Relapse Cycle (And Why Ordinary List Apps Fail) */}
+      <section id="philosophy" className="py-16 sm:py-24 bg-[#fbf9f5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center">
             <span className="inline-block rounded-full bg-[#be5a38]/10 px-3.5 py-1 text-xs font-bold text-[#be5a38] uppercase tracking-wider mb-4">
-              The Behavioral Reality Check
+              The Relapse Reality Check
             </span>
             <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
-              Why Traditional To-Do & Habit Apps Keep Failing You.
+              Why Generic Habit Apps Fail High Performers.
             </h2>
             <p className="mx-auto max-w-2xl text-sm text-[#737970] sm:text-base mt-2">
-              Generic list apps treat humans like cold machinery. When life happens, rigid streaks reset to 0, guilt sets in, and you relapse. Growzok is built on behavioral biology.
+              Most habit trackers treat human behavior like cold machinery. When life strikes, rigid streaks shatter, guilt sets in, and routines collapse. Growzok is engineered around human biology.
             </p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
               <span className="text-2xl">⚡</span>
-              <h3 className="font-bold text-sm text-[#be5a38]">The Thursday Burnout Relapse</h3>
+              <h3 className="font-bold text-sm text-[#be5a38]">Mid-Week Fatigue Relapse</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
-                <strong className="text-[#232f26]">Insecurity:</strong> "I start strong on Monday, get overwhelmed by Thursday, and give up."
+                <strong className="text-[#232f26]">The Problem:</strong> "Starting with intense motivation on Monday, hitting friction by Thursday, and quitting out of guilt."
               </p>
               <div className="pt-2 border-t border-[#e5e1d7]">
                 <p className="text-xs font-bold text-[#406852]">
-                  ✓ Growzok Fix: Non-penalizing weekday schedules & Heuristic AI Coach scaling targets before you crash.
+                  ✓ Growzok Solution: Non-penalizing schedule logic & Heuristic AI Coach scaling targets before you break.
                 </p>
               </div>
             </div>
 
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
               <span className="text-2xl">📱</span>
-              <h3 className="font-bold text-sm text-[#be5a38]">Phone Distraction Trap</h3>
+              <h3 className="font-bold text-sm text-[#be5a38]">Digital Attention Drain</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
-                <strong className="text-[#232f26]">Insecurity:</strong> "Opening my phone to check off a habit leads to 45 mins of doomscrolling."
+                <strong className="text-[#232f26]">The Problem:</strong> "Unlocking your phone to log a habit exposes your brain to instant notification noise and digital fatigue."
               </p>
               <div className="pt-2 border-t border-[#e5e1d7]">
                 <p className="text-xs font-bold text-[#406852]">
-                  ✓ Growzok Fix: Full-Screen Distraction-Free Focus Mode with 0kB browser-native ambient soundscapes.
+                  ✓ Growzok Solution: Full-Screen Distraction-Free Focus Environment with GPU ambient soundscapes.
                 </p>
               </div>
             </div>
@@ -311,24 +311,24 @@ export default function OverviewClient() {
               <span className="text-2xl">❓</span>
               <h3 className="font-bold text-sm text-[#be5a38]">Decision Paralysis</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
-                <strong className="text-[#232f26]">Insecurity:</strong> "I don't know what routines actually optimize my energy, sleep, and focus."
+                <strong className="text-[#232f26]">The Problem:</strong> "Wasting cognitive energy trying to design routines from scratch without knowing what moves the needle."
               </p>
               <div className="pt-2 border-t border-[#e5e1d7]">
                 <p className="text-xs font-bold text-[#406852]">
-                  ✓ Growzok Fix: 16 Biological Domains & 1-Click Science-Backed Protocols (Neuroscience, Circadian).
+                  ✓ Growzok Solution: 16 Biological Domains & Science-Backed Protocols pre-calibrated for high performers.
                 </p>
               </div>
             </div>
 
             <div className="rounded-2xl border border-[#be5a38]/20 bg-white p-6 shadow-sm space-y-3">
               <span className="text-2xl">💸</span>
-              <h3 className="font-bold text-sm text-[#be5a38]">Subscription Paywalls</h3>
+              <h3 className="font-bold text-sm text-[#be5a38]">Subscription Exploitation</h3>
               <p className="text-xs text-[#737970] leading-relaxed">
-                <strong className="text-[#232f26]">Insecurity:</strong> "I'm tired of $10/mo habit apps that lock my history behind paywalls."
+                <strong className="text-[#232f26]">The Problem:</strong> "Renting your own behavioral history behind restrictive monthly paywalls and locked data silos."
               </p>
               <div className="pt-2 border-t border-[#e5e1d7]">
                 <p className="text-xs font-bold text-[#406852]">
-                  ✓ Growzok Fix: 100% Free Core Platform with 0 Paid Lockouts & 1-Click iCal/JSON/CSV Data Ownership.
+                  ✓ Growzok Solution: Complete personal data sovereignty with full export capability and zero hidden paywalls.
                 </p>
               </div>
             </div>
@@ -336,16 +336,16 @@ export default function OverviewClient() {
         </div>
       </section>
 
-      {/* 5. Interactive Focus Engine & Ambient Soundscape Sampler */}
+      {/* 5. Focus Engine & Ambient Soundscape Sampler */}
       <section id="focus" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-12">
             <div className="space-y-4 lg:col-span-6">
               <span className="inline-block rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] uppercase tracking-wider mb-3">
-                0kB Web Audio Synthesizer
+                🎧 GPU-Synthesized Ambient Audio
               </span>
               <h2 className="font-display text-3xl font-bold text-[#232f26] sm:text-4xl">
-                Lock Into Deep Focus. Zero Distractions.
+                Enter Flow State Instantly. Command Your Environment.
               </h2>
               <p className="text-sm text-[#737970] leading-relaxed">
                 Our in-browser Web Audio engine generates ambient soundscapes directly inside your GPU without streaming heavy MP3 files or relying on Spotify ads.
@@ -401,20 +401,20 @@ export default function OverviewClient() {
           <div className="grid items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5 space-y-4">
               <span className="inline-block rounded-full bg-[#e3ede6] px-3.5 py-1 text-xs font-bold text-[#406852] mb-3">
-                16 Fixed Biological Domains
+                🧬 16 Biological & Behavioral Domains
               </span>
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
-                Scientific Alignment Across All Spheres of Life.
+                Total Alignment Across Every Dimension of Performance.
               </h2>
               <p className="text-sm leading-relaxed text-[#737970]">
-                Whether you're tuning circadian sleep rhythm, optimizing deep focus, or managing cash flow, Growzok categorizes habits accurately.
+                From circadian sleep hygiene to deep cognitive output, categorize every habit within a scientifically structured framework.
               </p>
               <div className="pt-2">
                 <Link
                   href="/protocols"
                   className="inline-flex items-center gap-1.5 text-sm font-bold text-[#232f26] underline underline-offset-4 hover:text-[#406852]"
                 >
-                  Explore All Protocols in Marketplace →
+                  Explore Protocol Library ➔
                 </Link>
               </div>
             </div>
@@ -436,22 +436,22 @@ export default function OverviewClient() {
       </section>
 
       {/* 7. Preset Systems Spotlight */}
-      <section id="systems" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white">
+      <section id="protocols" className="border-t border-[#e5e1d7] py-16 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26]">
-                Featured Science Protocols
+                Elite Protocol Architecture
               </h2>
               <p className="mt-1 text-sm text-[#737970]">
-                Pre-configured bundles designed by human performance experts.
+                Proven behavioral frameworks calibrated for immediate execution.
               </p>
             </div>
             <Link
               href="/protocols"
               className="text-xs font-bold text-[#232f26] underline underline-offset-4 hover:text-[#406852]"
             >
-              Browse Marketplace →
+              Browse Library ➔
             </Link>
           </div>
 
@@ -459,22 +459,22 @@ export default function OverviewClient() {
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
-                  Morning Routine
+                  Circadian Reset
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">
                   Neuro-Reset Morning Protocol
                 </h3>
                 <p className="text-xs text-[#737970] leading-relaxed">
-                  Sunlight exposure, electrolytes, cold reset, delayed caffeine.
+                  Sunlight exposure, electrolyte hydration, thermal reset, delayed caffeine intake.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span className="font-medium">Rating 4.9 (1,420 reviews)</span>
+                <span className="font-medium">Rating 4.9 (1,420 users)</span>
                 <Link
                   href="/protocols/huberman-morning"
                   className="font-bold text-[#232f26] hover:underline"
                 >
-                  View System →
+                  View Architecture ➔
                 </Link>
               </div>
             </div>
@@ -482,22 +482,22 @@ export default function OverviewClient() {
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
-                  Productivity & Focus
+                  Cognitive Output
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">
-                  Deep Work & Hyper-Focus Engine
+                  Deep Work & Cognitive Flow Engine
                 </h3>
                 <p className="text-xs text-[#737970] leading-relaxed">
-                  90-minute focus blocks, zero phone first hour, evening shutdown audit.
+                  90-minute hyper-focus blocks, zero notification mornings, evening shutdown audits.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span className="font-medium">Rating 4.95 (890 reviews)</span>
+                <span className="font-medium">Rating 4.95 (890 users)</span>
                 <Link
                   href="/protocols/deep-work-focus"
                   className="font-bold text-[#232f26] hover:underline"
                 >
-                  View System →
+                  View Architecture ➔
                 </Link>
               </div>
             </div>
@@ -505,22 +505,22 @@ export default function OverviewClient() {
             <div className="flex flex-col justify-between rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-6 shadow-sm">
               <div className="space-y-3">
                 <span className="inline-block rounded-full bg-[#e3ede6] px-2.5 py-0.5 text-xs font-bold text-[#406852] mb-2">
-                  Evening Wind-Down
+                  Recovery Architecture
                 </span>
                 <h3 className="text-lg font-bold text-[#232f26]">
-                  Stoic Nightly Wind-Down
+                  Stoic Nightly Reflection & Wind-Down
                 </h3>
                 <p className="text-xs text-[#737970] leading-relaxed">
-                  Nightly reflection journal, screen-free hour, environment reset.
+                  Mental debrief journal, environmental optimization, screen-free buffer window.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-[#e5e1d7] pt-4 text-xs text-[#737970]">
-                <span className="font-medium">Rating 4.94 (1,120 reviews)</span>
+                <span className="font-medium">Rating 4.94 (1,120 users)</span>
                 <Link
                   href="/protocols/stoic-evening"
                   className="font-bold text-[#232f26] hover:underline"
                 >
-                  View System →
+                  View Architecture ➔
                 </Link>
               </div>
             </div>
@@ -533,13 +533,13 @@ export default function OverviewClient() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="text-center space-y-2">
             <span className="inline-block rounded-full bg-[#406852]/10 px-3.5 py-1 text-xs font-bold text-[#406852] uppercase tracking-wider mb-2">
-              Identity & Long-Term Mastery
+              🏆 Identity Transformation & System Mastery
             </span>
             <h2 className="font-display text-3xl font-bold tracking-tight text-[#232f26] sm:text-4xl">
-              Turn Daily Habits into Unshakeable System XP.
+              Transform Daily Consistency Into Unshakeable Proof.
             </h2>
             <p className="mx-auto max-w-xl text-sm text-[#737970]">
-              Level up your character, unlock milestone trophies, and visualize a 365-day SVG consistency density grid.
+              Watch your personal character evolve as daily discipline translates into System XP, milestone trophies, and an unbroken 365-day consistency grid.
             </p>
           </div>
 
@@ -559,10 +559,10 @@ export default function OverviewClient() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { icon: "🌱", name: "First Step", desc: "First completion logged" },
-                { icon: "⚡", name: "Habit Apprentice", desc: "25 habit completions" },
+                { icon: "🌱", name: "First Step", desc: "Initial execution logged" },
+                { icon: "⚡", name: "Apprentice Architect", desc: "25 habit completions" },
                 { icon: "🔥", name: "Week Warrior", desc: "7-day unbroken streak" },
-                { icon: "🧘", name: "Zen Master", desc: "20+ Breathing logs" },
+                { icon: "🧘", name: "Zen Master", desc: "20+ Breathwork logs" },
               ].map((b, i) => (
                 <div key={i} className="flex items-center gap-2.5 rounded-xl border border-[#406852]/30 bg-[#e3ede6]/40 p-3 text-xs">
                   <span className="text-xl">{b.icon}</span>
@@ -632,17 +632,17 @@ export default function OverviewClient() {
       <section className="border-t border-[#e5e1d7] bg-[#232f26] py-16 text-center text-[#fbf9f5]">
         <div className="mx-auto max-w-3xl px-4 space-y-4">
           <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-            Start Building Your Daily Rhythm Today.
+            Command Your Rhythm Today.
           </h2>
           <p className="text-sm text-slate-300">
-            Join thousands of high performers using scientific habit systems to build consistency.
+            Join thousands of high performers building resilient, science-backed daily momentum.
           </p>
           <div className="pt-4 flex justify-center gap-3">
             <Link
               href="/register"
               className="rounded-xl bg-[#fbf9f5] px-6 py-3.5 text-sm font-bold text-[#232f26] shadow-sm transition-opacity hover:opacity-90 active:scale-[0.98]"
             >
-              Get Started Free →
+              Claim Your System →
             </Link>
           </div>
         </div>
@@ -660,7 +660,7 @@ export default function OverviewClient() {
           <p>© {new Date().getFullYear()} Growzok. All rights reserved.</p>
           <div className="flex gap-4 font-semibold">
             <Link href="/protocols" className="hover:text-[#232f26]">
-              Templates Marketplace
+              Protocol Library
             </Link>
             <Link href="/login" className="hover:text-[#232f26]">
               Sign In

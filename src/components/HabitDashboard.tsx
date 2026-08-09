@@ -248,71 +248,89 @@ export default function HabitDashboard() {
             </p>
           )}
 
-          {/* Search Bar & Status Filter Bar for 20+ Habits */}
+          {/* Search Bar & Status Filter Bar */}
           {habits.length > 0 && (
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <input
-                type="search"
-                placeholder="Search habits by name or domain…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-[#e5e1d7] bg-white px-3.5 py-2 text-xs text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] focus:border-[#232f26]/40 dark:focus:border-[#3f3f46] sm:max-w-xs"
-              />
+            <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                {/* Search Bar with Vector Search Icon */}
+                <div className="relative flex-1 sm:max-w-md flex items-center rounded-2xl border border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] px-3.5 py-2 text-xs shadow-xs focus-within:border-[#406852] dark:focus-within:border-[#a3b899] transition-all">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-[#737970] dark:text-[#a1a1aa] mr-2">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  <input
+                    type="search"
+                    placeholder="Search habits by name or domain..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-transparent text-xs font-medium text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="text-xs text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-white font-bold ml-1"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
 
-              <div className="flex items-center gap-1 rounded-xl border border-[#e5e1d7] bg-white p-1 shadow-xs dark:border-[#27272a] dark:bg-[#18181b] shrink-0 self-end sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setStatusFilter("all")}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                    statusFilter === "all"
-                      ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-xs"
-                      : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26]"
-                  }`}
-                >
-                  All ({habits.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setStatusFilter("pending")}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                    statusFilter === "pending"
-                      ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-xs"
-                      : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26]"
-                  }`}
-                >
-                  Pending
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setStatusFilter("completed")}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                    statusFilter === "completed"
-                      ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-xs"
-                      : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26]"
-                  }`}
-                >
-                  Completed
-                </button>
+                {/* Status Filter Segmented Pill (Full width on mobile, auto on desktop) */}
+                <div className="flex w-full sm:w-auto items-center justify-between gap-1 rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-1 dark:border-[#27272a] dark:bg-[#121215] shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("all")}
+                    className={`flex-1 sm:flex-initial rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all text-center ${
+                      statusFilter === "all"
+                        ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+                        : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-white"
+                    }`}
+                  >
+                    All ({habits.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("pending")}
+                    className={`flex-1 sm:flex-initial rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all text-center ${
+                      statusFilter === "pending"
+                        ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+                        : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-white"
+                    }`}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter("completed")}
+                    className={`flex-1 sm:flex-initial rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all text-center ${
+                      statusFilter === "completed"
+                        ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+                        : "text-[#737970] dark:text-[#a1a1aa] hover:text-[#232f26] dark:hover:text-white"
+                    }`}
+                  >
+                    Completed
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
 
-          {/* User Label Filters (Morning, Evening, etc.) */}
-          {labelsPresent.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-[#e5e1d7]/60 dark:border-[#27272a] pb-3 no-scrollbar scroll-x-safe">
-              {filterOptions.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setFilter(c)}
-                  className={`rounded-full px-3.5 py-1 text-xs font-medium whitespace-nowrap transition-all ${
-                    filter === c
-                      ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm"
-                      : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] dark:hover:border-[#3f3f46] dark:hover:text-[#f4f4f5] hover:border-[#232f26]/30 hover:text-[#232f26]"
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
+              {/* User Label Filters (Morning, Evening, etc.) */}
+              {labelsPresent.length > 1 && (
+                <div className="flex items-center gap-1.5 overflow-x-auto pt-1 pb-1 no-scrollbar scroll-x-safe">
+                  {filterOptions.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setFilter(c)}
+                      className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap transition-all ${
+                        filter === c
+                          ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+                          : "border border-[#e5e1d7] bg-white text-[#737970] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#a1a1aa] hover:border-[#232f26]/30 hover:text-[#232f26] dark:hover:border-[#3f3f46] dark:hover:text-white"
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

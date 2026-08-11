@@ -290,3 +290,89 @@ html.dark .animate-shimmer::after {
 .scroll-x-safe::-webkit-scrollbar {
   display: none;
 }
+
+/* ═══════════════════════════════════════════════════
+   Horse Gallop & Stride Animations
+   ═══════════════════════════════════════════════════ */
+
+@keyframes horseGallopBody {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-1px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-0.5deg);
+  }
+}
+
+@keyframes horseLegFront {
+  0%, 100% {
+    transform: rotate(25deg);
+  }
+  25% {
+    transform: rotate(-35deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(40deg);
+  }
+}
+
+@keyframes horseLegBack {
+  0%, 100% {
+    transform: rotate(-30deg);
+  }
+  25% {
+    transform: rotate(35deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-40deg);
+  }
+}
+
+@keyframes groundStride {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+.animate-horse-body {
+  animation: horseGallopBody 0.65s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  transform-origin: center center;
+}
+
+.animate-horse-leg-front {
+  animation: horseLegFront 0.65s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-horse-leg-back {
+  animation: horseLegBack 0.65s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-ground-stride {
+  animation: groundStride 0.75s linear infinite;
+}
+

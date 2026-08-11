@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { HorseLoader } from "@/components/HorseLoader";
 
 type Mode = "login" | "register";
 
@@ -138,15 +139,18 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-xl bg-[#232f26] py-3 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50"
+          className="w-full rounded-xl bg-[#232f26] py-3 text-xs font-bold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] shadow-sm transition-all hover:bg-black dark:hover:bg-[#3f3f46] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          {pending
-            ? isRegister
-              ? "Creating…"
-              : "Signing in…"
-            : isRegister
-              ? "Create account"
-              : "Sign in"}
+          {pending ? (
+            <>
+              <HorseLoader size="sm" inline />
+              <span>{isRegister ? "Creating Account..." : "Authenticating..."}</span>
+            </>
+          ) : isRegister ? (
+            "Create account"
+          ) : (
+            "Sign in"
+          )}
         </button>
       </form>
 

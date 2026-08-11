@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Protocol, ProtocolHabit } from "@/types/protocol";
 import { useHabits } from "@/hooks/useHabits";
 import { frequencyLabel } from "@/lib/frequency";
+import { HorseLoader } from "@/components/HorseLoader";
 
 interface Props {
   protocol?: Protocol;
@@ -249,9 +250,16 @@ export default function ProtocolAdoptModal({ protocol: protocolProp, template: t
             <button
               onClick={handleAdoptClick}
               disabled={submitting || selected.size === 0}
-              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-semibold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-opacity hover:opacity-90 disabled:opacity-40"
+              className="rounded-xl bg-[#232f26] px-5 py-2 text-xs font-bold text-white dark:bg-[#27272a] dark:text-[#f4f4f5] dark:border dark:border-[#3f3f46] transition-opacity hover:opacity-90 disabled:opacity-40 flex items-center gap-2"
             >
-              {submitting ? "Adopting…" : `Adopt ${selected.size} Habits →`}
+              {submitting ? (
+                <>
+                  <HorseLoader size="sm" inline />
+                  <span>Adopting...</span>
+                </>
+              ) : (
+                `Adopt ${selected.size} Habits →`
+              )}
             </button>
           </div>
         </div>

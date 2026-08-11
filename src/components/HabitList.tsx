@@ -6,6 +6,7 @@ import HabitCard from "@/components/HabitCard";
 import CompactHabitRow from "@/components/CompactHabitRow";
 import type { EditHabitInput } from "@/hooks/useHabits";
 import { SkeletonHabitCard } from "@/components/Skeleton";
+import { HorseLoader } from "@/components/HorseLoader";
 import EditHabitModal from "@/components/EditHabitModal";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { todayStr } from "@/lib/dates";
@@ -113,11 +114,12 @@ export default function HabitList({
 
   if (loading) {
     return (
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
-        <SkeletonHabitCard delayClass="animation-delay-75" />
-        <SkeletonHabitCard delayClass="animation-delay-150" />
-        <SkeletonHabitCard delayClass="animation-delay-200" />
-        <SkeletonHabitCard delayClass="animation-delay-300" />
+      <div className="space-y-6 py-4">
+        <HorseLoader size="lg" label="Synchronizing Biological Rhythms..." />
+        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+          <SkeletonHabitCard delayClass="animation-delay-75" />
+          <SkeletonHabitCard delayClass="animation-delay-150" />
+        </div>
       </div>
     );
   }

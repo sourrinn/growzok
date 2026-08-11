@@ -6,6 +6,7 @@ import LifeHUDHeader from "@/components/LifeHUDHeader";
 import CircadianClockMatrix from "@/components/CircadianClockMatrix";
 import HabitVelocitySparkline from "@/components/HabitVelocitySparkline";
 import HabitSymbolIcon from "@/components/HabitSymbolIcon";
+import { HorseLoader } from "@/components/HorseLoader";
 import { computeUserGamification } from "@/lib/gamification";
 
 export default function DashboardCommandHub() {
@@ -160,7 +161,7 @@ export default function DashboardCommandHub() {
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-xs text-[#737970]">Loading command hub...</div>
+            <HorseLoader size="md" label="Synchronizing Executive Command Hub..." />
           ) : pendingHabits.length === 0 ? (
             <div className="rounded-2xl border border-[#406852]/30 bg-[#e3ede6]/40 p-6 text-center space-y-2">
               <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">

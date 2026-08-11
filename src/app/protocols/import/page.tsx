@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { HorseLoader } from "@/components/HorseLoader";
 import ImportClient from "./ImportClient";
 
 export const metadata = {
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default function ImportProtocolPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-xs text-[#737970]">Loading import protocol...</div>}>
+    <Suspense fallback={<HorseLoader size="lg" label="Importing Protocol Stack..." />}>
       <ImportClient />
     </Suspense>
   );

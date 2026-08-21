@@ -13,6 +13,8 @@ import {
 import { frequencyLabel } from "@/lib/frequency";
 import StreakStem from "@/components/StreakStem";
 import HabitVelocitySparkline from "@/components/HabitVelocitySparkline";
+import { useSessionContext } from "@/contexts/SessionContext";
+
 interface Props {
   habit: Habit;
   isManaging?: boolean;
@@ -29,6 +31,7 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
   const streak = computeCurrentStreak(habit);
   const weekProgress = computeThisWeekProgress(habit);
   const onTrack = habit.missAllowance > 0 ? computeOnTrackStatus(habit) : null;
+  const { openSession } = useSessionContext();
 
   const savedValue = habit.progress[today] !== undefined ? String(habit.progress[today]) : "";
   const [draftValue, setDraftValue] = useState(savedValue);
@@ -199,6 +202,17 @@ export default function HabitCard({ habit, isManaging = false, onToggle, onLogPr
             </div>
           </div>
         </div>
+        
+        {/* Start Session Focus Button (Only visible in normal mode) */}
+        {!isManaging && (
+          <button
+            type="button"
+            onClick={() => openSession({ habitId: habit.id, habitName: habit.name, plannedMins: 25 })}
+            className="flex h-7 shrink-0 items-center gap-1 rounded-lg border border-[#406852]/30 bg-[#e3ede6]/50 px-2.5 py-1 text-[11px] font-bold text-[#406852] dark:border-[#406852]/40 dark:bg-[#406852]/10 dark:text-[#a3b899]"
+          >
+            ▶ Focus
+          </button>
+        )}
 
         {/* Delete + Edit Icon Buttons (Only visible in Manage Board mode) */}
         {isManaging && (

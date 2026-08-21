@@ -7,6 +7,8 @@ import { computeCurrentStreak } from "@/lib/analytics";
 import { frequencyLabel } from "@/lib/frequency";
 import HabitSymbolIcon from "@/components/HabitSymbolIcon";
 import type { Habit } from "@/types/habit";
+import { useSessionContext } from "@/contexts/SessionContext";
+
 
 interface Props {
   habit: Habit;
@@ -56,6 +58,7 @@ export default function CompactHabitRow({
   const target = habit.target;
   const isNumeric = Boolean(target && target.goal > 1);
   const targetGoal = target?.goal ?? 1;
+  const { openSession } = useSessionContext();
 
   const [inputVal, setInputVal] = useState(String(currentVal));
   const [editingTarget, setEditingTarget] = useState(false);
@@ -181,6 +184,16 @@ export default function CompactHabitRow({
           <span className="hidden sm:inline text-xs text-[#737970] dark:text-[#a1a1aa]">
             {frequencyLabel(habit.frequency)}
           </span>
+        )}
+
+        {!isManaging && (
+          <button
+            type="button"
+            onClick={() => openSession({ habitId: habit.id, habitName: habit.name, plannedMins: 25 })}
+            className="rounded-lg border border-[#406852]/30 bg-[#e3ede6]/50 px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:border-[#406852]/40 dark:bg-[#406852]/10 dark:text-[#a3b899]"
+          >
+            ▶ Focus
+          </button>
         )}
 
         {/* Management Mode Edit / Delete Controls */}

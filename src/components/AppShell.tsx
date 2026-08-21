@@ -5,6 +5,8 @@ import Link from "next/link";
 import AppSidebar from "@/components/AppSidebar";
 import CommandPalette from "@/components/CommandPalette";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import { SessionProvider, useSessionContext } from "@/contexts/SessionContext";
+import { SessionOverlay } from "@/components/SessionOverlay";
 
 import { useSession } from "next-auth/react";
 
@@ -14,10 +16,57 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function AppShell({ userLabel = "Workspace", secondarySidebar, children }: Props) {
+// ─── Active Session Banner ────────────────────────────────────────────────────
+
+function ActiveSessionBanner() {
+  const { activeSession, resumeOverlay } = useSessionContext();
+
+  if (!activeSession || activeSession.status !== "in_progress") return null;
+
+  const elapsed = activeSession.elapsedSeconds ?? 0;
+  const planned = activeSession.plannedDurationSeconds ?? 1500;
+  const remaining = Math.max(0, planned - elapsed);
+  const mins = Math.floor(remaining / 60);
+  const secs = remaining % 60;
+  const pct = Math.min(100, Math.round((elapsed / planned) * 100));
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-[120] flex items-center justify-between gap-3 bg-[#232f26] px-4 py-2 shadow-lg">
+      {/* Progress bar underlay */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] bg-[#a3b899] transition-all duration-1000"
+        style={{ width: `${pct}%` }}
+      />
+
+      <div className="flex items-center gap-3 min-w-0">
+        <span className="inline-flex h-2 w-2 rounded-full bg-[#4ade80] animate-pulse shrink-0" />
+        <span className="text-xs font-semibold text-[#f4f4f5] truncate">
+          Session active
+        </span>
+        <span className="hidden sm:inline text-xs text-[#a3b899] font-mono tabular-nums">
+          {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")} remaining
+        </span>
+      </div>
+
+      <button
+        onClick={resumeOverlay}
+        className="shrink-0 rounded-lg bg-[#406852] px-3 py-1 text-[11px] font-bold text-white hover:bg-[#4a7a60] transition-colors"
+      >
+        Resume →
+      </button>
+    </div>
+  );
+}
+
+// ─── Inner Shell (has access to SessionContext) ───────────────────────────────
+
+function AppShellInner({ userLabel = "Workspace", secondarySidebar, children }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { data: session } = useSession();
+  const { activeSession } = useSessionContext();
+
+  const isSessionActive = activeSession?.status === "in_progress";
 
   useEffect(() => {
     const saved = localStorage.getItem("growzok_sidebar_collapsed");
@@ -35,12 +84,18 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
   };
 
   return (
-    <div className="min-h-screen bg-[#fbf9f5]/50 dark:bg-[#09090b]">
+    <div className={`min-h-screen bg-[#fbf9f5]/50 dark:bg-[#09090b] ${isSessionActive ? "pt-9" : ""}`}>
+      {/* Active Session Banner — persists globally */}
+      <ActiveSessionBanner />
+
+      {/* Global Session Focus Overlay */}
+      <SessionOverlay />
+
       {/* Primary Fixed Left Sidebar */}
       <div
         className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col z-30 transition-all duration-300 ${
           isCollapsed ? "md:w-16" : "md:w-64"
-        }`}
+        } ${isSessionActive ? "mt-9" : ""}`}
       >
         <AppSidebar
           userLabel={userLabel}
@@ -54,7 +109,7 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
         <div
           className={`hidden md:fixed md:inset-y-0 md:flex md:flex-col z-20 transition-all duration-300 ${
             isCollapsed ? "md:left-16" : "md:left-64"
-          }`}
+          } ${isSessionActive ? "mt-9" : ""}`}
         >
           {secondarySidebar}
         </div>
@@ -84,7 +139,7 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
           </span>
         </Link>
 
-        {/* Right: Profile Account Tab (Light theme, Profile SVG symbol, No text) */}
+        {/* Right: Profile Account Tab */}
         <Link
           href="/account"
           className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#e5e1d7] bg-white text-[#232f26] dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] shadow-xs active:scale-95 transition-all shrink-0"
@@ -150,5 +205,15 @@ export default function AppShell({ userLabel = "Workspace", secondarySidebar, ch
       {/* Fixed Mobile Bottom Navigation (Icon-Only, Excludes Admin) */}
       <MobileBottomNav />
     </div>
+  );
+}
+
+// ─── Public Export (wraps with SessionProvider) ───────────────────────────────
+
+export default function AppShell(props: Props) {
+  return (
+    <SessionProvider>
+      <AppShellInner {...props} />
+    </SessionProvider>
   );
 }

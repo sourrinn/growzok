@@ -8,9 +8,13 @@ import HabitVelocitySparkline from "@/components/HabitVelocitySparkline";
 import HabitSymbolIcon from "@/components/HabitSymbolIcon";
 import { HorseLoader } from "@/components/HorseLoader";
 import { computeUserGamification } from "@/lib/gamification";
+import { DayPlanPanel } from "@/components/DayPlanPanel";
+import { useSessionContext } from "@/contexts/SessionContext";
 
 export default function DashboardCommandHub() {
   const { habits, loading, toggleHabit } = useHabits();
+  const { activeSession, resumeOverlay } = useSessionContext();
+  const isSessionActive = activeSession?.status === "in_progress";
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const completedTodayCount = habits.filter((h) => h.history.includes(todayStr)).length;
@@ -32,6 +36,25 @@ export default function DashboardCommandHub() {
     <div className="space-y-8">
       {/* Sci-Fi Global Command Status HUD Bar */}
       <LifeHUDHeader />
+
+      {/* OS State Bar — cognitive layer status */}
+      {isSessionActive && (
+        <div
+          onClick={resumeOverlay}
+          className="flex items-center gap-3 rounded-2xl border border-[#406852]/40 bg-[#406852]/5 px-5 py-3 cursor-pointer hover:bg-[#406852]/10 transition-colors"
+        >
+          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#4ade80] animate-pulse" />
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-bold text-[#406852] dark:text-[#a3b899] uppercase tracking-wider">
+              L3 Active Execution
+            </p>
+            <p className="text-sm font-semibold text-[#232f26] dark:text-[#f4f4f5] truncate">
+              Focus session running — tap to resume
+            </p>
+          </div>
+          <span className="text-xs font-bold text-[#406852] dark:text-[#a3b899] shrink-0">Resume →</span>
+        </div>
+      )}
 
       {/* Hero Command Hub Score Card */}
       <div className="rounded-3xl border border-[#e5e1d7] bg-white p-6 sm:p-8 shadow-sm dark:border-[#27272a] dark:bg-[#18181b] space-y-6">
@@ -143,6 +166,9 @@ export default function DashboardCommandHub() {
 
       {/* Embedded Circadian 24-Hour Photonic Curve HUD */}
       <CircadianClockMatrix />
+
+      {/* L2 Day Plan — today's time blocks embedded inline */}
+      <DayPlanPanel />
 
       {/* Main Grid: Priority Habits Rail (8 cols) + Workstation Quick Launch (4 cols) */}
       <div className="grid gap-8 md:grid-cols-12 lg:grid-cols-12">

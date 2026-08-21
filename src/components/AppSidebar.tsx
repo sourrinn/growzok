@@ -54,6 +54,54 @@ export default function AppSidebar({
         </svg>
       ),
     },
+    // ── Cognitive Layers ─────────────────────────────────────────────────
+    {
+      label: "Strategic",
+      href: "/strategic",
+      active: pathname === "/strategic",
+      section: "Cognitive",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      label: "Day Planner",
+      href: "/timeline",
+      active: pathname === "/timeline",
+      section: "Cognitive",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      label: "Focus Session",
+      href: "/session",
+      active: pathname === "/session",
+      section: "Cognitive",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 7v5l3 3" strokeLinecap="round" />
+        </svg>
+      ),
+    },
+    {
+      label: "Reflect",
+      href: "/reflect",
+      active: pathname === "/reflect",
+      section: "Cognitive",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ),
+    },
     {
       label: "Bio Suite Hub",
       href: "/bio",
@@ -147,7 +195,7 @@ export default function AppSidebar({
             </p>
           )}
           <nav className="mt-2 space-y-1.5">
-            {navItems.map((item) => (
+            {navItems.filter((i) => !("section" in i) || !i.section).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -165,6 +213,37 @@ export default function AppSidebar({
               </Link>
             ))}
           </nav>
+
+          {/* Cognitive Layers Section */}
+          <div className="mt-4">
+            {!isCollapsed && (
+              <p className="px-2 pt-2 text-[10px] font-semibold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] border-t border-[#e5e1d7] dark:border-[#27272a]">
+                Cognitive Layers
+              </p>
+            )}
+            {isCollapsed && (
+              <div className="my-2 h-px bg-[#e5e1d7] dark:bg-[#27272a]" />
+            )}
+            <nav className="mt-2 space-y-1.5">
+              {navItems.filter((i) => "section" in i && i.section === "Cognitive").map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  title={isCollapsed ? item.label : undefined}
+                  className={`flex items-center rounded-xl transition-all ${
+                    isCollapsed ? "justify-center py-3 px-0" : "gap-3 px-3 py-3 text-sm"
+                  } font-medium ${
+                    item.active
+                      ? "bg-[#232f26] text-[#fbf9f5] dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-sm font-semibold border border-transparent dark:border-[#3f3f46]"
+                      : "text-[#737970] hover:bg-[#e5e1d7]/50 hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:bg-[#27272a] dark:hover:text-[#f4f4f5]"
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  {!isCollapsed && <span>{item.label}</span>}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
       </div>
 

@@ -1,38 +1,63 @@
 import type { ObjectId } from "mongodb";
 
-export type NoteStatus = "active" | "archived";
+export type BuiltInNodeCategory = "optimistic" | "detailed" | "image" | "action";
+export type NodeCategory = BuiltInNodeCategory | (string & {});
 
-export interface NoteDoc {
-  _id: ObjectId;
-  userId: string;
-  title?: string;
-  content: string;
-  tags: string[];
-  isPinned: boolean;
-  status: NoteStatus;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface Note {
+export interface CanvasNode {
   id: string;
-  userId: string;
+  category: NodeCategory;
   title?: string;
   content: string;
-  tags: string[];
-  isPinned: boolean;
-  status: NoteStatus;
+  mediaUrl?: string;
+  isCompleted?: boolean;
+  metadata?: Record<string, any>;
+  position: { x: number; y: number };
+  width?: number;
+  height?: number;
   createdAt: string;
   updatedAt: string;
 }
 
-export function serializeNote(doc: NoteDoc): Note {
+export interface CanvasConnector {
+  id: string;
+  fromNodeId: string;
+  toNodeId: string;
+  label?: string;
+  color?: string;
+  createdAt: string;
+}
+
+export interface NoteSessionDoc {
+  _id: ObjectId;
+  userId: string;
+  title: string;
+  nodes: CanvasNode[];
+  connectors: CanvasConnector[];
+  isPinned: boolean;
+  status: "active" | "archived";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface NoteSession {
+  id: string;
+  userId: string;
+  title: string;
+  nodes: CanvasNode[];
+  connectors: CanvasConnector[];
+  isPinned: boolean;
+  status: "active" | "archived";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export function serializeNoteSession(doc: NoteSessionDoc): NoteSession {
   return {
     id: doc._id.toString(),
     userId: doc.userId,
-    title: doc.title || "",
-    content: doc.content || "",
-    tags: Array.isArray(doc.tags) ? doc.tags : [],
+    title: doc.title || "Untitled Session",
+    nodes: Array.isArray(doc.nodes) ? doc.nodes : [],
+    connectors: Array.isArray(doc.connectors) ? doc.connectors : [],
     isPinned: Boolean(doc.isPinned),
     status: doc.status || "active",
     createdAt: doc.createdAt ? doc.createdAt.toISOString() : new Date().toISOString(),

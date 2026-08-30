@@ -1,411 +1,507 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useNotes } from "@/hooks/useRoughNotes";
+import { useNotesSessions } from "@/hooks/useNotesSessions";
+import { getNodeCategoryConfig, NODE_CATEGORY_REGISTRY } from "@/lib/nodeRegistry";
 import { HorseLoader } from "@/components/HorseLoader";
 
 export function NotesClient() {
-  const [statusTab, setStatusTab] = useState<"active" | "archived">("active");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const {
+    sessions,
+    activeSession,
+    setActiveSession,
+    loading,
+    searchQuery,
+    setSearchQuery,
+    createNewSession,
+    togglePinSession,
+    deleteSession,
+    addNode,
+    updateNode,
+    deleteNode,
+    addConnector,
+    deleteConnector,
+  } = useNotesSessions();
 
-  const { notes, loading, addNote, updateNoteContent, togglePin, updateStatus, deleteNote } = useNotes({
-    status: statusTab,
-    search: searchQuery,
-    tag: selectedTag || undefined,
-  });
+  const [newSessionTitle, setNewSessionTitle] = useState("");
+  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
 
-  const [newTitle, setNewTitle] = useState("");
-  const [newContent, setNewContent] = useState("");
-  const [newTags, setNewTags] = useState("");
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingTitle, setEditingTitle] = useState("");
-  const [editingContent, setEditingContent] = useState("");
+  // Quick Add Node inputs
+  const [nodeCategory, setNodeCategory] = useState<string>("optimistic");
+  const [nodeContent, setNodeContent] = useState("");
+  const [nodeTitle, setNodeTitle] = useState("");
+  const [nodeMediaUrl, setNodeMediaUrl] = useState("");
 
-  const handleAdd = async (e: React.FormEvent) => {
+  // Connector Creation state
+  const [connectingFromId, setConnectingFromId] = useState<string | null>(null);
+  const [connectorLabel, setConnectorLabel] = useState("");
+
+  const handleCreateSession = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newContent.trim()) return;
-
-    const parsedTags = newTags
-      .split(/[\s,]+/)
-      .map((t) => t.replace(/^#/, "").trim().toLowerCase())
-      .filter(Boolean);
-
-    await addNote(newContent, newTitle, parsedTags);
-    setNewTitle("");
-    setNewContent("");
-    setNewTags("");
+    await createNewSession(newSessionTitle.trim() || "Untitled Session");
+    setNewSessionTitle("");
+    setShowNewSessionModal(false);
   };
 
-  const handleSaveEdit = async (id: string) => {
-    if (!editingContent.trim()) return;
-    await updateNoteContent(id, editingContent, editingTitle);
-    setEditingId(null);
+  const handleAddNode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!nodeContent.trim() && nodeCategory !== "image") return;
+
+    // Estimate initial position on canvas
+    const currentCount = activeSession?.nodes.length || 0;
+    const posX = 40 + (currentCount % 3) * 280;
+    const posY = 40 + Math.floor(currentCount / 3) * 220;
+
+    await addNode({
+      category: nodeCategory,
+      title: nodeTitle.trim(),
+      content: nodeContent.trim(),
+      mediaUrl: nodeMediaUrl.trim(),
+      position: { x: posX, y: posY },
+    });
+
+    setNodeContent("");
+    setNodeTitle("");
+    setNodeMediaUrl("");
   };
 
-  // Collect all unique tags across current notes
-  const allTags = useMemo(() => {
-    const set = new Set<string>();
-    notes.forEach((n) => n.tags?.forEach((t) => set.add(t)));
-    return Array.from(set);
-  }, [notes]);
+  const handleConnectNodes = async (toNodeId: string) => {
+    if (!connectingFromId || connectingFromId === toNodeId) {
+      setConnectingFromId(null);
+      return;
+    }
+    await addConnector(connectingFromId, toNodeId, connectorLabel.trim());
+    setConnectingFromId(null);
+    setConnectorLabel("");
+  };
 
-  const pinnedNotes = notes.filter((n) => n.isPinned);
-  const unpinnedNotes = notes.filter((n) => !n.isPinned);
+  const pinnedSessions = useMemo(() => sessions.filter((s) => s.isPinned), [sessions]);
+  const unpinnedSessions = useMemo(() => sessions.filter((s) => !s.isPinned), [sessions]);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 animate-fade-in">
-      {/* Page Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+    <div className="flex flex-col md:flex-row gap-6 min-h-[calc(100vh-8rem)] animate-fade-in">
+      {/* LEFT SIDEBAR: ChatGPT-Style Sessions List */}
+      <div className="w-full md:w-80 shrink-0 space-y-4 rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="rounded-full bg-[#406852]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#406852] dark:bg-[#27272a] dark:text-[#a3b899] uppercase tracking-wider">
-              Notes Workspace
-            </span>
+            <span className="text-lg">💬</span>
+            <h2 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+              Thought Sessions
+            </h2>
           </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#232f26] dark:text-[#f4f4f5] mt-1">
-            Notes Engine
-          </h1>
-          <p className="text-xs sm:text-sm text-[#737970] dark:text-[#a1a1aa] mt-0.5">
-            Capture thoughts, pin key ideas, tag friction points, and organize your mind.
-          </p>
-        </div>
-
-        {/* Status Tabs (Active vs Archived) */}
-        <div className="flex items-center gap-1.5 self-start sm:self-auto rounded-xl border border-[#e5e1d7] bg-white p-1 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs">
           <button
-            onClick={() => setStatusTab("active")}
-            className={`rounded-lg px-3.5 py-1 text-xs font-semibold capitalize transition-all ${
-              statusTab === "active"
-                ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-xs"
-                : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
-            }`}
+            onClick={() => createNewSession()}
+            className="flex items-center gap-1 rounded-xl bg-[#232f26] px-3 py-1.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] hover:bg-black dark:hover:bg-white transition-all"
+            title="Create new session thread"
           >
-            Active
-          </button>
-          <button
-            onClick={() => setStatusTab("archived")}
-            className={`rounded-lg px-3.5 py-1 text-xs font-semibold capitalize transition-all ${
-              statusTab === "archived"
-                ? "bg-[#232f26] text-white dark:bg-[#27272a] dark:text-[#f4f4f5] shadow-xs"
-                : "text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
-            }`}
-          >
-            Archived
+            <span>+ New</span>
           </button>
         </div>
-      </div>
 
-      {/* Search & Tag Filter Bar */}
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-        {/* Search Bar */}
-        <div className="relative flex-1">
+        {/* Search Session Bar */}
+        <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search notes by keyword or #tag..."
-            className="w-full rounded-xl border border-[#e5e1d7] bg-white px-4 py-2.5 pl-9 text-xs text-[#232f26] outline-none dark:border-[#27272a] dark:bg-[#18181b] dark:text-[#f4f4f5] placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa] shadow-xs"
+            placeholder="Search sessions..."
+            className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 pl-8 text-xs text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
           />
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3 top-3 h-4 w-4 text-[#737970] dark:text-[#a1a1aa]">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[#737970] dark:text-[#a1a1aa]">
             <circle cx="11" cy="11" r="8" />
             <path d="M21 21l-4.35-4.35" />
           </svg>
         </div>
 
-        {/* Tag Filter Pills */}
-        {allTags.length > 0 && (
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+        {/* Session Threads Scrollable List */}
+        <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-1 no-scrollbar text-xs">
+          {loading ? (
+            <HorseLoader size="sm" label="Loading..." />
+          ) : sessions.length === 0 ? (
+            <p className="text-center py-6 text-[#737970] dark:text-[#a1a1aa]">
+              No sessions yet. Click + New above.
+            </p>
+          ) : (
+            <>
+              {pinnedSessions.map((sess) => (
+                <SessionRow
+                  key={sess.id}
+                  session={sess}
+                  isActive={activeSession?.id === sess.id}
+                  onClick={() => setActiveSession(sess)}
+                  onTogglePin={() => togglePinSession(sess.id)}
+                  onDelete={() => deleteSession(sess.id)}
+                />
+              ))}
+              {unpinnedSessions.map((sess) => (
+                <SessionRow
+                  key={sess.id}
+                  session={sess}
+                  isActive={activeSession?.id === sess.id}
+                  onClick={() => setActiveSession(sess)}
+                  onTogglePin={() => togglePinSession(sess.id)}
+                  onDelete={() => deleteSession(sess.id)}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* RIGHT MAIN AREA: Connected Session Canvas */}
+      <div className="flex-1 space-y-6">
+        {!activeSession ? (
+          <div className="flex flex-col items-center justify-center min-h-[50vh] rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
+            <span className="text-4xl mb-3 block">🧠</span>
+            <h3 className="font-bold text-lg text-[#232f26] dark:text-[#f4f4f5]">
+              Select or Create a Session
+            </h3>
+            <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1 max-w-sm">
+              Sessions store your spatial connected nodes and ideas. Choose a thread on the left or create a new one.
+            </p>
             <button
-              onClick={() => setSelectedTag(null)}
-              className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-all shrink-0 ${
-                selectedTag === null
-                  ? "bg-[#406852] text-white"
-                  : "bg-[#e5e1d7]/60 text-[#737970] dark:bg-[#27272a] dark:text-[#a1a1aa]"
-              }`}
+              onClick={() => createNewSession("New Session Thread")}
+              className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b]"
             >
-              All Tags
+              + Create Session
             </button>
-            {allTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-all shrink-0 ${
-                  selectedTag === tag
-                    ? "bg-[#406852] text-white"
-                    : "bg-[#e5e1d7]/60 text-[#737970] dark:bg-[#27272a] dark:text-[#a1a1aa]"
-                }`}
-              >
-                #{tag}
-              </button>
-            ))}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Session Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-[#406852]/10 px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:bg-[#27272a] dark:text-[#a3b899] uppercase tracking-wider">
+                    Session Canvas
+                  </span>
+                  <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">
+                    {activeSession.nodes.length} Nodes · {activeSession.connectors.length} Connectors
+                  </span>
+                </div>
+                <h1 className="font-display text-xl sm:text-2xl font-bold text-[#232f26] dark:text-[#f4f4f5] mt-0.5">
+                  {activeSession.title}
+                </h1>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <button
+                  onClick={() => togglePinSession(activeSession.id)}
+                  className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
+                    activeSession.isPinned
+                      ? "bg-[#406852] text-white"
+                      : "border border-[#e5e1d7] text-[#737970] dark:border-[#27272a] dark:text-[#a1a1aa]"
+                  }`}
+                >
+                  📌 {activeSession.isPinned ? "Pinned" : "Pin Thread"}
+                </button>
+              </div>
+            </div>
+
+            {/* Node Creation Toolbar */}
+            <form onSubmit={handleAddNode} className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs space-y-3">
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                <span className="text-xs font-bold text-[#737970] dark:text-[#a1a1aa] shrink-0">
+                  Node Type:
+                </span>
+                {Object.values(NODE_CATEGORY_REGISTRY).map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setNodeCategory(cat.id)}
+                    className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all shrink-0 ${
+                      nodeCategory === cat.id
+                        ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+                        : "bg-[#fbf9f5] text-[#737970] dark:bg-[#27272a] dark:text-[#a1a1aa] hover:text-[#232f26]"
+                    }`}
+                  >
+                    <span>{cat.icon}</span>
+                    <span>{cat.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-2">
+                {nodeCategory === "image" ? (
+                  <input
+                    type="text"
+                    value={nodeMediaUrl}
+                    onChange={(e) => setNodeMediaUrl(e.target.value)}
+                    placeholder="Paste Image / Diagram URL..."
+                    className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-2.5 text-xs text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5]"
+                  />
+                ) : null}
+
+                {nodeCategory === "detailed" && (
+                  <input
+                    type="text"
+                    value={nodeTitle}
+                    onChange={(e) => setNodeTitle(e.target.value)}
+                    placeholder="Node title (optional)..."
+                    className="w-full bg-transparent font-semibold text-xs text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970]"
+                  />
+                )}
+
+                <textarea
+                  value={nodeContent}
+                  onChange={(e) => setNodeContent(e.target.value)}
+                  placeholder={
+                    nodeCategory === "optimistic"
+                      ? "Write a fast micro spark or optimistic thought..."
+                      : nodeCategory === "action"
+                      ? "Write an actionable habit/task starter..."
+                      : "Write detailed note content..."
+                  }
+                  rows={2}
+                  className="w-full resize-none bg-transparent text-xs text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970]"
+                />
+              </div>
+
+              <div className="flex items-center justify-between border-t border-[#e5e1d7]/60 pt-2.5 dark:border-[#27272a]/60">
+                <span className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">
+                  {getNodeCategoryConfig(nodeCategory).description}
+                </span>
+                <button
+                  type="submit"
+                  disabled={!nodeContent.trim() && !nodeMediaUrl.trim()}
+                  className="rounded-xl bg-[#232f26] px-4 py-1.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs disabled:opacity-40"
+                >
+                  + Add Node
+                </button>
+              </div>
+            </form>
+
+            {/* Connectors Feed List */}
+            {activeSession.connectors.length > 0 && (
+              <div className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 dark:border-[#27272a] dark:bg-[#18181b]/60 space-y-2 text-xs">
+                <h3 className="font-bold text-[11px] uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
+                  Active Relationships ({activeSession.connectors.length})
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {activeSession.connectors.map((c) => {
+                    const fromNode = activeSession.nodes.find((n) => n.id === c.fromNodeId);
+                    const toNode = activeSession.nodes.find((n) => n.id === c.toNodeId);
+                    return (
+                      <div
+                        key={c.id}
+                        className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white px-2.5 py-1 text-[11px] font-medium dark:border-[#3f3f46] dark:bg-[#27272a]"
+                      >
+                        <span className="font-bold text-[#406852] dark:text-[#a3b899]">
+                          {fromNode?.content.slice(0, 15) || "Node"}
+                        </span>
+                        <span className="text-[#737970]">➔ {c.label || "links to"} ➔</span>
+                        <span className="font-bold text-[#406852] dark:text-[#a3b899]">
+                          {toNode?.content.slice(0, 15) || "Node"}
+                        </span>
+                        <button
+                          onClick={() => deleteConnector(c.id)}
+                          className="ml-1 text-[10px] text-[#be5a38] hover:underline font-bold"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Connected Spatial Nodes Grid */}
+            {activeSession.nodes.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
+                <span className="text-3xl mb-2 block">⚡</span>
+                <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+                  Empty Session Canvas
+                </h3>
+                <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1">
+                  Use the toolbar above to add your first Optimistic Spark, Detailed Note, or Action Node.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {activeSession.nodes.map((node) => (
+                  <CanvasNodeCard
+                    key={node.id}
+                    node={node}
+                    isConnectingFrom={connectingFromId === node.id}
+                    onStartConnect={() => setConnectingFromId(node.id)}
+                    onCompleteConnect={() => handleConnectNodes(node.id)}
+                    onUpgradeCategory={(newCat) => updateNode(node.id, { category: newCat })}
+                    onToggleComplete={() => updateNode(node.id, { isCompleted: !node.isCompleted })}
+                    onDelete={() => deleteNode(node.id)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
-
-      {/* Quick Add Note Form */}
-      {statusTab === "active" && (
-        <form onSubmit={handleAdd} className="rounded-2xl border border-[#e5e1d7] bg-white p-4 shadow-sm dark:border-[#27272a] dark:bg-[#18181b] space-y-3">
-          <input
-            type="text"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            placeholder="Note title (optional)..."
-            className="w-full bg-transparent font-semibold text-sm text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
-          />
-          <textarea
-            value={newContent}
-            onChange={(e) => setNewContent(e.target.value)}
-            placeholder="Write your note or thought... (Tip: Add #tags directly in text)"
-            rows={3}
-            className="w-full resize-none bg-transparent text-sm text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
-          />
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between border-t border-[#e5e1d7]/60 pt-3 dark:border-[#27272a]/60 gap-3">
-            <input
-              type="text"
-              value={newTags}
-              onChange={(e) => setNewTags(e.target.value)}
-              placeholder="Tags (e.g. idea, friction, learning)..."
-              className="bg-transparent text-xs text-[#737970] dark:text-[#a1a1aa] outline-none placeholder:text-[#737970]/60 dark:placeholder:text-[#a1a1aa]/60 flex-1"
-            />
-            <button
-              type="submit"
-              disabled={!newContent.trim()}
-              className="flex items-center justify-center gap-1.5 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs hover:bg-black dark:hover:bg-white transition-all disabled:opacity-40 shrink-0"
-            >
-              <span>+ Save Note</span>
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Notes Feed */}
-      {loading ? (
-        <HorseLoader size="md" label="Loading notes..." />
-      ) : notes.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
-          <span className="text-3xl mb-2 block">📝</span>
-          <h3 className="font-bold text-base text-[#232f26] dark:text-[#f4f4f5]">
-            No Notes Found
-          </h3>
-          <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1">
-            {searchQuery
-              ? "No notes matched your search query."
-              : "Capture your first note above to start organizing your thoughts."}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {/* Pinned Section */}
-          {pinnedNotes.length > 0 && (
-            <div className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa] flex items-center gap-1.5">
-                <span>📌</span> Pinned Notes ({pinnedNotes.length})
-              </h2>
-              <div className="grid grid-cols-1 gap-3">
-                {pinnedNotes.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    editingId={editingId}
-                    editingTitle={editingTitle}
-                    editingContent={editingContent}
-                    setEditingId={setEditingId}
-                    setEditingTitle={setEditingTitle}
-                    setEditingContent={setEditingContent}
-                    handleSaveEdit={handleSaveEdit}
-                    togglePin={togglePin}
-                    updateStatus={updateStatus}
-                    deleteNote={deleteNote}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Regular Section */}
-          {unpinnedNotes.length > 0 && (
-            <div className="space-y-3">
-              {pinnedNotes.length > 0 && (
-                <h2 className="text-xs font-bold uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
-                  Other Notes ({unpinnedNotes.length})
-                </h2>
-              )}
-              <div className="grid grid-cols-1 gap-3">
-                {unpinnedNotes.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    editingId={editingId}
-                    editingTitle={editingTitle}
-                    editingContent={editingContent}
-                    setEditingId={setEditingId}
-                    setEditingTitle={setEditingTitle}
-                    setEditingContent={setEditingContent}
-                    handleSaveEdit={handleSaveEdit}
-                    togglePin={togglePin}
-                    updateStatus={updateStatus}
-                    deleteNote={deleteNote}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
 
-interface NoteCardProps {
-  note: any;
-  editingId: string | null;
-  editingTitle: string;
-  editingContent: string;
-  setEditingId: (id: string | null) => void;
-  setEditingTitle: (val: string) => void;
-  setEditingContent: (val: string) => void;
-  handleSaveEdit: (id: string) => void;
-  togglePin: (id: string) => void;
-  updateStatus: (id: string, status: "active" | "archived") => void;
-  deleteNote: (id: string) => void;
+function SessionRow({
+  session,
+  isActive,
+  onClick,
+  onTogglePin,
+  onDelete,
+}: {
+  session: any;
+  isActive: boolean;
+  onClick: () => void;
+  onTogglePin: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      className={`group flex items-center justify-between rounded-xl px-3 py-2 cursor-pointer transition-all ${
+        isActive
+          ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
+          : "hover:bg-[#fbf9f5] dark:hover:bg-[#27272a] text-[#232f26] dark:text-[#f4f4f5]"
+      }`}
+    >
+      <div className="flex items-center gap-2 truncate">
+        {session.isPinned && <span className="text-xs">📌</span>}
+        <span className="font-medium truncate">{session.title}</span>
+      </div>
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePin();
+          }}
+          className="p-1 hover:text-[#406852]"
+          title="Pin thread"
+        >
+          📌
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          className="p-1 hover:text-[#be5a38]"
+          title="Delete thread"
+        >
+          🗑️
+        </button>
+      </div>
+    </div>
+  );
 }
 
-function NoteCard({
-  note,
-  editingId,
-  editingTitle,
-  editingContent,
-  setEditingId,
-  setEditingTitle,
-  setEditingContent,
-  handleSaveEdit,
-  togglePin,
-  updateStatus,
-  deleteNote,
-}: NoteCardProps) {
-  const isEditing = editingId === note.id;
+function CanvasNodeCard({
+  node,
+  isConnectingFrom,
+  onStartConnect,
+  onCompleteConnect,
+  onUpgradeCategory,
+  onToggleComplete,
+  onDelete,
+}: {
+  node: any;
+  isConnectingFrom: boolean;
+  onStartConnect: () => void;
+  onCompleteConnect: () => void;
+  onUpgradeCategory: (category: string) => void;
+  onToggleComplete: () => void;
+  onDelete: () => void;
+}) {
+  const catConfig = getNodeCategoryConfig(node.category);
 
   return (
     <div
-      className={`group flex flex-col gap-3 rounded-2xl border p-4 shadow-xs transition-all ${
-        note.isPinned
-          ? "border-[#406852]/40 bg-[#e3ede6]/20 dark:border-[#406852]/40 dark:bg-[#18181b]"
+      className={`group relative flex flex-col justify-between rounded-2xl border p-4 shadow-xs transition-all ${
+        isConnectingFrom
+          ? "ring-2 ring-[#406852] border-[#406852]"
           : "border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] hover:border-[#232f26]/30"
       }`}
     >
-      {isEditing ? (
-        <div className="space-y-3">
-          <input
-            type="text"
-            value={editingTitle}
-            onChange={(e) => setEditingTitle(e.target.value)}
-            placeholder="Title..."
-            className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-2.5 text-xs font-semibold text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5]"
-          />
-          <textarea
-            value={editingContent}
-            onChange={(e) => setEditingContent(e.target.value)}
-            rows={3}
-            className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 text-xs text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5]"
-          />
-          <div className="flex items-center gap-2 justify-end">
+      <div className="space-y-2">
+        {/* Category Header */}
+        <div className="flex items-center justify-between">
+          <span
+            className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${catConfig.badgeBg} ${catConfig.badgeText}`}
+          >
+            <span>{catConfig.icon}</span>
+            <span>{catConfig.label}</span>
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            {/* 1-Click Upgrade Button from Optimistic -> Detailed */}
+            {node.category === "optimistic" && (
+              <button
+                onClick={() => onUpgradeCategory("detailed")}
+                className="text-[10px] font-bold text-[#406852] hover:underline dark:text-[#a3b899]"
+                title="Evolve into Detailed Note"
+              >
+                ➔ Elaborate
+              </button>
+            )}
+
+            {/* Connect Button */}
             <button
-              onClick={() => handleSaveEdit(note.id)}
-              className="rounded-lg bg-[#232f26] px-3 py-1.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b]"
+              onClick={isConnectingFrom ? onStartConnect : onStartConnect}
+              className="text-[10px] font-bold text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-white"
+              title="Connect to another node"
             >
-              Save
+              🔗 Link
             </button>
+
             <button
-              onClick={() => setEditingId(null)}
-              className="rounded-lg border border-[#e5e1d7] px-3 py-1.5 text-xs font-medium text-[#737970] dark:border-[#27272a] dark:text-[#a1a1aa]"
+              onClick={onDelete}
+              className="text-[10px] font-bold text-[#be5a38] hover:underline"
             >
-              Cancel
+              Delete
             </button>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="flex items-start justify-between gap-3">
-            <div className="space-y-1 flex-1">
-              {note.title && (
-                <h3 className="font-semibold text-sm text-[#232f26] dark:text-[#f4f4f5]">
-                  {note.title}
-                </h3>
-              )}
-              <p className="text-xs sm:text-sm text-[#232f26]/90 dark:text-[#f4f4f5]/90 whitespace-pre-wrap leading-relaxed">
-                {note.content}
-              </p>
-            </div>
 
-            {/* Pin Toggle Button */}
-            <button
-              onClick={() => togglePin(note.id)}
-              className={`rounded-lg p-1.5 transition-all ${
-                note.isPinned
-                  ? "bg-[#406852] text-white"
-                  : "text-[#737970] hover:bg-[#e5e1d7]/50 dark:text-[#a1a1aa] dark:hover:bg-[#27272a]"
+        {/* Content Body */}
+        {node.category === "action" ? (
+          <div className="flex items-start gap-2 pt-1">
+            <input
+              type="checkbox"
+              checked={Boolean(node.isCompleted)}
+              onChange={onToggleComplete}
+              className="mt-1 rounded accent-[#406852]"
+            />
+            <span
+              className={`text-xs font-medium ${
+                node.isCompleted ? "line-through text-[#737970]" : "text-[#232f26] dark:text-[#f4f4f5]"
               }`}
-              title={note.isPinned ? "Unpin note" : "Pin note to top"}
             >
-              📌
-            </button>
-          </div>
-
-          {/* Tags List */}
-          {note.tags && note.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-1">
-              {note.tags.map((t: string) => (
-                <span
-                  key={t}
-                  className="rounded-md bg-[#e5e1d7]/50 px-2 py-0.5 text-[10px] font-bold text-[#737970] dark:bg-[#27272a] dark:text-[#a1a1aa]"
-                >
-                  #{t}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Footer Controls */}
-          <div className="flex items-center justify-between border-t border-[#e5e1d7]/40 pt-2.5 dark:border-[#27272a]/40 text-xs">
-            <span className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">
-              {new Date(note.createdAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {node.content}
             </span>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                  setEditingId(note.id);
-                  setEditingTitle(note.title || "");
-                  setEditingContent(note.content);
-                }}
-                className="text-[11px] font-medium text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
-              >
-                Edit
-              </button>
-
-              <button
-                onClick={() => updateStatus(note.id, note.status === "active" ? "archived" : "active")}
-                className="text-[11px] font-medium text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-[#f4f4f5]"
-              >
-                {note.status === "active" ? "Archive" : "Unarchive"}
-              </button>
-
-              <button
-                onClick={() => deleteNote(note.id)}
-                className="text-[11px] font-medium text-[#be5a38] hover:underline"
-              >
-                Delete
-              </button>
-            </div>
           </div>
-        </>
-      )}
+        ) : (
+          <div className="space-y-1">
+            {node.title && (
+              <h4 className="font-bold text-xs text-[#232f26] dark:text-[#f4f4f5]">
+                {node.title}
+              </h4>
+            )}
+            <p className="text-xs text-[#232f26]/90 dark:text-[#f4f4f5]/90 whitespace-pre-wrap leading-relaxed">
+              {node.content}
+            </p>
+          </div>
+        )}
+
+        {/* Media Preview if available */}
+        {node.mediaUrl && (
+          <div className="mt-2 rounded-xl overflow-hidden border border-[#e5e1d7] dark:border-[#3f3f46]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={node.mediaUrl} alt="Node Media" className="max-h-40 w-full object-cover" />
+          </div>
+        )}
+      </div>
+
+      {/* Footer Timestamp */}
+      <div className="border-t border-[#e5e1d7]/40 pt-2 mt-3 dark:border-[#27272a]/40 text-[10px] text-[#737970] dark:text-[#a1a1aa]">
+        Created {new Date(node.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+      </div>
     </div>
   );
 }

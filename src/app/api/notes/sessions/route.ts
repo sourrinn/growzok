@@ -20,7 +20,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ sessions: sessionsList });
   } catch (error) {
-    console.error("GET /api/notes error:", error);
+    console.error("GET /api/notes/sessions error:", error);
     return NextResponse.json({ error: "Failed to fetch sessions" }, { status: 500 });
   }
 }
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     const newSession = await createSession(session.user.id, title, initialContent);
     return NextResponse.json({ session: newSession }, { status: 201 });
   } catch (error) {
-    console.error("POST /api/notes error:", error);
+    console.error("POST /api/notes/sessions error:", error);
     return NextResponse.json({ error: "Failed to create session" }, { status: 500 });
   }
 }

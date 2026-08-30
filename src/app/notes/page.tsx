@@ -7,7 +7,7 @@ import { HorseLoader } from "@/components/HorseLoader";
 
 export const metadata = {
   title: "Notes Workspace — Growzok",
-  description: "Standalone Notes Engine — capture thoughts, pin key ideas, tag friction points, and organize your mind.",
+  description: "Connected Element Engine — spatial notes, optimistic sparks, detailed notes, media, and directional connectors.",
 };
 
 export default async function NotesPage() {

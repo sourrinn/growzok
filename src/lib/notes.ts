@@ -1,81 +1,126 @@
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import {
-  type RoughNote,
-  type RoughNoteDoc,
-  type RoughNoteStatus,
-  serializeRoughNote,
+  type Note,
+  type NoteDoc,
+  type NoteStatus,
+  serializeNote,
 } from "@/types/note";
 
 const COLLECTION = "rough_notes";
 
 async function collection() {
   const db = await getDb();
-  return db.collection<RoughNoteDoc>(COLLECTION);
+  return db.collection<NoteDoc>(COLLECTION);
 }
 
-export async function listRoughNotes(
+export async function listNotes(
   userId: string,
-  statusFilter?: RoughNoteStatus
-): Promise<RoughNote[]> {
+  options: { status?: NoteStatus; search?: string; tag?: string } = {}
+): Promise<Note[]> {
   const col = await collection();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const query: any = { userId };
-  if (statusFilter) {
-    query.status = statusFilter;
+
+  if (options.status) {
+    query.status = options.status;
+  } else {
+    query.status = "active";
   }
-  const docs = await col.find(query).sort({ createdAt: -1 }).toArray();
-  return docs.map(serializeRoughNote);
+
+  if (options.tag) {
+    query.tags = options.tag;
+  }
+
+  if (options.search && options.search.trim()) {
+    const s = options.search.trim();
+    query.$or = [
+      { content: { $regex: s, $options: "i" } },
+      { title: { $regex: s, $options: "i" } },
+      { tags: { $regex: s, $options: "i" } },
+    ];
+  }
+
+  const docs = await col
+    .find(query)
+    .sort({ isPinned: -1, createdAt: -1 })
+    .toArray();
+  return docs.map(serializeNote);
 }
 
-export async function createRoughNote(
+export async function createNote(
   userId: string,
-  content: string
-): Promise<RoughNote> {
+  data: { content: string; title?: string; tags?: string[] }
+): Promise<Note> {
   const col = await collection();
   const now = new Date();
-  const doc: Omit<RoughNoteDoc, "_id"> = {
+
+  // Extract hashtags from content if not explicitly provided
+  const extractedTags =
+    data.tags && data.tags.length > 0
+      ? data.tags
+      : (data.content.match(/#[\w-]+/g) || []).map((t) => t.slice(1).toLowerCase());
+
+  const doc: Omit<NoteDoc, "_id"> = {
     userId,
-    content: content.trim(),
-    status: "raw",
+    title: data.title?.trim() || "",
+    content: data.content.trim(),
+    tags: Array.from(new Set(extractedTags)),
+    isPinned: false,
+    status: "active",
     createdAt: now,
     updatedAt: now,
   };
-  const res = await col.insertOne(doc as RoughNoteDoc);
-  return serializeRoughNote({ ...doc, _id: res.insertedId });
+
+  const res = await col.insertOne(doc as NoteDoc);
+  return serializeNote({ ...doc, _id: res.insertedId });
 }
 
-export async function updateRoughNote(
+export async function updateNote(
   userId: string,
   noteId: string,
-  content: string
-): Promise<RoughNote | null> {
+  patch: { content?: string; title?: string; tags?: string[]; isPinned?: boolean; status?: NoteStatus }
+): Promise<Note | null> {
   const col = await collection();
+  const now = new Date();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: any = { updatedAt: now };
+
+  if (patch.content !== undefined) updateData.content = patch.content.trim();
+  if (patch.title !== undefined) updateData.title = patch.title.trim();
+  if (patch.tags !== undefined) updateData.tags = patch.tags;
+  if (patch.isPinned !== undefined) updateData.isPinned = Boolean(patch.isPinned);
+  if (patch.status !== undefined) updateData.status = patch.status;
+
+  const res = await col.findOneAndUpdate(
+    { _id: new ObjectId(noteId), userId },
+    { $set: updateData },
+    { returnDocument: "after" }
+  );
+
+  return res ? serializeNote(res) : null;
+}
+
+export async function togglePinNote(
+  userId: string,
+  noteId: string
+): Promise<Note | null> {
+  const col = await collection();
+  const doc = await col.findOne({ _id: new ObjectId(noteId), userId });
+  if (!doc) return null;
+
   const now = new Date();
   const res = await col.findOneAndUpdate(
     { _id: new ObjectId(noteId), userId },
-    { $set: { content: content.trim(), updatedAt: now } },
+    { $set: { isPinned: !doc.isPinned, updatedAt: now } },
     { returnDocument: "after" }
   );
-  return res ? serializeRoughNote(res) : null;
+
+  return res ? serializeNote(res) : null;
 }
 
-export async function updateRoughNoteStatus(
-  userId: string,
-  noteId: string,
-  status: RoughNoteStatus
-): Promise<RoughNote | null> {
-  const col = await collection();
-  const now = new Date();
-  const res = await col.findOneAndUpdate(
-    { _id: new ObjectId(noteId), userId },
-    { $set: { status, updatedAt: now } },
-    { returnDocument: "after" }
-  );
-  return res ? serializeRoughNote(res) : null;
-}
-
-export async function deleteRoughNote(
+export async function deleteNote(
   userId: string,
   noteId: string
 ): Promise<boolean> {

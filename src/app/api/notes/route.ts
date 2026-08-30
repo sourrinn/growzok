@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { createRoughNote, listRoughNotes } from "@/lib/notes";
+import { createNote, listNotes } from "@/lib/notes";
+import type { NoteStatus } from "@/types/note";
 
 export async function GET(req: Request) {
   try {
@@ -10,11 +11,16 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const statusParam = searchParams.get("status");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const statusFilter = statusParam ? (statusParam as any) : undefined;
+    const statusParam = searchParams.get("status") as NoteStatus | null;
+    const search = searchParams.get("search") || undefined;
+    const tag = searchParams.get("tag") || undefined;
 
-    const notes = await listRoughNotes(session.user.id, statusFilter);
+    const notes = await listNotes(session.user.id, {
+      status: statusParam || "active",
+      search,
+      tag,
+    });
+
     return NextResponse.json({ notes });
   } catch (error) {
     console.error("GET /api/notes error:", error);
@@ -30,13 +36,13 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { content } = body;
+    const { content, title, tags } = body;
 
     if (!content || typeof content !== "string" || !content.trim()) {
       return NextResponse.json({ error: "Content is required" }, { status: 400 });
     }
 
-    const note = await createRoughNote(session.user.id, content);
+    const note = await createNote(session.user.id, { content, title, tags });
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {
     console.error("POST /api/notes error:", error);

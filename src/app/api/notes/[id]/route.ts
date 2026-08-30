@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { deleteRoughNote, updateRoughNote, updateRoughNoteStatus } from "@/lib/notes";
+import { deleteNote, togglePinNote, updateNote } from "@/lib/notes";
 
 export async function PATCH(
   req: Request,
@@ -14,16 +14,20 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await req.json();
-    const { content, status } = body;
+    const { action, content, title, tags, isPinned, status } = body;
 
     let updatedNote = null;
 
-    if (content !== undefined) {
-      updatedNote = await updateRoughNote(session.user.id, id, content);
-    }
-
-    if (status !== undefined) {
-      updatedNote = await updateRoughNoteStatus(session.user.id, id, status);
+    if (action === "togglePin") {
+      updatedNote = await togglePinNote(session.user.id, id);
+    } else {
+      updatedNote = await updateNote(session.user.id, id, {
+        content,
+        title,
+        tags,
+        isPinned,
+        status,
+      });
     }
 
     if (!updatedNote) {
@@ -48,7 +52,7 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    const success = await deleteRoughNote(session.user.id, id);
+    const success = await deleteNote(session.user.id, id);
 
     if (!success) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });

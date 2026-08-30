@@ -6,8 +6,8 @@ import { NotesClient } from "./NotesClient";
 import { HorseLoader } from "@/components/HorseLoader";
 
 export const metadata = {
-  title: "Rough Notes Scratchpad — Growzok",
-  description: "Layer 1 Cognitive Dump — offload working memory, mental noise, and friction points.",
+  title: "Notes Workspace — Growzok",
+  description: "Standalone Notes Engine — capture thoughts, pin key ideas, tag friction points, and organize your mind.",
 };
 
 export default async function NotesPage() {

@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import AppShell from "@/components/AppShell";
 import NotesSessionsSidebar from "@/components/NotesSessionsSidebar";
 import { useNotesSessions } from "@/hooks/useNotesSessions";
-import { getNodeCategoryConfig, NODE_CATEGORY_REGISTRY } from "@/lib/nodeRegistry";
+import { getElementCategoryConfig, ELEMENT_REGISTRY } from "@/lib/nodeRegistry";
+import { calculateCollisionFreePath } from "@/lib/connectorRouting";
 import { HorseLoader } from "@/components/HorseLoader";
 
 interface NotesClientProps {
@@ -29,35 +30,34 @@ export function NotesClient({ userLabel }: NotesClientProps) {
     deleteConnector,
   } = useNotesSessions();
 
-  // Quick Add Node inputs
-  const [nodeCategory, setNodeCategory] = useState<string>("optimistic");
-  const [nodeContent, setNodeContent] = useState("");
-  const [nodeTitle, setNodeTitle] = useState("");
-  const [nodeMediaUrl, setNodeMediaUrl] = useState("");
+  // Quick Add Element inputs
+  const [elementCategory, setElementCategory] = useState<string>("sticky");
+  const [elementContent, setElementContent] = useState("");
+  const [elementTitle, setElementTitle] = useState("");
+  const [elementMediaUrl, setElementMediaUrl] = useState("");
 
   // Connector Creation state
   const [connectingFromId, setConnectingFromId] = useState<string | null>(null);
-  const [connectorLabel, setConnectorLabel] = useState("");
 
-  const handleAddNode = async (e: React.FormEvent) => {
+  const handleAddElement = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nodeContent.trim() && nodeCategory !== "image") return;
+    if (!elementContent.trim() && elementCategory !== "image") return;
 
     const currentCount = activeSession?.nodes.length || 0;
     const posX = 40 + (currentCount % 3) * 280;
     const posY = 40 + Math.floor(currentCount / 3) * 220;
 
     await addNode({
-      category: nodeCategory,
-      title: nodeTitle.trim(),
-      content: nodeContent.trim(),
-      mediaUrl: nodeMediaUrl.trim(),
+      category: elementCategory,
+      title: elementTitle.trim(),
+      content: elementContent.trim(),
+      mediaUrl: elementMediaUrl.trim(),
       position: { x: posX, y: posY },
     });
 
-    setNodeContent("");
-    setNodeTitle("");
-    setNodeMediaUrl("");
+    setElementContent("");
+    setElementTitle("");
+    setElementMediaUrl("");
   };
 
   const handleConnectNodes = async (toNodeId: string) => {
@@ -65,9 +65,8 @@ export function NotesClient({ userLabel }: NotesClientProps) {
       setConnectingFromId(null);
       return;
     }
-    await addConnector(connectingFromId, toNodeId, connectorLabel.trim());
+    await addConnector(connectingFromId, toNodeId);
     setConnectingFromId(null);
-    setConnectorLabel("");
   };
 
   // Secondary Sub-Sidebar docked flush to global AppSidebar
@@ -79,7 +78,7 @@ export function NotesClient({ userLabel }: NotesClientProps) {
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
       onSelectSession={(sess) => setActiveSession(sess)}
-      onCreateSession={() => createNewSession("New Session Thread")}
+      onCreateSession={() => createNewSession("New Session Deck")}
       onTogglePinSession={togglePinSession}
       onDeleteSession={deleteSession}
     />
@@ -90,18 +89,18 @@ export function NotesClient({ userLabel }: NotesClientProps) {
       <div className="space-y-6 animate-fade-in">
         {!activeSession ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
-            <span className="text-4xl mb-3 block">🧠</span>
+            <span className="text-4xl mb-3 block">🔲</span>
             <h3 className="font-bold text-lg text-[#232f26] dark:text-[#f4f4f5]">
               Select or Create a Session
             </h3>
             <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1 max-w-sm">
-              Sessions store your spatial connected nodes and ideas. Choose a thread on the secondary sidebar or create a new one.
+              Sessions store your PowerPoint-style note cards, sticky notes, containers, and collision-free connectors.
             </p>
             <button
-              onClick={() => createNewSession("New Session Thread")}
+              onClick={() => createNewSession("New Session Deck")}
               className="mt-4 rounded-xl bg-[#232f26] px-4 py-2 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b]"
             >
-              + Create Session
+              + Create Session Deck
             </button>
           </div>
         ) : (
@@ -111,10 +110,10 @@ export function NotesClient({ userLabel }: NotesClientProps) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-[#406852]/10 px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:bg-[#27272a] dark:text-[#a3b899] uppercase tracking-wider">
-                    Connected Session Canvas
+                    PowerPoint Note Canvas
                   </span>
                   <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">
-                    {activeSession.nodes.length} Nodes · {activeSession.connectors.length} Connectors
+                    {activeSession.nodes.length} Elements · {activeSession.connectors.length} Auto-Connectors
                   </span>
                 </div>
                 <h1 className="font-display text-xl sm:text-2xl font-bold text-[#232f26] dark:text-[#f4f4f5] mt-0.5">
@@ -136,19 +135,19 @@ export function NotesClient({ userLabel }: NotesClientProps) {
               </div>
             </div>
 
-            {/* Node Creation Toolbar */}
-            <form onSubmit={handleAddNode} className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs space-y-3">
+            {/* PPT Element Toolbar */}
+            <form onSubmit={handleAddElement} className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs space-y-3">
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
                 <span className="text-xs font-bold text-[#737970] dark:text-[#a1a1aa] shrink-0">
-                  Node Category:
+                  Element Palette:
                 </span>
-                {Object.values(NODE_CATEGORY_REGISTRY).map((cat) => (
+                {Object.values(ELEMENT_REGISTRY).map((cat) => (
                   <button
                     key={cat.id}
                     type="button"
-                    onClick={() => setNodeCategory(cat.id)}
+                    onClick={() => setElementCategory(cat.id)}
                     className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all shrink-0 ${
-                      nodeCategory === cat.id
+                      elementCategory === cat.id
                         ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
                         : "bg-[#fbf9f5] text-[#737970] dark:bg-[#27272a] dark:text-[#a1a1aa] hover:text-[#232f26]"
                     }`}
@@ -160,35 +159,37 @@ export function NotesClient({ userLabel }: NotesClientProps) {
               </div>
 
               <div className="space-y-2">
-                {nodeCategory === "image" ? (
+                {elementCategory === "image" ? (
                   <input
                     type="text"
-                    value={nodeMediaUrl}
-                    onChange={(e) => setNodeMediaUrl(e.target.value)}
+                    value={elementMediaUrl}
+                    onChange={(e) => setElementMediaUrl(e.target.value)}
                     placeholder="Paste Image / Diagram URL..."
                     className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] p-2.5 text-xs text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5]"
                   />
                 ) : null}
 
-                {nodeCategory === "detailed" && (
+                {(elementCategory === "shape" || elementCategory === "text" || elementCategory === "detailed") && (
                   <input
                     type="text"
-                    value={nodeTitle}
-                    onChange={(e) => setNodeTitle(e.target.value)}
-                    placeholder="Node title (optional)..."
+                    value={elementTitle}
+                    onChange={(e) => setElementTitle(e.target.value)}
+                    placeholder="Title / Container Header (optional)..."
                     className="w-full bg-transparent font-semibold text-xs text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970]"
                   />
                 )}
 
                 <textarea
-                  value={nodeContent}
-                  onChange={(e) => setNodeContent(e.target.value)}
+                  value={elementContent}
+                  onChange={(e) => setElementContent(e.target.value)}
                   placeholder={
-                    nodeCategory === "optimistic"
-                      ? "Write a fast micro spark or optimistic thought..."
-                      : nodeCategory === "action"
-                      ? "Write an actionable habit/task starter..."
-                      : "Write detailed note content..."
+                    elementCategory === "sticky"
+                      ? "Write a yellow sticky note thought..."
+                      : elementCategory === "shape"
+                      ? "Write container notes or concepts..."
+                      : elementCategory === "action"
+                      ? "Write an actionable task starter..."
+                      : "Write freeform note content..."
                   }
                   rows={2}
                   className="w-full resize-none bg-transparent text-xs text-[#232f26] dark:text-[#f4f4f5] outline-none placeholder:text-[#737970]"
@@ -197,80 +198,78 @@ export function NotesClient({ userLabel }: NotesClientProps) {
 
               <div className="flex items-center justify-between border-t border-[#e5e1d7]/60 pt-2.5 dark:border-[#27272a]/60">
                 <span className="text-[11px] text-[#737970] dark:text-[#a1a1aa]">
-                  {getNodeCategoryConfig(nodeCategory).description}
+                  {getElementCategoryConfig(elementCategory).description}
                 </span>
                 <button
                   type="submit"
-                  disabled={!nodeContent.trim() && !nodeMediaUrl.trim()}
+                  disabled={!elementContent.trim() && !elementMediaUrl.trim()}
                   className="rounded-xl bg-[#232f26] px-4 py-1.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs disabled:opacity-40"
                 >
-                  + Add Node
+                  + Add Element
                 </button>
               </div>
             </form>
 
-            {/* Connectors Feed List */}
-            {activeSession.connectors.length > 0 && (
-              <div className="rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5] p-3 dark:border-[#27272a] dark:bg-[#18181b]/60 space-y-2 text-xs">
-                <h3 className="font-bold text-[11px] uppercase tracking-wider text-[#737970] dark:text-[#a1a1aa]">
-                  Active Relationships ({activeSession.connectors.length})
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {activeSession.connectors.map((c) => {
-                    const fromNode = activeSession.nodes.find((n) => n.id === c.fromNodeId);
-                    const toNode = activeSession.nodes.find((n) => n.id === c.toNodeId);
-                    return (
-                      <div
-                        key={c.id}
-                        className="flex items-center gap-1.5 rounded-xl border border-[#e5e1d7] bg-white px-2.5 py-1 text-[11px] font-medium dark:border-[#3f3f46] dark:bg-[#27272a]"
-                      >
-                        <span className="font-bold text-[#406852] dark:text-[#a3b899]">
-                          {fromNode?.content.slice(0, 15) || "Node"}
-                        </span>
-                        <span className="text-[#737970]">➔ {c.label || "links to"} ➔</span>
-                        <span className="font-bold text-[#406852] dark:text-[#a3b899]">
-                          {toNode?.content.slice(0, 15) || "Node"}
-                        </span>
-                        <button
-                          onClick={() => deleteConnector(c.id)}
-                          className="ml-1 text-[10px] text-[#be5a38] hover:underline font-bold"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            {/* Canvas Stage & Collision-Free SVG Auto-Routing Overlay */}
+            <div className="relative min-h-[500px] rounded-2xl border border-[#e5e1d7] bg-[#fbf9f5]/50 p-4 dark:border-[#27272a] dark:bg-[#121215]/50 overflow-hidden">
+              {/* SVG Auto-Routing Connectors Overlay */}
+              <svg className="absolute inset-0 pointer-events-none h-full w-full z-10 overflow-visible">
+                {activeSession.connectors.map((c) => {
+                  const sourceNode = activeSession.nodes.find((n) => n.id === c.fromNodeId);
+                  const targetNode = activeSession.nodes.find((n) => n.id === c.toNodeId);
 
-            {/* Connected Spatial Nodes Grid */}
-            {activeSession.nodes.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
-                <span className="text-3xl mb-2 block">⚡</span>
-                <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
-                  Empty Session Canvas
-                </h3>
-                <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1">
-                  Use the toolbar above to add your first Optimistic Spark, Detailed Note, or Action Node.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {activeSession.nodes.map((node) => (
-                  <CanvasNodeCard
-                    key={node.id}
-                    node={node}
-                    isConnectingFrom={connectingFromId === node.id}
-                    onStartConnect={() => setConnectingFromId(node.id)}
-                    onCompleteConnect={() => handleConnectNodes(node.id)}
-                    onUpgradeCategory={(newCat) => updateNode(node.id, { category: newCat })}
-                    onToggleComplete={() => updateNode(node.id, { isCompleted: !node.isCompleted })}
-                    onDelete={() => deleteNode(node.id)}
-                  />
-                ))}
-              </div>
-            )}
+                  if (!sourceNode || !targetNode) return null;
+
+                  const pathD = calculateCollisionFreePath(
+                    sourceNode.position,
+                    targetNode.position,
+                    activeSession.nodes.map((n) => ({ id: n.id, ...n.position })),
+                    c.fromNodeId,
+                    c.toNodeId
+                  );
+
+                  return (
+                    <path
+                      key={c.id}
+                      d={pathD}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-[#406852] dark:text-[#a3b899] opacity-80 transition-all duration-300"
+                    />
+                  );
+                })}
+              </svg>
+
+              {/* Elements Grid */}
+              {activeSession.nodes.length === 0 ? (
+                <div className="flex flex-col items-center justify-center min-h-[350px] text-center p-8">
+                  <span className="text-3xl mb-2 block">📌</span>
+                  <h3 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
+                    Empty Canvas Stage
+                  </h3>
+                  <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1">
+                    Use the Palette Toolbar above to add Sticky Notes, Shapes, Text Boxes, or Action Starters.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 relative z-20">
+                  {activeSession.nodes.map((node) => (
+                    <PPTElementCard
+                      key={node.id}
+                      node={node}
+                      isConnectingFrom={connectingFromId === node.id}
+                      onStartConnect={() => setConnectingFromId(node.id)}
+                      onCompleteConnect={() => handleConnectNodes(node.id)}
+                      onToggleComplete={() => updateNode(node.id, { isCompleted: !node.isCompleted })}
+                      onDelete={() => deleteNode(node.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -278,12 +277,11 @@ export function NotesClient({ userLabel }: NotesClientProps) {
   );
 }
 
-function CanvasNodeCard({
+function PPTElementCard({
   node,
   isConnectingFrom,
   onStartConnect,
   onCompleteConnect,
-  onUpgradeCategory,
   onToggleComplete,
   onDelete,
 }: {
@@ -291,18 +289,15 @@ function CanvasNodeCard({
   isConnectingFrom: boolean;
   onStartConnect: () => void;
   onCompleteConnect: () => void;
-  onUpgradeCategory: (category: string) => void;
   onToggleComplete: () => void;
   onDelete: () => void;
 }) {
-  const catConfig = getNodeCategoryConfig(node.category);
+  const catConfig = getElementCategoryConfig(node.category);
 
   return (
     <div
-      className={`group relative flex flex-col justify-between rounded-2xl border p-4 shadow-xs transition-all ${
-        isConnectingFrom
-          ? "ring-2 ring-[#406852] border-[#406852]"
-          : "border-[#e5e1d7] bg-white dark:border-[#27272a] dark:bg-[#18181b] hover:border-[#232f26]/30"
+      className={`group relative flex flex-col justify-between rounded-2xl border p-4 shadow-xs transition-all ${catConfig.cardBg} ${catConfig.cardBorder} ${
+        isConnectingFrom ? "ring-2 ring-[#406852] border-[#406852]" : ""
       }`}
     >
       <div className="space-y-2">
@@ -316,24 +311,13 @@ function CanvasNodeCard({
           </span>
 
           <div className="flex items-center gap-1.5">
-            {/* 1-Click Upgrade Button from Optimistic -> Detailed */}
-            {node.category === "optimistic" && (
-              <button
-                onClick={() => onUpgradeCategory("detailed")}
-                className="text-[10px] font-bold text-[#406852] hover:underline dark:text-[#a3b899]"
-                title="Evolve into Detailed Note"
-              >
-                ➔ Elaborate
-              </button>
-            )}
-
-            {/* Connect Button */}
+            {/* Auto-Connector Button */}
             <button
               onClick={isConnectingFrom ? onStartConnect : onStartConnect}
               className="text-[10px] font-bold text-[#737970] hover:text-[#232f26] dark:text-[#a1a1aa] dark:hover:text-white"
-              title="Connect to another node"
+              title="Connect smoothly to another node without overlaps"
             >
-              🔗 Link
+              🔗 Auto-Connect
             </button>
 
             <button

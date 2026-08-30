@@ -17,10 +17,8 @@ export default async function NotesPage() {
   const userName = session.user.name || session.user.email || "";
 
   return (
-    <AppShell userLabel={userName}>
-      <Suspense fallback={<HorseLoader size="lg" label="Loading Rough Notes..." />}>
-        <NotesClient />
-      </Suspense>
-    </AppShell>
+    <Suspense fallback={<HorseLoader size="lg" label="Loading Notes Workspace..." />}>
+      <NotesClient userLabel={userName} />
+    </Suspense>
   );
 }

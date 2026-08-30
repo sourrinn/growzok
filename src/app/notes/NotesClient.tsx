@@ -1,11 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import AppShell from "@/components/AppShell";
+import NotesSessionsSidebar from "@/components/NotesSessionsSidebar";
 import { useNotesSessions } from "@/hooks/useNotesSessions";
 import { getNodeCategoryConfig, NODE_CATEGORY_REGISTRY } from "@/lib/nodeRegistry";
 import { HorseLoader } from "@/components/HorseLoader";
 
-export function NotesClient() {
+interface NotesClientProps {
+  userLabel: string;
+}
+
+export function NotesClient({ userLabel }: NotesClientProps) {
   const {
     sessions,
     activeSession,
@@ -23,9 +29,6 @@ export function NotesClient() {
     deleteConnector,
   } = useNotesSessions();
 
-  const [newSessionTitle, setNewSessionTitle] = useState("");
-  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
-
   // Quick Add Node inputs
   const [nodeCategory, setNodeCategory] = useState<string>("optimistic");
   const [nodeContent, setNodeContent] = useState("");
@@ -36,18 +39,10 @@ export function NotesClient() {
   const [connectingFromId, setConnectingFromId] = useState<string | null>(null);
   const [connectorLabel, setConnectorLabel] = useState("");
 
-  const handleCreateSession = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await createNewSession(newSessionTitle.trim() || "Untitled Session");
-    setNewSessionTitle("");
-    setShowNewSessionModal(false);
-  };
-
   const handleAddNode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nodeContent.trim() && nodeCategory !== "image") return;
 
-    // Estimate initial position on canvas
     const currentCount = activeSession?.nodes.length || 0;
     const posX = 40 + (currentCount % 3) * 280;
     const posY = 40 + Math.floor(currentCount / 3) * 220;
@@ -75,81 +70,24 @@ export function NotesClient() {
     setConnectorLabel("");
   };
 
-  const pinnedSessions = useMemo(() => sessions.filter((s) => s.isPinned), [sessions]);
-  const unpinnedSessions = useMemo(() => sessions.filter((s) => !s.isPinned), [sessions]);
+  // Secondary Sub-Sidebar docked flush to global AppSidebar
+  const secondarySidebar = (
+    <NotesSessionsSidebar
+      sessions={sessions}
+      activeSession={activeSession}
+      loading={loading}
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      onSelectSession={(sess) => setActiveSession(sess)}
+      onCreateSession={() => createNewSession("New Session Thread")}
+      onTogglePinSession={togglePinSession}
+      onDeleteSession={deleteSession}
+    />
+  );
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 min-h-[calc(100vh-8rem)] animate-fade-in">
-      {/* LEFT SIDEBAR: ChatGPT-Style Sessions List */}
-      <div className="w-full md:w-80 shrink-0 space-y-4 rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">💬</span>
-            <h2 className="font-bold text-sm text-[#232f26] dark:text-[#f4f4f5]">
-              Thought Sessions
-            </h2>
-          </div>
-          <button
-            onClick={() => createNewSession()}
-            className="flex items-center gap-1 rounded-xl bg-[#232f26] px-3 py-1.5 text-xs font-bold text-white dark:bg-[#f4f4f5] dark:text-[#18181b] hover:bg-black dark:hover:bg-white transition-all"
-            title="Create new session thread"
-          >
-            <span>+ New</span>
-          </button>
-        </div>
-
-        {/* Search Session Bar */}
-        <div className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search sessions..."
-            className="w-full rounded-xl border border-[#e5e1d7] bg-[#fbf9f5] px-3 py-2 pl-8 text-xs text-[#232f26] outline-none dark:border-[#3f3f46] dark:bg-[#27272a] dark:text-[#f4f4f5] placeholder:text-[#737970] dark:placeholder:text-[#a1a1aa]"
-          />
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[#737970] dark:text-[#a1a1aa]">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-        </div>
-
-        {/* Session Threads Scrollable List */}
-        <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-1 no-scrollbar text-xs">
-          {loading ? (
-            <HorseLoader size="sm" label="Loading..." />
-          ) : sessions.length === 0 ? (
-            <p className="text-center py-6 text-[#737970] dark:text-[#a1a1aa]">
-              No sessions yet. Click + New above.
-            </p>
-          ) : (
-            <>
-              {pinnedSessions.map((sess) => (
-                <SessionRow
-                  key={sess.id}
-                  session={sess}
-                  isActive={activeSession?.id === sess.id}
-                  onClick={() => setActiveSession(sess)}
-                  onTogglePin={() => togglePinSession(sess.id)}
-                  onDelete={() => deleteSession(sess.id)}
-                />
-              ))}
-              {unpinnedSessions.map((sess) => (
-                <SessionRow
-                  key={sess.id}
-                  session={sess}
-                  isActive={activeSession?.id === sess.id}
-                  onClick={() => setActiveSession(sess)}
-                  onTogglePin={() => togglePinSession(sess.id)}
-                  onDelete={() => deleteSession(sess.id)}
-                />
-              ))}
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* RIGHT MAIN AREA: Connected Session Canvas */}
-      <div className="flex-1 space-y-6">
+    <AppShell userLabel={userLabel} secondarySidebar={secondarySidebar}>
+      <div className="space-y-6 animate-fade-in">
         {!activeSession ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] rounded-2xl border border-dashed border-[#e5e1d7] bg-white p-12 text-center dark:border-[#27272a] dark:bg-[#18181b]">
             <span className="text-4xl mb-3 block">🧠</span>
@@ -157,7 +95,7 @@ export function NotesClient() {
               Select or Create a Session
             </h3>
             <p className="text-xs text-[#737970] dark:text-[#a1a1aa] mt-1 max-w-sm">
-              Sessions store your spatial connected nodes and ideas. Choose a thread on the left or create a new one.
+              Sessions store your spatial connected nodes and ideas. Choose a thread on the secondary sidebar or create a new one.
             </p>
             <button
               onClick={() => createNewSession("New Session Thread")}
@@ -173,7 +111,7 @@ export function NotesClient() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-[#406852]/10 px-2 py-0.5 text-[10px] font-bold text-[#406852] dark:bg-[#27272a] dark:text-[#a3b899] uppercase tracking-wider">
-                    Session Canvas
+                    Connected Session Canvas
                   </span>
                   <span className="text-xs text-[#737970] dark:text-[#a1a1aa]">
                     {activeSession.nodes.length} Nodes · {activeSession.connectors.length} Connectors
@@ -202,7 +140,7 @@ export function NotesClient() {
             <form onSubmit={handleAddNode} className="rounded-2xl border border-[#e5e1d7] bg-white p-4 dark:border-[#27272a] dark:bg-[#18181b] shadow-xs space-y-3">
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
                 <span className="text-xs font-bold text-[#737970] dark:text-[#a1a1aa] shrink-0">
-                  Node Type:
+                  Node Category:
                 </span>
                 {Object.values(NODE_CATEGORY_REGISTRY).map((cat) => (
                   <button
@@ -318,7 +256,7 @@ export function NotesClient() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {activeSession.nodes.map((node) => (
                   <CanvasNodeCard
                     key={node.id}
@@ -336,59 +274,7 @@ export function NotesClient() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function SessionRow({
-  session,
-  isActive,
-  onClick,
-  onTogglePin,
-  onDelete,
-}: {
-  session: any;
-  isActive: boolean;
-  onClick: () => void;
-  onTogglePin: () => void;
-  onDelete: () => void;
-}) {
-  return (
-    <div
-      onClick={onClick}
-      className={`group flex items-center justify-between rounded-xl px-3 py-2 cursor-pointer transition-all ${
-        isActive
-          ? "bg-[#232f26] text-white dark:bg-[#f4f4f5] dark:text-[#18181b] shadow-xs"
-          : "hover:bg-[#fbf9f5] dark:hover:bg-[#27272a] text-[#232f26] dark:text-[#f4f4f5]"
-      }`}
-    >
-      <div className="flex items-center gap-2 truncate">
-        {session.isPinned && <span className="text-xs">📌</span>}
-        <span className="font-medium truncate">{session.title}</span>
-      </div>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onTogglePin();
-          }}
-          className="p-1 hover:text-[#406852]"
-          title="Pin thread"
-        >
-          📌
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete();
-          }}
-          className="p-1 hover:text-[#be5a38]"
-          title="Delete thread"
-        >
-          🗑️
-        </button>
-      </div>
-    </div>
+    </AppShell>
   );
 }
 

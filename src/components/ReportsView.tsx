@@ -13,7 +13,6 @@ import { generateBehavioralInsights } from "@/lib/heuristicCoach";
 import { computeHabitSynergies } from "@/lib/synergy";
 import SocialShareModal from "@/components/SocialShareModal";
 import StreakProtectionCard from "@/components/StreakProtectionCard";
-import CircadianClockMatrix from "@/components/CircadianClockMatrix";
 
 
 const PERIODS: { value: ReportPeriod; label: string }[] = [
@@ -669,8 +668,7 @@ export default function ReportsView() {
         </div>
       )}
 
-      {/* Circadian Energy Clock Matrix */}
-      <CircadianClockMatrix />
+
 
       {/* Day-of-Week Execution Histogram */}
       <DayOfWeekHistogram stats={dowStats} />

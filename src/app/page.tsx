@@ -5,9 +5,9 @@ import OverviewClient from "./OverviewClient";
 export default async function HomePage() {
   const session = await auth();
 
-  // If user is already logged in, send them straight to their habits dashboard
+  // If user is already logged in, send them straight to their habits workspace
   if (session?.user?.id) {
-    redirect("/dashboard");
+    redirect("/habits");
   }
 
   // Otherwise, render the marketing landing page on root /

@@ -8,36 +8,12 @@ export default function MobileBottomNav() {
 
   const navItems = [
     {
-      label: "Bio Suite",
-      href: "/bio",
-      active: pathname.startsWith("/bio"),
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 3a9 9 0 0 0 0 18M12 7v10" />
-        </svg>
-      ),
-    },
-    {
       label: "Habits",
       href: "/habits",
-      active: pathname === "/habits",
+      active: pathname === "/habits" || pathname === "/",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
-      ),
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
-      active: pathname === "/dashboard",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-          <rect x="3" y="3" width="7" height="9" rx="1.5" />
-          <rect x="14" y="3" width="7" height="5" rx="1.5" />
-          <rect x="14" y="12" width="7" height="9" rx="1.5" />
-          <rect x="3" y="16" width="7" height="5" rx="1.5" />
         </svg>
       ),
     },
@@ -54,7 +30,7 @@ export default function MobileBottomNav() {
     {
       label: "Protocols",
       href: "/protocols",
-      active: pathname.startsWith("/protocols") || pathname.startsWith("/playbooks") || pathname.startsWith("/templates"),
+      active: pathname.startsWith("/protocols") || pathname.startsWith("/templates"),
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
           <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />

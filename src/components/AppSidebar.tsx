@@ -22,22 +22,9 @@ export default function AppSidebar({
 
   const baseNavItems = [
     {
-      label: "Command Hub",
-      href: "/dashboard",
-      active: pathname === "/dashboard",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
-          <rect x="3" y="3" width="7" height="9" rx="1.5" />
-          <rect x="14" y="3" width="7" height="5" rx="1.5" />
-          <rect x="14" y="12" width="7" height="9" rx="1.5" />
-          <rect x="3" y="16" width="7" height="5" rx="1.5" />
-        </svg>
-      ),
-    },
-    {
       label: "Habits & Routines",
       href: "/habits",
-      active: pathname === "/habits",
+      active: pathname === "/habits" || pathname === "/",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round" />
@@ -51,17 +38,6 @@ export default function AppSidebar({
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
           <path d="M18 20V10M12 20V4M6 20v-6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ),
-    },
-    {
-      label: "Bio Suite Hub",
-      href: "/bio",
-      active: pathname.startsWith("/bio"),
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5 shrink-0">
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 3a9 9 0 0 0 0 18M12 7v10" strokeLinecap="round" />
         </svg>
       ),
     },

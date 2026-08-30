@@ -38,11 +38,10 @@ export default function CommandPalette() {
   );
 
   const pages = [
-    { name: "Dashboard", href: "/dashboard", icon: "•" },
-    { name: "Reports & Analytics", href: "/reports", icon: "•" },
+    { name: "Habits Workspace", href: "/habits", icon: "⚡" },
+    { name: "Reports & Analytics", href: "/reports", icon: "📊" },
     { name: "Protocols Hub", href: "/protocols", icon: "◈" },
     { name: "Account Settings", href: "/account", icon: "•" },
-    { name: "Admin Portal", href: "/admin", icon: "•" },
   ].filter((p) => fuzzyMatch(p.name, query));
 
   const handleNavigate = (href: string) => {
